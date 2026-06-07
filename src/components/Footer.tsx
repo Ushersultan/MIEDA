@@ -15,7 +15,8 @@ const Footer = () => {
               <span className="text-2xl font-bold">MIEDA</span>
             </div>
             <p className="text-primary-foreground/80 mb-6 max-w-md">
-              Une église où chacun peut découvrir ce que Dieu peut faire à travers lui. Rejoignez notre communauté de foi.
+              « Voici, je viens pour faire ta volonté. » Hébreux 10:9. 
+              Rejoignez notre communauté de foi.
             </p>
             <div className="flex gap-4">
               <a 
