@@ -50,7 +50,7 @@ const Contact = () => {
                   <Input 
                     id="phone" 
                     type="tel" 
-                    placeholder="+33 6 12 34 56 78" 
+                    placeholder="+1 571 206 9260" 
                     className="w-full"
                   />
                 </div>
@@ -83,7 +83,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1 text-foreground">Email</h4>
-                    <p className="text-muted-foreground">contact@mieda.org</p>
+                    <p className="text-muted-foreground">com@eglisesmieda.org</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -92,7 +92,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1 text-foreground">Téléphone</h4>
-                    <p className="text-muted-foreground">+33 1 23 45 67 89</p>
+                    <p className="text-muted-foreground">+1 571 206 9260</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -102,8 +102,8 @@ const Contact = () => {
                   <div>
                     <h4 className="font-semibold mb-1 text-foreground">Adresse</h4>
                     <p className="text-muted-foreground">
-                      123 Avenue de la Foi<br />
-                      75001 Paris, France
+                      136 Rue Descartes, <br />
+                      94120 Fontenay-sous-Bois, France
                     </p>
                   </div>
                 </div>
@@ -118,11 +118,11 @@ const Contact = () => {
                 <div className="space-y-3 text-primary-foreground/90">
                   <div>
                     <p className="font-semibold">Dimanche</p>
-                    <p>9:00 - 10:30 & 11:00 - 12:30</p>
+                    <p>10:30 & 12:30 - 12:30</p>
                   </div>
                   <div>
                     <p className="font-semibold">Mercredi</p>
-                    <p>19:00 - 20:30</p>
+                    <p>9:00 - 12:00</p>
                   </div>
                 </div>
               </CardContent>
