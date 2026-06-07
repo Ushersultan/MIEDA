@@ -50,7 +50,7 @@ const Contact = () => {
                   <Input 
                     id="phone" 
                     type="tel" 
-                    placeholder="+1 571 206 9260" 
+                    placeholder="+xxxx xxx xxxx" 
                     className="w-full"
                   />
                 </div>
