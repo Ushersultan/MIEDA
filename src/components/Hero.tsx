@@ -21,8 +21,7 @@ const Hero = () => {
             Bienvenue à la MIEDA 
           </h1>
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-            Mission Internationale d'Évangélisation et de Délivrance des Âmes
-          <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
+            (Mission Internationale d'Évangélisation et de Délivrance des Âmes)
             « Voici, je viens pour faire ta volonté. » Hébreux 10:9. 
               Rejoignez notre communauté de foi.
           </p>
