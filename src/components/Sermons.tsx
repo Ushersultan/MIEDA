@@ -52,4 +52,4 @@ const Sermons = () => {
   );
 };
 
-export default Message;
+export default Sermons;
