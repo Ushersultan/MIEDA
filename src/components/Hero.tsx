@@ -18,8 +18,10 @@ const Hero = () => {
       <div className="container mx-auto px-4 z-10 text-center">
         <div className="max-w-4xl mx-auto animate-fade-in">
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
-            Bienvenue à la Mission Internationale d'Évangélisation et de Délivrance des Âmes
+            Bienvenue à la MIEDA 
           </h1>
+           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
+            Mission Internationale d'Évangélisation et de Délivrance des Âmes
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
             « Voici, je viens pour faire ta volonté. » Hébreux 10:9. 
               Rejoignez notre communauté de foi.
