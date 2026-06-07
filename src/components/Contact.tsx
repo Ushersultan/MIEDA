@@ -92,7 +92,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1 text-foreground">Téléphone</h4>
-                    <p className="text-muted-foreground">225 07 07 88 79 89</p>
+                    <p className="text-muted-foreground">+225 07 07 88 79 89</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -102,8 +102,8 @@ const Contact = () => {
                   <div>
                     <h4 className="font-semibold mb-1 text-foreground">Adresse</h4>
                     <p className="text-muted-foreground">
-                      136 Rue Descartes, <br />
-                      94120 Fontenay-sous-Bois, France
+                      MIEDA Yamoussoukro, <br />
+                      Quartier Millionnaire, Côte d'Ivoire
                     </p>
                   </div>
                 </div>
