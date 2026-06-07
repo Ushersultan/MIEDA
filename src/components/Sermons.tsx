@@ -24,14 +24,14 @@ const Sermons = () => {
           <div className="animate-fade-in">
             <div className="inline-block px-4 py-2 bg-secondary/20 rounded-full mb-6">
               <span className="text-sm font-semibold text-secondary-foreground">
-                Dernier Sermon
+                Dernier Message
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
               La Parole Transforme les Vies
             </h2>
             <p className="text-xl text-muted-foreground mb-4 leading-relaxed">
-              Pasteur Emmanuel Mensah
+              Révérend Docteur Prophète Djeha Kouadio
             </p>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
               Découvrez comment la Parole de Dieu peut transformer votre vie. Rejoignez-nous chaque semaine pour des enseignements inspirants et puissants.
@@ -39,10 +39,10 @@ const Sermons = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="text-lg px-8">
                 <Play className="w-5 h-5 mr-2" />
-                Regarder le Sermon
+                Regarder le Message
               </Button>
               <Button size="lg" variant="outline" className="text-lg px-8">
-                Voir Tous les Sermons
+                Voir Tous les Messages
               </Button>
             </div>
           </div>
@@ -52,4 +52,4 @@ const Sermons = () => {
   );
 };
 
-export default Sermons;
+export default Message;
