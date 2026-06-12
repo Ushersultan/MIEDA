@@ -48,7 +48,7 @@ const Sermons = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="https://www.youtube.com/@VsdCommunicationMIEDA"
+                href="https://www.youtube.com/@VsdCommunicationMIEDA/streams"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -59,7 +59,7 @@ const Sermons = () => {
               </a>
 
               <a
-                href="https://www.youtube.com/@VsdCommunicationMIEDA/videos"
+                href="https://www.youtube.com/@VsdCommunicationMIEDA/streams"
                 target="_blank"
                 rel="noopener noreferrer"
               >
