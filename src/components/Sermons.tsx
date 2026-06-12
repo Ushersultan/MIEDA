@@ -37,13 +37,27 @@ const Sermons = () => {
               Découvrez comment la Parole de Dieu peut transformer votre vie. Rejoignez-nous chaque semaine pour des enseignements inspirants et puissants.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="text-lg px-8">
-                <Play className="w-5 h-5 mr-2" />
-                Regarder le Message
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8">
-                Voir Tous les Messages
-              </Button>
+              <a
+                href="https://www.youtube.com/@VsdCommunicationMIEDA"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="lg" className="text-lg px-8">
+                  <Play className="w-5 h-5 mr-2" />
+                  Regarder le Message
+                </Button>
+              </a>
+
+              <a
+                href="https://www.youtube.com/@VsdCommunicationMIEDA/videos"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="lg" variant="outline" className="text-lg px-8">
+                  Voir Tous les Messages
+                </Button>
+              </a>
+              </div>
             </div>
           </div>
         </div>
