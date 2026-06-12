@@ -10,15 +10,15 @@ const Sermons = () => {
           <div className="relative group animate-scale-in">
             <div className="aspect-video bg-gradient-to-br from-primary to-accent rounded-2xl overflow-hidden shadow-2xl">
               <div className="w-full h-full flex items-center justify-center bg-black/20">
-                <a
-                  href="https://www.youtube.com/@VsdCommunicationMIEDA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-20 h-20 bg-primary-foreground/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform cursor-pointer"
-                  aria-label="Regarder le message sur YouTube"
-                >
-                  <Play className="w-10 h-10 text-primary ml-1" fill="currentColor" />
-                </a>
+                <div className="w-full h-full">
+                  <iframe
+                    className="w-full h-full rounded-2xl"
+                    src="https://www.youtube.com/embed/live_stream?channel=VsdCommunicationMIEDA"
+                    title="MIEDA En Direct"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
               </div>
             </div>
             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-secondary rounded-full blur-3xl opacity-50" />
