@@ -29,7 +29,7 @@ const Sermons = () => {
           <div className="animate-fade-in">
             <div className="inline-block px-4 py-2 bg-secondary/20 rounded-full mb-6">
               <span className="text-sm font-semibold text-secondary-foreground">
-                Dernier Message
+                🔴 CULTE EN DIRECT
               </span>
             </div>
 
