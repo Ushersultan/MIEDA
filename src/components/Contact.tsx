@@ -14,7 +14,7 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    console.log("FORMULAIRE SOUMIS");
     try {
       setStatus("Envoi en cours...");
 
