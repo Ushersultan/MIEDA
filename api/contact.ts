@@ -11,7 +11,7 @@ export default async function handler(req: any, res: any) {
 
   try {
     await resend.emails.send({
-      from: "MIEDA Website <onboarding@resend.dev>",
+      from: "MIEDA Website <noreply@eglisesmieda.org>",
       to: "com@eglisesmieda.org",
       subject: `Nouveau message depuis le site MIEDA`,
       replyTo: email,
