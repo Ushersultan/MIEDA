@@ -2,130 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
-/* MIEDA Design System */
+/* MIEDA Design System - Bleu dominant */
 
 @layer base {
   :root {
-    /* Base */
     --background: 0 0% 100%;
-    --foreground: 140 55% 18%;
+    --foreground: 220 35% 18%;
 
-    /* Cards */
     --card: 0 0% 100%;
-    --card-foreground: 140 55% 18%;
+    --card-foreground: 220 35% 18%;
 
-    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 140 55% 18%;
+    --popover-foreground: 220 35% 18%;
 
-    /* Vert MIEDA */
-    --primary: 123 55% 40%;
+    /* Bleu MIEDA principal */
+    --primary: 220 80% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Jaune du globe */
+    /* Jaune lumière */
     --secondary: 53 95% 52%;
-    --secondary-foreground: 140 55% 18%;
+    --secondary-foreground: 220 35% 18%;
 
-    /* Bleu dominant */
-    --accent: 220 80% 45%;
+    /* Vert MIEDA en accent */
+    --accent: 123 55% 40%;
     --accent-foreground: 0 0% 100%;
 
-    /* Muted */
-    --muted: 210 25% 96%;
-    --muted-foreground: 140 20% 40%;
+    --muted: 210 30% 96%;
+    --muted-foreground: 220 18% 42%;
 
-    /* Destructive */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders */
-    --border: 210 20% 88%;
-    --input: 210 20% 88%;
+    --border: 210 24% 88%;
+    --input: 210 24% 88%;
     --ring: 220 80% 45%;
 
-    /* Radius */
     --radius: 0.75rem;
 
-    /* Hero MIEDA */
     --hero-gradient: linear-gradient(
       135deg,
-      hsl(220 80% 45%) 0%,
-      hsl(220 75% 40%) 40%,
-      hsl(123 55% 40%) 80%,
+      hsl(220 82% 42%) 0%,
+      hsl(220 80% 48%) 45%,
+      hsl(210 75% 55%) 70%,
+      hsl(123 55% 40%) 92%,
       hsl(53 95% 52%) 100%
     );
 
-    /* Feu du Saint-Esprit */
     --gold-gradient: linear-gradient(
       135deg,
       hsl(53 95% 52%) 0%,
       hsl(35 95% 54%) 100%
     );
 
-    --section-bg: hsl(210 30% 98%);
+    --section-bg: hsl(210 35% 98%);
 
-    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 220 30% 20%;
+    --sidebar-foreground: 220 35% 18%;
 
     --sidebar-primary: 220 80% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
 
-    --sidebar-accent: 210 15% 95%;
-    --sidebar-accent-foreground: 220 30% 20%;
+    --sidebar-accent: 210 20% 94%;
+    --sidebar-accent-foreground: 220 35% 18%;
 
-    --sidebar-border: 210 20% 88%;
+    --sidebar-border: 210 24% 88%;
     --sidebar-ring: 220 80% 45%;
   }
 
   .dark {
-    /* Base */
-    --background: 220 25% 8%;
+    --background: 220 28% 8%;
     --foreground: 0 0% 98%;
 
-    /* Cards */
-    --card: 220 20% 12%;
+    --card: 220 24% 12%;
     --card-foreground: 0 0% 98%;
 
-    /* Popover */
-    --popover: 220 20% 12%;
+    --popover: 220 24% 12%;
     --popover-foreground: 0 0% 98%;
 
-    /* Jaune */
-    --primary: 53 95% 52%;
-    --primary-foreground: 220 25% 12%;
+    --primary: 220 80% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Vert */
-    --secondary: 123 45% 25%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 53 95% 52%;
+    --secondary-foreground: 220 25% 12%;
 
-    /* Bleu */
-    --accent: 220 80% 55%;
+    --accent: 123 55% 42%;
     --accent-foreground: 0 0% 98%;
 
-    /* Muted */
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 70%;
+    --muted: 220 18% 18%;
+    --muted-foreground: 220 10% 72%;
 
-    /* Destructive */
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    /* Borders */
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
+    --border: 220 18% 22%;
+    --input: 220 18% 22%;
     --ring: 220 80% 55%;
 
-    /* Hero Gradient */
     --hero-gradient: linear-gradient(
       135deg,
-      hsl(220 80% 30%) 0%,
-      hsl(220 75% 25%) 40%,
-      hsl(123 55% 28%) 80%,
+      hsl(220 80% 28%) 0%,
+      hsl(220 78% 34%) 50%,
+      hsl(210 70% 42%) 75%,
+      hsl(123 55% 30%) 92%,
       hsl(53 95% 45%) 100%
     );
 
-    /* Flame Gradient */
     --gold-gradient: linear-gradient(
       135deg,
       hsl(53 95% 52%) 0%,
@@ -134,17 +115,16 @@
 
     --section-bg: hsl(220 25% 10%);
 
-    /* Sidebar */
-    --sidebar-background: 220 20% 10%;
+    --sidebar-background: 220 24% 10%;
     --sidebar-foreground: 0 0% 95%;
 
     --sidebar-primary: 220 80% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
 
-    --sidebar-accent: 220 15% 18%;
+    --sidebar-accent: 220 18% 18%;
     --sidebar-accent-foreground: 0 0% 95%;
 
-    --sidebar-border: 220 15% 20%;
+    --sidebar-border: 220 18% 22%;
     --sidebar-ring: 220 80% 55%;
   }
 }
