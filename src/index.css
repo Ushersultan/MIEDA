@@ -2,103 +2,148 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* MIEDA Design System */
 
 @layer base {
   :root {
+    /* Base */
     --background: 0 0% 100%;
-    --foreground: 140 45% 20%;
+    --foreground: 140 55% 18%;
 
+    /* Cards */
     --card: 0 0% 100%;
-    --card-foreground: 140 45% 20%;
+    --card-foreground: 140 55% 18%;
 
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 140 45% 20%;
+    --popover-foreground: 140 55% 18%;
 
-    --primary: 140 45% 28%;
+    /* Vert MIEDA */
+    --primary: 123 55% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 75% 60%;
-    --secondary-foreground: 140 45% 20%;
+    /* Jaune du globe */
+    --secondary: 53 95% 52%;
+    --secondary-foreground: 140 55% 18%;
 
-    --muted: 140 15% 95%;
-    --muted-foreground: 140 20% 50%;
-
-    --accent: 200 65% 45%;
+    /* Bleu du globe */
+    --accent: 222 75% 42%;
     --accent-foreground: 0 0% 100%;
 
+    /* Muted */
+    --muted: 123 20% 96%;
+    --muted-foreground: 140 20% 40%;
+
+    /* Destructive */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 140 20% 90%;
-    --input: 140 20% 90%;
-    --ring: 140 45% 28%;
+    /* Borders */
+    --border: 123 25% 88%;
+    --input: 123 25% 88%;
+    --ring: 123 55% 40%;
 
+    /* Radius */
     --radius: 0.75rem;
-    
-    --hero-gradient: linear-gradient(135deg, hsl(140 45% 28%) 0%, hsl(140 50% 20%) 100%);
-    --gold-gradient: linear-gradient(135deg, hsl(45 75% 60%) 0%, hsl(35 80% 55%) 100%);
-    --section-bg: hsl(140 15% 98%);
 
+    /* MIEDA Hero Gradient */
+    --hero-gradient: linear-gradient(
+      135deg,
+      hsl(222 75% 42%) 0%,
+      hsl(123 55% 40%) 55%,
+      hsl(53 95% 52%) 100%
+    );
+
+    /* Flame Gradient */
+    --gold-gradient: linear-gradient(
+      135deg,
+      hsl(53 95% 52%) 0%,
+      hsl(35 95% 54%) 100%
+    );
+
+    --section-bg: hsl(123 20% 98%);
+
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 140 40% 20%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 123 55% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-accent: 123 15% 95%;
+    --sidebar-accent-foreground: 140 40% 20%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 123 20% 88%;
+    --sidebar-ring: 222 75% 42%;
   }
 
   .dark {
+    /* Base */
     --background: 140 45% 8%;
     --foreground: 0 0% 98%;
 
+    /* Cards */
     --card: 140 40% 12%;
     --card-foreground: 0 0% 98%;
 
+    /* Popover */
     --popover: 140 40% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 45 75% 60%;
-    --primary-foreground: 140 45% 20%;
+    /* Jaune */
+    --primary: 53 95% 52%;
+    --primary-foreground: 140 45% 12%;
 
-    --secondary: 140 30% 20%;
+    /* Vert */
+    --secondary: 123 45% 25%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 140 30% 18%;
-    --muted-foreground: 140 15% 65%;
-
-    --accent: 200 65% 45%;
+    /* Bleu */
+    --accent: 222 75% 55%;
     --accent-foreground: 0 0% 98%;
 
+    /* Muted */
+    --muted: 140 30% 18%;
+    --muted-foreground: 140 15% 70%;
+
+    /* Destructive */
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 98%;
 
+    /* Borders */
     --border: 140 30% 20%;
     --input: 140 30% 20%;
-    --ring: 45 75% 60%;
-    
-    --hero-gradient: linear-gradient(135deg, hsl(140 50% 15%) 0%, hsl(140 55% 10%) 100%);
-    --gold-gradient: linear-gradient(135deg, hsl(45 75% 60%) 0%, hsl(35 80% 55%) 100%);
+    --ring: 53 95% 52%;
+
+    /* Hero Gradient */
+    --hero-gradient: linear-gradient(
+      135deg,
+      hsl(222 75% 25%) 0%,
+      hsl(123 55% 28%) 55%,
+      hsl(53 95% 45%) 100%
+    );
+
+    /* Flame Gradient */
+    --gold-gradient: linear-gradient(
+      135deg,
+      hsl(53 95% 52%) 0%,
+      hsl(35 95% 54%) 100%
+    );
+
     --section-bg: hsl(140 40% 10%);
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Sidebar */
+    --sidebar-background: 140 40% 10%;
+    --sidebar-foreground: 0 0% 95%;
+
+    --sidebar-primary: 53 95% 52%;
+    --sidebar-primary-foreground: 140 45% 12%;
+
+    --sidebar-accent: 140 30% 18%;
+    --sidebar-accent-foreground: 0 0% 95%;
+
+    --sidebar-border: 140 30% 20%;
+    --sidebar-ring: 222 75% 55%;
   }
 }
 
