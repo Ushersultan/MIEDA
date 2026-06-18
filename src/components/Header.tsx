@@ -19,14 +19,14 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="MIEDA Logo" className="h-12 w-auto" />
-            <span className="text-2xl font-bold text-primary">MIEDA</span>
+            <img src={logo} alt="Logo MIEDA" className="h-12 w-auto" />
+            <span className="text-2xl font-bold text-accent">MIEDA</span>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <a
+              
                 key={item.label}
                 href={item.href}
                 className="text-foreground hover:text-primary transition-colors font-medium"
@@ -43,7 +43,7 @@ const Header = () => {
           <button
             className="md:hidden p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label="Ouvrir le menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -54,7 +54,7 @@ const Header = () => {
           <nav className="md:hidden py-4 border-t animate-fade-in">
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
-                <a
+                
                   key={item.label}
                   href={item.href}
                   className="text-foreground hover:text-primary transition-colors font-medium py-2"
