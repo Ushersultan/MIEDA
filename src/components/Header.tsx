@@ -26,7 +26,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              
+              <a
                 key={item.label}
                 href={item.href}
                 className="text-foreground hover:text-primary transition-colors font-medium"
@@ -54,7 +54,7 @@ const Header = () => {
           <nav className="md:hidden py-4 border-t animate-fade-in">
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
-                
+                <a
                   key={item.label}
                   href={item.href}
                   className="text-foreground hover:text-primary transition-colors font-medium py-2"
