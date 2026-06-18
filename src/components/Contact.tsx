@@ -11,38 +11,48 @@ const Contact = () => {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("FORMULAIRE SOUMIS");
-    try {
-      setStatus("Envoi en cours...");
+    setIsSubmitting(true);
+    setIsError(false);
+    setStatus("Envoi en cours...");
 
+    try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          message,
-        }),
+        body: JSON.stringify({ name, email, phone, message }),
       });
 
+      // Tente de lire la réponse JSON (message de succès ou d'erreur)
+      const data = await response.json().catch(() => ({}));
+
       if (response.ok) {
-        setStatus("✅ Message envoyé avec succès !");
+        setIsError(false);
+        setStatus("✅ Message envoyé avec succès ! Nous vous répondrons bientôt.");
         setName("");
         setEmail("");
         setPhone("");
         setMessage("");
       } else {
-        setStatus("❌ Une erreur est survenue lors de l'envoi.");
+        setIsError(true);
+        setStatus(
+          data.error
+            ? `❌ ${data.error}`
+            : "❌ Une erreur est survenue lors de l'envoi."
+        );
       }
     } catch (error) {
       console.error(error);
-      setStatus("❌ Impossible d'envoyer le message.");
+      setIsError(true);
+      setStatus("❌ Impossible d'envoyer le message. Vérifiez votre connexion.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -135,7 +145,11 @@ const Contact = () => {
                 </div>
 
                 {status && (
-                  <div className="text-sm text-center font-medium">
+                  <div
+                    className={`text-sm text-center font-medium ${
+                      isError ? "text-destructive" : "text-green-600"
+                    }`}
+                  >
                     {status}
                   </div>
                 )}
@@ -144,8 +158,9 @@ const Contact = () => {
                   type="submit"
                   size="lg"
                   className="w-full text-lg"
+                  disabled={isSubmitting}
                 >
-                  Envoyer le Message
+                  {isSubmitting ? "Envoi en cours..." : "Envoyer le Message"}
                 </Button>
               </form>
             </CardContent>
@@ -236,4 +251,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
