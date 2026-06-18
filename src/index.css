@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* MIEDA Design System - Bleu globe dominant */
+/* MIEDA Design System — Bleu globe dominant, vert/jaune/orange en accents */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -12,17 +12,21 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 60% 15%;
 
-    /* Bleu MIEDA — extrait du globe (#1a4fa8) */
-    --primary: 220 74% 37%;
+    /* Bleu MIEDA — globe (#0c4ab6) — couleur dominante */
+    --primary: 218 88% 38%;
     --primary-foreground: 0 0% 100%;
 
-    /* Jaune lumière (#f5c800) */
-    --secondary: 50 100% 48%;
+    /* Jaune MIEDA — continents (#ffdd00) */
+    --secondary: 52 100% 50%;
     --secondary-foreground: 220 60% 15%;
 
-    /* Vert MIEDA (#1e7a2e) */
-    --accent: 128 60% 29%;
+    /* Vert MIEDA — texte du logo (#147b1d) */
+    --accent: 125 72% 28%;
     --accent-foreground: 0 0% 100%;
+
+    /* Orange MIEDA — flammes (#f9911a) — NOUVEAU */
+    --highlight: 32 95% 54%;
+    --highlight-foreground: 30 75% 16%;
 
     --muted: 215 40% 95%;
     --muted-foreground: 220 25% 40%;
@@ -30,32 +34,34 @@
     --destructive-foreground: 0 0% 100%;
     --border: 215 35% 85%;
     --input: 215 35% 85%;
-    --ring: 220 74% 37%;
+    --ring: 218 88% 38%;
     --radius: 0.75rem;
 
+    /* Dégradé héro : bleu dominant -> bleu clair -> vert -> jaune */
     --hero-gradient: linear-gradient(
       135deg,
-      hsl(220 74% 19%) 0%,
-      hsl(220 74% 37%) 40%,
-      hsl(215 65% 51%) 70%,
-      hsl(128 60% 29%) 90%,
-      hsl(50 100% 48%) 100%
+      hsl(218 88% 20%) 0%,
+      hsl(218 88% 38%) 40%,
+      hsl(212 70% 52%) 68%,
+      hsl(125 72% 28%) 88%,
+      hsl(52 100% 50%) 100%
     );
+    /* Dégradé "flamme" : jaune -> orange (continents -> flammes) */
     --gold-gradient: linear-gradient(
       135deg,
-      hsl(50 100% 48%) 0%,
-      hsl(35 95% 52%) 100%
+      hsl(52 100% 50%) 0%,
+      hsl(32 95% 54%) 100%
     );
     --section-bg: hsl(215 40% 97%);
 
     --sidebar-background: 220 50% 96%;
     --sidebar-foreground: 220 60% 15%;
-    --sidebar-primary: 220 74% 37%;
+    --sidebar-primary: 218 88% 38%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 215 35% 90%;
     --sidebar-accent-foreground: 220 60% 15%;
     --sidebar-border: 215 35% 85%;
-    --sidebar-ring: 220 74% 37%;
+    --sidebar-ring: 218 88% 38%;
   }
 
   .dark {
@@ -66,14 +72,17 @@
     --popover: 220 35% 11%;
     --popover-foreground: 0 0% 97%;
 
-    --primary: 220 70% 52%;
+    --primary: 218 80% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 50 100% 48%;
+    --secondary: 52 100% 50%;
     --secondary-foreground: 220 40% 10%;
 
-    --accent: 128 55% 38%;
+    --accent: 125 60% 42%;
     --accent-foreground: 0 0% 98%;
+
+    --highlight: 32 95% 56%;
+    --highlight-foreground: 30 80% 12%;
 
     --muted: 220 25% 16%;
     --muted-foreground: 220 15% 68%;
@@ -81,31 +90,31 @@
     --destructive-foreground: 0 0% 98%;
     --border: 220 25% 20%;
     --input: 220 25% 20%;
-    --ring: 220 70% 52%;
+    --ring: 218 80% 55%;
 
     --hero-gradient: linear-gradient(
       135deg,
-      hsl(220 74% 14%) 0%,
-      hsl(220 74% 26%) 45%,
-      hsl(215 65% 38%) 72%,
-      hsl(128 55% 22%) 90%,
-      hsl(50 95% 42%) 100%
+      hsl(218 88% 14%) 0%,
+      hsl(218 88% 28%) 45%,
+      hsl(212 65% 40%) 70%,
+      hsl(125 55% 24%) 90%,
+      hsl(52 95% 44%) 100%
     );
     --gold-gradient: linear-gradient(
       135deg,
-      hsl(50 100% 48%) 0%,
-      hsl(35 95% 52%) 100%
+      hsl(52 100% 50%) 0%,
+      hsl(32 95% 54%) 100%
     );
     --section-bg: hsl(220 35% 9%);
 
     --sidebar-background: 220 35% 9%;
     --sidebar-foreground: 0 0% 94%;
-    --sidebar-primary: 220 70% 52%;
+    --sidebar-primary: 218 80% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 25% 16%;
     --sidebar-accent-foreground: 0 0% 94%;
     --sidebar-border: 220 25% 20%;
-    --sidebar-ring: 220 70% 52%;
+    --sidebar-ring: 218 80% 55%;
   }
 }
 
