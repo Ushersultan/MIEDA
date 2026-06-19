@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 // ══════════════════════════════════════════════
 //  CONFIGURATION
 // ══════════════════════════════════════════════
-const YT_API_KEY = "VOTRE_CLE_API"; // ← Remplacez par votre clé YouTube Data v3
+const YT_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY ?? "";
 const CHANNEL_HANDLE = "VsdCommunicationMIEDA";
 const MAX_VIDEOS = 9;
 
@@ -113,7 +113,7 @@ const Sermons = () => {
   const [activeTab, setActiveTab] = useState<"latest" | "grid">("latest");
 
   useEffect(() => {
-    if (YT_API_KEY === AIzaSyAJBSs68utiWWV-msBAwPcvb6m5wU4JCwE) {
+    if (YT_API_KEY === "VOTRE_CLE_API") {
       setLoading(false);
       return;
     }
@@ -169,7 +169,7 @@ const Sermons = () => {
     load();
   }, []);
 
-  const noApiKey = YT_API_KEY === "VOTRE_CLE_API";
+  const noApiKey = !YT_API_KEY;
 
   return (
     <section id="sermons" className="py-24 bg-background">
