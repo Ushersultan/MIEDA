@@ -113,7 +113,7 @@ const Sermons = () => {
   const [activeTab, setActiveTab] = useState<"latest" | "grid">("latest");
 
   useEffect(() => {
-    if (YT_API_KEY === "VOTRE_CLE_API") {
+    if (YT_API_KEY === AIzaSyAJBSs68utiWWV-msBAwPcvb6m5wU4JCwE) {
       setLoading(false);
       return;
     }
