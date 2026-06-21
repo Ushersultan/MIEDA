@@ -43,7 +43,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              
+              <a
                 key={item.label}
                 href={item.href}
                 className="text-foreground hover:text-primary transition-colors font-medium"
@@ -69,7 +69,7 @@ const Header = () => {
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-card border border-border rounded-2xl shadow-xl overflow-hidden z-50">
                   <div className="p-1.5">
                     {culteItems.map((item) => (
-                      
+                      <a
                         key={item.label}
                         href={item.href}
                         onClick={() => setCultesOpen(false)}
@@ -86,7 +86,7 @@ const Header = () => {
                     ))}
                   </div>
                   <div className="border-t border-border px-4 py-2.5 bg-muted/40">
-                    
+                    <a
                       href="#cultes"
                       onClick={() => setCultesOpen(false)}
                       className="text-xs text-primary font-medium hover:underline"
@@ -118,7 +118,7 @@ const Header = () => {
           <nav className="md:hidden py-4 border-t animate-fade-in">
             <div className="flex flex-col gap-1">
               {navItems.map((item) => (
-                
+                <a
                   key={item.label}
                   href={item.href}
                   className="text-foreground hover:text-primary transition-colors font-medium py-2 px-2 rounded-lg hover:bg-muted"
@@ -134,7 +134,7 @@ const Header = () => {
                   Cultes
                 </p>
                 {culteItems.map((item) => (
-                  
+                  <a
                     key={item.label}
                     href={item.href}
                     onClick={() => setIsMenuOpen(false)}
