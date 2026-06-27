@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, ChevronDown, MapPin, Baby, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Menu, X, ChevronDown, MapPin, Baby, Globe, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/mieda-logo.png";
 
 const culteItems = [
@@ -13,6 +15,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cultesOpen, setCultesOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -98,9 +101,20 @@ const Header = () => {
               )}
             </div>
 
-            <Button variant="default" size="lg">
-              Se Connecter
-            </Button>
+            {user ? (
+              <Link to="/profil">
+                <Button variant="default" size="lg">
+                  <UserIcon className="w-4 h-4 mr-2" />
+                  Mon espace
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/auth">
+                <Button variant="default" size="lg">
+                  Se Connecter
+                </Button>
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -146,9 +160,20 @@ const Header = () => {
                 ))}
               </div>
 
-              <Button variant="default" size="lg" className="w-full mt-2">
-                Se Connecter
-              </Button>
+              {user ? (
+                <Link to="/profil" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="default" size="lg" className="w-full mt-2">
+                    <UserIcon className="w-4 h-4 mr-2" />
+                    Mon espace
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="default" size="lg" className="w-full mt-2">
+                    Se Connecter
+                  </Button>
+                </Link>
+              )}
             </div>
           </nav>
         )}
