@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Menu, X, ChevronDown, MapPin, Baby, Globe, User as UserIcon,
-  Info, Building2, Lightbulb,
+  Info, Building2, Lightbulb, MapPinned,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,6 +11,7 @@ import logo from "@/assets/mieda-logo.png";
 // ── Sous-menu "L'Église" ──
 const egliseItems = [
   { label: "À Propos / Le Fondateur", to: "/a-propos", icon: Info, desc: "Notre histoire et notre vision" },
+  { label: "Nos Lieux de Cultes", to: "/lieux-de-cultes", icon: MapPinned, desc: "Nos églises dans le monde" },
   { label: "Départements & Instituts", to: "/departements", icon: Building2, desc: "Nos ministères et formations" },
   { label: "Nos Projets", to: "/projets", icon: Lightbulb, desc: "Ce que nous bâtissons" },
 ];

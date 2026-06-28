@@ -7,10 +7,10 @@ const Experience = () => {
   const experiences = [
     {
       icon: MapPin,
-      title: "Campus Physique",
-      description: "Adorez avec nous en personne à notre siège de Yamoussoukro, en Côte d'Ivoire.",
-      cta: "Voir le lieu",
-      to: "/cultes#culte-yamoussoukro",
+      title: "Nos Lieux de Cultes",
+      description: "Découvrez les églises MIEDA à travers le monde, leurs pasteurs et leurs coordonnées.",
+      cta: "Voir nos églises",
+      to: "/lieux-de-cultes",
     },
     {
       icon: Monitor,
