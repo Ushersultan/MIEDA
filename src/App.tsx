@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import Cultes from "./pages/Cultes";
+import LieuxDeCultes from "./pages/LieuxDeCultes";
 import APropos from "./pages/APropos";
 import Evenements from "./pages/Evenements";
 import Departements from "./pages/Departements";
@@ -30,6 +31,7 @@ const App = () => (
             <Route element={<Layout />}>
               <Route path="/" element={<Index />} />
               <Route path="/cultes" element={<Cultes />} />
+              <Route path="/lieux-de-cultes" element={<LieuxDeCultes />} />
               <Route path="/a-propos" element={<APropos />} />
               <Route path="/evenements" element={<Evenements />} />
               <Route path="/departements" element={<Departements />} />
