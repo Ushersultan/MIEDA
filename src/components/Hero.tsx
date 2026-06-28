@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-worship.jpg";
 
 const Hero = () => {
@@ -35,15 +36,17 @@ const Hero = () => {
               size="lg" 
               variant="secondary"
               className="text-lg px-8 py-6 hover:scale-105 transition-transform"
+              asChild
             >
-              Se Connecter
+              <Link to="/auth">Se Connecter</Link>
             </Button>
             <Button 
               size="lg" 
               variant="outline"
               className="text-lg px-8 py-6 bg-primary-foreground/10 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-105 transition-all"
+              asChild
             >
-              En Savoir Plus
+              <Link to="/a-propos">En Savoir Plus</Link>
             </Button>
           </div>
         </div>

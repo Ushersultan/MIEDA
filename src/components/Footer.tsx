@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 import logo from "@/assets/mieda-logo.png";
 
@@ -58,10 +59,12 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Liens Rapides</h3>
             <ul className="space-y-2 text-primary-foreground/80">
-              <li><a href="#home" className="hover:text-primary-foreground transition-colors">Accueil</a></li>
-              <li><a href="#about" className="hover:text-primary-foreground transition-colors">À Propos</a></li>
-              <li><a href="#sermons" className="hover:text-primary-foreground transition-colors">Sermons</a></li>
-              <li><a href="#events" className="hover:text-primary-foreground transition-colors">Événements</a></li>
+              <li><Link to="/" className="hover:text-primary-foreground transition-colors">Accueil</Link></li>
+              <li><Link to="/a-propos" className="hover:text-primary-foreground transition-colors">À Propos</Link></li>
+              <li><Link to="/cultes" className="hover:text-primary-foreground transition-colors">Cultes</Link></li>
+              <li><Link to="/evenements" className="hover:text-primary-foreground transition-colors">Événements</Link></li>
+              <li><Link to="/projets" className="hover:text-primary-foreground transition-colors">Nos Projets</Link></li>
+              <li><Link to="/contact" className="hover:text-primary-foreground transition-colors">Contact</Link></li>
             </ul>
           </div>
 

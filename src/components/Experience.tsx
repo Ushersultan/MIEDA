@@ -1,29 +1,30 @@
 import { MapPin, Monitor, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 const Experience = () => {
   const experiences = [
     {
       icon: MapPin,
       title: "Campus Physique",
-      description: "Adorez avec nous en personne dans l'un de nos campus physiques.",
-      cta: "Trouver un emplacement",
-      href: "#locations",
+      description: "Adorez avec nous en personne à notre siège de Yamoussoukro, en Côte d'Ivoire.",
+      cta: "Voir le lieu",
+      to: "/cultes#culte-yamoussoukro",
     },
     {
       icon: Monitor,
-      title: "Diffusions en Direct",
-      description: "Rejoignez notre communauté en ligne qui diffuse l'église de partout.",
+      title: "Culte en Ligne",
+      description: "Rejoignez la communauté MIEDA Diaspora en direct sur Zoom, partout dans le monde.",
       cta: "Voir les horaires",
-      href: "#streaming",
+      to: "/cultes#culte-en-ligne",
     },
     {
       icon: Users,
-      title: "Groupes de Prière",
-      description: "Rejoignez des groupes qui se rassemblent pour vivre l'expérience ensemble.",
-      cta: "Rejoindre un groupe",
-      href: "#groups",
+      title: "Nos Départements",
+      description: "Engagez-vous dans l'un de nos ministères et grandissez au service de Dieu.",
+      cta: "Découvrir",
+      to: "/departements",
     },
   ];
 
@@ -41,8 +42,8 @@ const Experience = () => {
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {experiences.map((exp, index) => (
-            <Card 
-              key={exp.title} 
+            <Card
+              key={exp.title}
               className="border-2 hover:border-primary transition-all duration-300 hover:shadow-xl hover:-translate-y-2 animate-scale-in bg-card"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
@@ -54,12 +55,12 @@ const Experience = () => {
                 <p className="text-muted-foreground mb-6 leading-relaxed">
                   {exp.description}
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full hover:bg-primary hover:text-primary-foreground"
                   asChild
                 >
-                  <a href={exp.href}>{exp.cta}</a>
+                  <Link to={exp.to}>{exp.cta}</Link>
                 </Button>
               </CardContent>
             </Card>

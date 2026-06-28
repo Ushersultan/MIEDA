@@ -4,7 +4,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import Layout from "@/components/Layout";
 import Index from "./pages/Index";
+import Cultes from "./pages/Cultes";
+import APropos from "./pages/APropos";
+import Evenements from "./pages/Evenements";
+import Departements from "./pages/Departements";
+import Projets from "./pages/Projets";
+import ContactPage from "./pages/ContactPage";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -19,9 +26,21 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Index />} />
+            {/* Pages du site avec Header + Footer */}
+            <Route element={<Layout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/cultes" element={<Cultes />} />
+              <Route path="/a-propos" element={<APropos />} />
+              <Route path="/evenements" element={<Evenements />} />
+              <Route path="/departements" element={<Departements />} />
+              <Route path="/projets" element={<Projets />} />
+              <Route path="/contact" element={<ContactPage />} />
+            </Route>
+
+            {/* Pages plein écran (sans Header/Footer) */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/profil" element={<Profile />} />
+
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
