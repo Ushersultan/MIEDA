@@ -18,7 +18,7 @@ const APropos = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">À Propos de MIEDA</h1>
           <p className="text-lg text-white/85 max-w-2xl mx-auto">
             Mission Internationale d'Évangélisation et de Délivrance des Âmes —
-            au service de Dieu et du développement de l'Afrique.
+            au service de Dieu et du salut des âmes.
           </p>
         </div>
       </div>
