@@ -1,5 +1,6 @@
 import { Target, Eye, Heart, BookOpen, Globe2, Users } from "lucide-react";
 import logo from "@/assets/mieda-logo.png";
+import papa from "@/assets/Papa.jpeg";
 
 const valeurs = [
   { icon: BookOpen, title: "La Parole de Dieu", desc: "Un enseignement biblique solide qui transforme les vies et édifie la foi." },
@@ -65,20 +66,33 @@ const APropos = () => {
               Révérend Docteur Prophète Djeha Kouadio
             </h2>
           </div>
-          <div className="bg-card border border-border rounded-2xl p-8 md:p-10">
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              Serviteur de Dieu et fondateur de MIEDA, le Révérend Docteur Prophète
-              Djeha Kouadio consacre sa vie à l'annonce de l'Évangile, à
-              l'enseignement de la Parole et à la délivrance des âmes. Sous sa
-              direction, la mission s'étend depuis Yamoussoukro, en Côte d'Ivoire,
-              vers de nombreuses nations.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              {/* ✏️ MIEDA : remplacez ce paragraphe par la biographie officielle du fondateur. */}
-              Son ministère est marqué par un profond attachement à la vérité
-              biblique, à la prière et à l'accompagnement des fidèles dans leur
-              marche avec Dieu.
-            </p>
+          <div className="bg-card border border-border rounded-2xl p-6 md:p-10 grid md:grid-cols-[280px_1fr] gap-8 items-center">
+            {/* Photo du fondateur */}
+            <div className="relative mx-auto md:mx-0">
+              <div className="absolute -inset-3 rounded-3xl opacity-20 blur-2xl" style={{ background: "var(--hero-gradient)" }} />
+              <img
+                src={papa}
+                alt="Révérend Docteur Prophète Djeha Kouadio"
+                className="relative w-full max-w-[280px] rounded-2xl object-cover shadow-lg ring-1 ring-border"
+              />
+            </div>
+
+            {/* Biographie */}
+            <div>
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                Serviteur de Dieu et fondateur de MIEDA, le Révérend Docteur Prophète
+                Djeha Kouadio consacre sa vie à l'annonce de l'Évangile, à
+                l'enseignement de la Parole et à la délivrance des âmes. Sous sa
+                direction, la mission s'étend depuis Yamoussoukro, en Côte d'Ivoire,
+                vers de nombreuses nations.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                {/* ✏️ MIEDA : remplacez ce paragraphe par la biographie officielle du fondateur. */}
+                Son ministère est marqué par un profond attachement à la vérité
+                biblique, à la prière et à l'accompagnement des fidèles dans leur
+                marche avec Dieu.
+              </p>
+            </div>
           </div>
         </div>
       </section>
