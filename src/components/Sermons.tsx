@@ -343,21 +343,43 @@ const CulteYamoussoukro = () => (
         </p>
 
         <div className="space-y-3 mb-8">
-          <div className="flex items-center gap-3 text-foreground">
+          {/* Dimanche */}
+          <div className="flex items-start gap-3 text-foreground">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <Calendar className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="font-medium">Dimanche — Louange &amp; Adoration</p>
+              <p className="text-sm text-muted-foreground">1er culte 06h00–08h20 · 2e culte 08h30–11h00</p>
+            </div>
+          </div>
+          {/* Mercredi */}
+          <div className="flex items-start gap-3 text-foreground">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <Calendar className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="font-medium">Mercredi — Culte de délivrance</p>
+              <p className="text-sm text-muted-foreground">09h00–13h00 · dernier mercredi 18h00–21h00</p>
+            </div>
+          </div>
+          {/* Ouverture quotidienne */}
+          <div className="flex items-start gap-3 text-foreground">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
               <Clock className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <p className="font-medium">Dimanche à 09h00</p>
-              <p className="text-sm text-muted-foreground">Heure de Côte d'Ivoire (GMT)</p>
+              <p className="font-medium">Tous les jours 9h00–11h00</p>
+              <p className="text-sm text-muted-foreground">Église ouverte pour assistance et prière</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 text-foreground">
+          {/* Lieu */}
+          <div className="flex items-start gap-3 text-foreground">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
               <MapPin className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <p className="font-medium">Yamoussoukro, Côte d'Ivoire</p>
+              <p className="font-medium">MIEDA Abla Pokou — Yamoussoukro au Millionaire</p>
               <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer"
                  className="text-sm text-primary hover:underline inline-flex items-center gap-1">
                 Voir l'itinéraire <ExternalLink className="w-3 h-3" />
@@ -473,7 +495,7 @@ const Sermons = () => {
 
   const summaryCards = [
     { id: "culte-yamoussoukro", icon: MapPin, title: "Culte Yamoussoukro",
-      sub: "Siège principal", badge: "Dim. 09h00",
+      sub: "Siège principal", badge: "Dim. dès 06h",
       badgeC: "bg-primary/10 text-primary", iconBg: "bg-primary/10", iconC: "text-primary" },
     { id: "culte-enfants", icon: Baby, title: "Culte Enfants",
       sub: "Pour les 4–12 ans", badge: "Dim. 09h00",
