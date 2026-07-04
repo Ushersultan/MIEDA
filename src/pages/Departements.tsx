@@ -3,25 +3,20 @@ import {
   BookOpen, HeartPulse, SprayCan, ClipboardCheck, ShieldCheck, Radio,
   Calculator, HeartHandshake, GraduationCap,
 } from "lucide-react";
+import { departements as departementsData } from "@/data/departements";
 
-const departements = [
-  { icon: Music, title: "Louange", desc: "Conduire l'assemblée dans l'adoration par le chant et la musique." },
-  { icon: HandHelping, title: "Intercession", desc: "Soutenir la mission et les fidèles par une prière fervente et constante." },
-  { icon: Megaphone, title: "Évangélisation", desc: "Annoncer la Bonne Nouvelle de Jésus-Christ et gagner des âmes." },
-  { icon: Flame, title: "Délivrance", desc: "Accompagner les personnes vers la liberté et la restauration en Christ." },
-  { icon: Church, title: "Ecclésiastique", desc: "Veiller au bon ordre spirituel et à la vie de l'Église." },
-  { icon: Sparkles, title: "Jeunesse", desc: "Encadrer et affermir les jeunes dans la foi et le service." },
-  { icon: Users, title: "Hommes", desc: "Rassembler et édifier les hommes de l'Église." },
-  { icon: UserRound, title: "Femmes", desc: "Rassembler et édifier les femmes de l'Église." },
-  { icon: BookOpen, title: "École de Dimanche", desc: "Enseigner la Parole de Dieu aux enfants chaque dimanche." },
-  { icon: HeartPulse, title: "Prière à l'Hôpital", desc: "Visiter, prier et réconforter les malades à l'hôpital." },
-  { icon: SprayCan, title: "Nettoyage", desc: "Entretenir la maison de Dieu dans la propreté et la dignité." },
-  { icon: ClipboardCheck, title: "Service d'Ordre", desc: "Accueillir et veiller au bon déroulement des cultes." },
-  { icon: ShieldCheck, title: "Sécurité", desc: "Assurer la sécurité des fidèles et des lieux de culte." },
-  { icon: Radio, title: "Communication", desc: "Diffuser l'Évangile via le web, la vidéo et les réseaux sociaux." },
-  { icon: Calculator, title: "Comptabilité", desc: "Gérer avec transparence les finances de l'Église." },
-  { icon: HeartHandshake, title: "Social", desc: "Servir la communauté par des actions de solidarité et d'entraide." },
-];
+const icones: Record<string, any> = {
+  "louange": Music, "intercession": HandHelping, "evangelisation": Megaphone,
+  "delivrance": Flame, "ecclesiastique": Church, "jeunesse": Sparkles,
+  "hommes": Users, "femmes": UserRound, "ecole-de-dimanche": BookOpen,
+  "priere-hopital": HeartPulse, "nettoyage": SprayCan, "service-ordre": ClipboardCheck,
+  "securite": ShieldCheck, "communication": Radio, "comptabilite": Calculator,
+  "social": HeartHandshake,
+};
+
+const departements = departementsData.map((d) => ({
+  icon: icones[d.id] ?? Users, title: d.titre, desc: d.desc,
+}));
 
 const instituts = [
   { icon: BookOpen, title: "Institut Biblique", desc: "Une formation approfondie à la Parole de Dieu pour affermir les fidèles." },

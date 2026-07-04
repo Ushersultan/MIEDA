@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Lock, User as UserIcon, MapPin, ArrowLeft, Loader2 } from "lucide-react";
+import { Mail, Lock, User as UserIcon, MapPin, ArrowLeft, Loader2, Church } from "lucide-react";
+import { eglisesGroupees } from "@/lib/serviteurs";
 import logo from "@/assets/mieda-logo.png";
 
 const Auth = () => {
@@ -14,6 +15,8 @@ const Auth = () => {
   const [fullName, setFullName] = useState("");
   const [ville, setVille] = useState("");
   const [pays, setPays] = useState("");
+  const [egliseId, setEgliseId] = useState("");
+  const groupes = eglisesGroupees();
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -59,6 +62,7 @@ const Auth = () => {
             full_name: fullName,
             ville,
             pays,
+            eglise_id: egliseId || null,
             role: "membre",
           });
         }
@@ -158,6 +162,26 @@ const Auth = () => {
                   onChange={(e) => setPays(e.target.value)}
                   className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                 />
+              </div>
+            )}
+
+            {mode === "signup" && (
+              <div className="relative">
+                <Church className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                <select
+                  value={egliseId}
+                  onChange={(e) => setEgliseId(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
+                >
+                  <option value="">Mon église MIEDA (optionnel)</option>
+                  {groupes.map((g) => (
+                    <optgroup key={g.groupe} label={g.groupe}>
+                      {g.options.map((o) => (
+                        <option key={o.id} value={o.id}>{o.nom}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
               </div>
             )}
 

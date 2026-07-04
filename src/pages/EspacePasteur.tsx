@@ -6,15 +6,17 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
   ArrowLeft, Loader2, Church, HeartHandshake, Megaphone, Users, ShieldAlert,
-  CheckCircle2, Clock, Send, Trash2, Calendar, Phone, MapPin, Home,
+  CheckCircle2, Clock, Send, Trash2, Calendar, Phone, MapPin, Home, XCircle, Inbox,
 } from "lucide-react";
 import { nomEglise } from "@/lib/serviteurs";
+import { departements } from "@/data/departements";
 
-type Tab = "prieres" | "annonces" | "membres";
+type Tab = "prieres" | "annonces" | "membres" | "demandes";
 
 interface Priere { id: string; nom: string; demande: string; traitee: boolean; created_at: string; }
 interface Annonce { id: string; titre: string; contenu: string; date_evenement: string | null; created_at: string; }
 interface Membre { id: string; full_name: string; phone: string; ville: string; role: string; }
+interface DemandeDept { id: string; user_id: string; departement: string; message: string | null; statut: string; created_at: string; nom?: string; }
 
 const EspacePasteur = () => {
   const { user, loading: authLoading, profil, signOut } = useAuth();
@@ -25,6 +27,7 @@ const EspacePasteur = () => {
   const [prieres, setPrieres] = useState<Priere[]>([]);
   const [annonces, setAnnonces] = useState<Annonce[]>([]);
   const [membres, setMembres] = useState<Membre[]>([]);
+  const [demandes, setDemandes] = useState<DemandeDept[]>([]);
   const [chargement, setChargement] = useState(true);
 
   // Formulaire annonce
@@ -44,17 +47,24 @@ const EspacePasteur = () => {
   const charger = useCallback(async () => {
     if (!egliseId) { setChargement(false); return; }
     setChargement(true);
-    const [pr, an, me] = await Promise.all([
+    const [pr, an, me, de] = await Promise.all([
       supabase.from("prieres").select("id, nom, demande, traitee, created_at")
         .eq("eglise_id", egliseId).order("created_at", { ascending: false }),
       supabase.from("annonces").select("id, titre, contenu, date_evenement, created_at")
         .eq("eglise_id", egliseId).order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, full_name, phone, ville, role")
         .eq("eglise_id", egliseId),
+      supabase.from("demandes_departement")
+        .select("id, user_id, departement, message, statut, created_at")
+        .eq("eglise_id", egliseId).order("created_at", { ascending: false }),
     ]);
     if (pr.data) setPrieres(pr.data as Priere[]);
     if (an.data) setAnnonces(an.data as Annonce[]);
     if (me.data) setMembres(me.data as Membre[]);
+    if (de.data) {
+      const noms = new Map((me.data ?? []).map((m: any) => [m.id, m.full_name]));
+      setDemandes((de.data as DemandeDept[]).map((d) => ({ ...d, nom: noms.get(d.user_id) ?? "Membre" })));
+    }
     setChargement(false);
   }, [egliseId]);
 
@@ -84,6 +94,12 @@ const EspacePasteur = () => {
       charger();
     }
     setPub(false);
+  };
+
+  const statuerDemande = async (id: string, statut: "approuvee" | "refusee") => {
+    const { error } = await supabase.from("demandes_departement")
+      .update({ statut }).eq("id", id);
+    if (!error) setDemandes((prev) => prev.map((d) => d.id === id ? { ...d, statut } : d));
   };
 
   const supprimerAnnonce = async (id: string) => {
@@ -120,8 +136,11 @@ const EspacePasteur = () => {
 
   const prieresEnAttente = prieres.filter((p) => !p.traitee).length;
 
+  const demandesEnAttente = demandes.filter((d) => d.statut === "en_attente").length;
+
   const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
     { id: "prieres", label: "Prières", icon: HeartHandshake, count: prieresEnAttente },
+    { id: "demandes", label: "Demandes", icon: Inbox, count: demandesEnAttente },
     { id: "annonces", label: "Annonces", icon: Megaphone, count: annonces.length },
     { id: "membres", label: "Membres", icon: Users, count: membres.length },
   ];
@@ -206,6 +225,57 @@ const EspacePasteur = () => {
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {/* DEMANDES DE DÉPARTEMENT */}
+                {tab === "demandes" && (
+                  <div className="space-y-3">
+                    {demandes.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">
+                        Aucune demande d'adhésion à un département.
+                      </p>
+                    )}
+                    {demandes.map((d) => {
+                      const dept = departements.find((x) => x.id === d.departement);
+                      return (
+                        <div key={d.id} className={`p-4 rounded-xl border ${
+                          d.statut === "en_attente" ? "border-primary/30 bg-card" : "border-border bg-muted/30"
+                        }`}>
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="font-medium text-foreground">
+                                {d.nom} → <span className="text-primary">{dept?.titre ?? d.departement}</span>
+                              </p>
+                              {d.message && (
+                                <p className="text-sm text-muted-foreground mt-1 italic">« {d.message} »</p>
+                              )}
+                              <p className="text-xs text-muted-foreground mt-1.5">
+                                {new Date(d.created_at).toLocaleDateString("fr-FR")}
+                              </p>
+                            </div>
+                            {d.statut === "en_attente" ? (
+                              <div className="flex gap-2 flex-shrink-0">
+                                <button onClick={() => statuerDemande(d.id, "approuvee")}
+                                  className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 transition-colors">
+                                  <CheckCircle2 className="w-3.5 h-3.5" /> Approuver
+                                </button>
+                                <button onClick={() => statuerDemande(d.id, "refusee")}
+                                  className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
+                                  <XCircle className="w-3.5 h-3.5" /> Refuser
+                                </button>
+                              </div>
+                            ) : (
+                              <span className={`text-xs font-medium flex-shrink-0 ${
+                                d.statut === "approuvee" ? "text-green-600" : "text-destructive"
+                              }`}>
+                                {d.statut === "approuvee" ? "Approuvée ✓" : "Refusée"}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
 
