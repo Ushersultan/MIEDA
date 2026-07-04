@@ -13,8 +13,10 @@ import Evenements from "./pages/Evenements";
 import Departements from "./pages/Departements";
 import Projets from "./pages/Projets";
 import ContactPage from "./pages/ContactPage";
+import Serviteur from "./pages/Serviteur";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
+import EspacePasteur from "./pages/EspacePasteur";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,11 +39,13 @@ const App = () => (
               <Route path="/departements" element={<Departements />} />
               <Route path="/projets" element={<Projets />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/serviteur/:egliseId/:slug" element={<Serviteur />} />
             </Route>
 
             {/* Pages plein écran (sans Header/Footer) */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/profil" element={<Profile />} />
+            <Route path="/espace-pasteur" element={<EspacePasteur />} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
