@@ -1,13 +1,38 @@
 import { useState } from "react";
-import { Heart, Calculator, ExternalLink } from "lucide-react";
+import {
+  Heart, ExternalLink, Landmark, Smartphone, QrCode, Copy, Check, Globe2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import paypalQr from "@/assets/paypal-qr.png";
 
 // ══════════════════════════════════════════════
 //  CONFIGURATION
 // ══════════════════════════════════════════════
 const PAYPAL_EMAIL = "mieda.diaspora@gmail.com";
 const CURRENCY = "USD";
+
+// ── Coordonnées officielles Dîmes & Offrandes — MIEDA Diaspora ──
+const BANQUE_US = {
+  banque: "Manufacturers and Traders Trust Company (M&T Bank)",
+  adresse: "One M&T Plaza, Buffalo, NY 14203, USA",
+  beneficiaire: "KOUADIO DJEHA",
+  compte: "9886633974",
+  chipsAba: "0555",
+  swift: "MANTUS33",
+};
+
+const WAVE = {
+  nom: "DJEHA ROSINE",
+  tel: "+225 07 07 68 80 89",
+};
+
+const IBAN_FR = {
+  iban: "FR17 3000 2005 3200 0000 6156 V05",
+  bic: "CRLYFRPP",
+  titulaire: "MIEDA",
+  adresse: "40 Avenue de Sully, 93190 Livry-Gargan, France",
+};
 
 // ── Utilitaire PayPal ──
 function buildPayPalUrl(amount: string, description: string): string {
@@ -23,29 +48,73 @@ function buildPayPalUrl(amount: string, description: string): string {
   return `https://www.paypal.com/donate?${params.toString()}`;
 }
 
+// ── Ligne d'info avec bouton copier ──
+const CopyRow = ({ label, value, copyValue }: { label: string; value: string; copyValue?: string }) => {
+  const [copied, setCopied] = useState(false);
+  const doCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(copyValue ?? value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch { /* noop */ }
+  };
+  return (
+    <div className="flex items-start justify-between gap-3 py-2">
+      <div className="min-w-0">
+        <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
+        <p className="text-sm font-medium text-foreground break-words">{value}</p>
+      </div>
+      <button
+        onClick={doCopy}
+        className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/70 flex items-center justify-center transition-colors"
+        aria-label={`Copier ${label}`}
+      >
+        {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+      </button>
+    </div>
+  );
+};
+
 // ══════════════════════════════════════════════
-//  ONGLET — DON LIBRE
+//  FORMULAIRE PAYPAL — Offrande ou Dîme
 // ══════════════════════════════════════════════
-const FreeOfferingTab = () => {
+const PayPalForm = () => {
   const [amount, setAmount] = useState("");
+  const [type, setType] = useState<"offrande" | "dime">("offrande");
   const [note, setNote] = useState("");
   const presets = ["5", "10", "25", "50", "100"];
 
   const handleGive = () => {
     const val = parseFloat(amount);
     if (!val || val <= 0) return;
-    const desc = note
-      ? `Offrande MIEDA — ${note}`
-      : "Offrande — Mission Internationale MIEDA";
+    const base = type === "dime" ? "Dîme MIEDA" : "Offrande MIEDA";
+    const desc = note ? `${base} — ${note}` : `${base} — Mission Internationale`;
     window.open(buildPayPalUrl(val.toFixed(2), desc), "_blank");
   };
 
   return (
     <div className="space-y-6">
-      <p className="text-muted-foreground text-sm leading-relaxed">
-        Donnez selon ce que le Seigneur a mis dans votre cœur. Chaque offrande
-        soutient la mission d'évangélisation et les œuvres de l'église.
-      </p>
+      {/* Type de don */}
+      <div>
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">
+          Type de don
+        </label>
+        <div className="flex gap-2">
+          {([["offrande", "Offrande"], ["dime", "Dîme"]] as const).map(([val, lbl]) => (
+            <button
+              key={val}
+              onClick={() => setType(val)}
+              className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
+                type === val
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "border-border text-foreground hover:border-primary"
+              }`}
+            >
+              {lbl}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Montants rapides */}
       <div>
@@ -115,120 +184,24 @@ const FreeOfferingTab = () => {
         <ExternalLink className="w-4 h-4 ml-2 opacity-60" />
       </Button>
 
-      <p className="text-xs text-muted-foreground text-center">
-        Vous serez redirigé vers PayPal pour finaliser votre don en toute sécurité.
-      </p>
-    </div>
-  );
-};
-
-// ══════════════════════════════════════════════
-//  ONGLET — DÎME
-// ══════════════════════════════════════════════
-const TitheTab = () => {
-  const [salary, setSalary] = useState("");
-  const [period, setPeriod] = useState<"monthly" | "biweekly" | "weekly">("monthly");
-
-  const periodLabels = {
-    monthly: "Mensuel",
-    biweekly: "Bimensuel",
-    weekly: "Hebdomadaire",
-  };
-
-  const tithe = salary ? (parseFloat(salary) * 0.1).toFixed(2) : "0.00";
-  const hasAmount = parseFloat(tithe) > 0;
-
-  const handleGive = () => {
-    if (!hasAmount) return;
-    const desc = `Dîme MIEDA (${periodLabels[period]}) — 10% de ${salary} ${CURRENCY}`;
-    window.open(buildPayPalUrl(tithe, desc), "_blank");
-  };
-
-  return (
-    <div className="space-y-6">
-      <p className="text-muted-foreground text-sm leading-relaxed">
-        La dîme représente 10% de vos revenus, en reconnaissance de la
-        bénédiction de Dieu dans votre vie (Malachie 3:10).
-      </p>
-
-      {/* Fréquence */}
-      <div>
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">
-          Fréquence de revenu
-        </label>
-        <div className="flex gap-2">
-          {(Object.keys(periodLabels) as Array<keyof typeof periodLabels>).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
-                period === p
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "border-border text-foreground hover:border-primary"
-              }`}
-            >
-              {periodLabels[p]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Salaire */}
-      <div>
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
-          Votre revenu ({periodLabels[period].toLowerCase()})
-        </label>
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
-            $
-          </span>
-          <Input
-            type="number"
-            min="0"
-            step="1"
-            placeholder="0.00"
-            value={salary}
-            onChange={(e) => setSalary(e.target.value)}
-            className="pl-7"
-          />
-        </div>
-      </div>
-
-      {/* Résultat calculé */}
-      <div className={`rounded-xl p-5 border transition-all ${
-        hasAmount
-          ? "bg-primary/5 border-primary/30"
-          : "bg-muted/40 border-border"
-      }`}>
-        <div className="flex items-center gap-2 mb-1">
-          <Calculator className="w-4 h-4 text-muted-foreground" />
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Votre dîme (10%)
-          </span>
-        </div>
-        <p className={`text-3xl font-bold ${hasAmount ? "text-primary" : "text-muted-foreground"}`}>
-          ${tithe}
-          <span className="text-sm font-normal text-muted-foreground ml-2">
-            {CURRENCY}
-          </span>
-        </p>
-        {hasAmount && (
-          <p className="text-xs text-muted-foreground mt-1">
-            10% de ${parseFloat(salary).toLocaleString("fr-FR")} ({periodLabels[period].toLowerCase()})
+      {/* QR Code */}
+      <div className="flex items-center gap-4 rounded-xl border border-border bg-muted/30 p-4">
+        <img
+          src={paypalQr}
+          alt="QR code PayPal MIEDA Diaspora"
+          className="w-28 h-28 rounded-lg flex-shrink-0 bg-white"
+        />
+        <div>
+          <p className="text-sm font-semibold text-foreground flex items-center gap-1.5 mb-1">
+            <QrCode className="w-4 h-4 text-primary" />
+            Scannez-moi
           </p>
-        )}
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Scannez ce code avec l'appareil photo de votre téléphone pour donner
+            directement via PayPal.
+          </p>
+        </div>
       </div>
-
-      <Button
-        size="lg"
-        className="w-full text-base"
-        onClick={handleGive}
-        disabled={!hasAmount}
-      >
-        <Heart className="w-4 h-4 mr-2" />
-        Payer ma dîme de ${tithe} via PayPal
-        <ExternalLink className="w-4 h-4 ml-2 opacity-60" />
-      </Button>
 
       <p className="text-xs text-muted-foreground text-center">
         Vous serez redirigé vers PayPal pour finaliser votre don en toute sécurité.
@@ -241,19 +214,17 @@ const TitheTab = () => {
 //  COMPOSANT PRINCIPAL
 // ══════════════════════════════════════════════
 const Offering = () => {
-  const [tab, setTab] = useState<"offering" | "tithe">("offering");
-
   return (
     <section id="offrandes" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 items-start mb-14">
 
           {/* ── Côté gauche — Texte ── */}
           <div className="lg:sticky lg:top-24">
             <div className="inline-block px-4 py-2 bg-secondary/20 rounded-full mb-6">
               <span className="text-sm font-semibold text-secondary-foreground flex items-center gap-2">
                 <Heart className="w-4 h-4" />
-                Offrandes &amp; Dîmes
+                Dîmes &amp; Offrandes — MIEDA Diaspora
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -288,40 +259,97 @@ const Offering = () => {
             </div>
           </div>
 
-          {/* ── Côté droit — Formulaire ── */}
+          {/* ── Côté droit — Formulaire PayPal ── */}
           <div className="bg-background rounded-2xl border border-border shadow-lg overflow-hidden">
-            {/* Onglets */}
-            <div className="flex border-b border-border">
-              <button
-                onClick={() => setTab("offering")}
-                className={`flex-1 py-4 text-sm font-medium transition-colors ${
-                  tab === "offering"
-                    ? "text-foreground border-b-2 border-primary bg-primary/5"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Heart className="w-4 h-4 inline mr-2" />
-                Offrande libre
-              </button>
-              <button
-                onClick={() => setTab("tithe")}
-                className={`flex-1 py-4 text-sm font-medium transition-colors ${
-                  tab === "tithe"
-                    ? "text-foreground border-b-2 border-primary bg-primary/5"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Calculator className="w-4 h-4 inline mr-2" />
-                Calculer ma dîme
-              </button>
+            <div className="border-b border-border px-6 py-4">
+              <p className="font-semibold text-foreground flex items-center gap-2">
+                <Heart className="w-4 h-4 text-primary" />
+                Donner en ligne — Offrande ou Dîme
+              </p>
             </div>
-
-            {/* Contenu */}
             <div className="p-6">
-              {tab === "offering" ? <FreeOfferingTab /> : <TitheTab />}
+              <PayPalForm />
             </div>
           </div>
         </div>
+
+        {/* ── Autres moyens de donner ── */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex-1 h-px bg-border" />
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+            Autres moyens de donner
+          </h3>
+          <div className="flex-1 h-px bg-border" />
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Virement bancaire USA */}
+          <div className="bg-background rounded-2xl border border-border shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Landmark className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="font-semibold text-foreground">Virement bancaire</p>
+                <p className="text-xs text-muted-foreground">États-Unis 🇺🇸</p>
+              </div>
+            </div>
+            <div className="divide-y divide-border">
+              <CopyRow label="Banque" value={BANQUE_US.banque} />
+              <CopyRow label="Adresse" value={BANQUE_US.adresse} />
+              <CopyRow label="Bénéficiaire" value={BANQUE_US.beneficiaire} />
+              <CopyRow label="Numéro de compte" value={BANQUE_US.compte} />
+              <CopyRow label="CHIPS / ABA" value={BANQUE_US.chipsAba} />
+              <CopyRow label="Code SWIFT" value={BANQUE_US.swift} />
+            </div>
+          </div>
+
+          {/* Wave */}
+          <div className="bg-background rounded-2xl border border-border shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center">
+                <Smartphone className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <p className="font-semibold text-foreground">Wave</p>
+                <p className="text-xs text-muted-foreground">Mobile Money · Côte d'Ivoire 🇨🇮</p>
+              </div>
+            </div>
+            <div className="divide-y divide-border">
+              <CopyRow label="Nom" value={WAVE.nom} />
+              <CopyRow label="Numéro" value={WAVE.tel} copyValue={WAVE.tel.replace(/\s/g, "")} />
+            </div>
+            <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+              Envoyez votre dîme ou offrande directement via l'application Wave.
+            </p>
+          </div>
+
+          {/* IBAN France / International */}
+          <div className="bg-background rounded-2xl border border-border shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-xl bg-secondary/20 flex items-center justify-center">
+                <Globe2 className="w-5 h-5 text-secondary-foreground" />
+              </div>
+              <div>
+                <p className="font-semibold text-foreground">Virement IBAN</p>
+                <p className="text-xs text-muted-foreground">France / International 🇫🇷</p>
+              </div>
+            </div>
+            <div className="divide-y divide-border">
+              <CopyRow label="IBAN" value={IBAN_FR.iban} copyValue={IBAN_FR.iban.replace(/\s/g, "")} />
+              <CopyRow label="Code B.I.C." value={IBAN_FR.bic} />
+              <CopyRow label="Titulaire du compte" value={IBAN_FR.titulaire} />
+              <CopyRow label="Adresse" value={IBAN_FR.adresse} />
+            </div>
+            <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+              Précisez « Offrande » ou « Dîme » en libellé de votre virement.
+            </p>
+          </div>
+        </div>
+
+        <p className="text-center text-sm font-medium text-foreground mt-10">
+          Dieu vous bénisse 🙏
+        </p>
       </div>
     </section>
   );
