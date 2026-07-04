@@ -1,11 +1,23 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+
+export interface ProfilData {
+  full_name: string;
+  phone: string;
+  ville: string;
+  pays: string;
+  eglise_locale: string;
+  eglise_id: string | null;
+  role: string; // 'membre' | 'pasteur' | 'admin'
+}
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  profil: ProfilData | null;
+  refreshProfil: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -14,34 +26,60 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [profil, setProfil] = useState<ProfilData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const loadProfil = useCallback(async (u: User | null) => {
+    if (!u) { setProfil(null); return; }
+    const { data } = await supabase
+      .from("profiles").select("*").eq("id", u.id).single();
+    if (data) {
+      setProfil({
+        full_name: data.full_name ?? "",
+        phone: data.phone ?? "",
+        ville: data.ville ?? "",
+        pays: data.pays ?? "",
+        eglise_locale: data.eglise_locale ?? "",
+        eglise_id: data.eglise_id ?? null,
+        role: data.role ?? "membre",
+      });
+    } else {
+      setProfil(null);
+    }
+  }, []);
+
   useEffect(() => {
-    // Écoute les changements d'authentification
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        // Ne pas faire d'appel Supabase directement dans le callback (deadlock)
+        setTimeout(() => loadProfil(session?.user ?? null), 0);
         setLoading(false);
       }
     );
 
-    // Récupère la session existante au chargement
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      loadProfil(session?.user ?? null);
       setLoading(false);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [loadProfil]);
+
+  const refreshProfil = useCallback(async () => {
+    await loadProfil(user);
+  }, [user, loadProfil]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setProfil(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, profil, refreshProfil, signOut }}>
       {children}
     </AuthContext.Provider>
   );
