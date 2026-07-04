@@ -410,8 +410,8 @@ const CulteYamoussoukro = () => (
 // ══════════════════════════════════════════════
 //  SECTION CULTE ENFANTS
 // ══════════════════════════════════════════════
-const CulteEnfants = () => (
-  <div id="culte-enfants" className="scroll-mt-24 mb-20">
+const EcoleDimanche = () => (
+  <div id="ecole-de-dimanche" className="scroll-mt-24 mb-20">
     <div className="rounded-3xl border border-border bg-accent/5 p-8 md:p-10">
       <div className="flex items-center gap-2 mb-3">
         <Baby className="w-5 h-5 text-accent" />
@@ -420,7 +420,7 @@ const CulteEnfants = () => (
         </span>
       </div>
       <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-        Culte Enfants
+        École de Dimanche
       </h3>
       <p className="text-muted-foreground leading-relaxed max-w-2xl mb-6">
         Un espace dédié aux plus jeunes pour découvrir la foi dans la joie :
@@ -497,7 +497,7 @@ const Sermons = () => {
     { id: "culte-yamoussoukro", icon: MapPin, title: "Culte Yamoussoukro",
       sub: "Siège principal", badge: "Dim. dès 06h",
       badgeC: "bg-primary/10 text-primary", iconBg: "bg-primary/10", iconC: "text-primary" },
-    { id: "culte-enfants", icon: Baby, title: "Culte Enfants",
+    { id: "ecole-de-dimanche", icon: Baby, title: "École de Dimanche",
       sub: "Pour les 4–12 ans", badge: "Dim. 09h00",
       badgeC: "bg-accent/10 text-accent", iconBg: "bg-accent/10", iconC: "text-accent" },
     { id: "culte-en-ligne", icon: Globe, title: "Culte en Ligne",
@@ -548,7 +548,7 @@ const Sermons = () => {
         {/* ── Sections détaillées ── */}
         <CulteYamoussoukro />
         <CulteEnLigne />
-        <CulteEnfants />
+        <EcoleDimanche />
 
         {/* ── Médias / Vidéos ── */}
         <div className="flex items-center gap-4 mb-10">

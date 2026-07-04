@@ -19,7 +19,7 @@ const egliseItems = [
 // ── Sous-menu "Cultes" ──
 const culteItems = [
   { label: "Culte Yamoussoukro", to: "/cultes#culte-yamoussoukro", icon: MapPin, desc: "Siège principal" },
-  { label: "Culte Enfants", to: "/cultes#culte-enfants", icon: Baby, desc: "Pour les 4–12 ans" },
+  { label: "École de Dimanche", to: "/cultes#ecole-de-dimanche", icon: Baby, desc: "Pour les 4–12 ans" },
   { label: "Culte en Ligne", to: "/cultes#culte-en-ligne", icon: Globe, desc: "MIEDA Diaspora · Zoom" },
 ];
 
