@@ -3,8 +3,10 @@ import {
   MapPin, Phone, Mail, Youtube, Facebook, Instagram, Video,
   ChevronDown, ExternalLink, Globe2, Users, Church, Search, X,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { eglises, ordreRegions, type Eglise, type Pasteur } from "@/data/eglises";
+import { lienServiteur } from "@/lib/serviteurs";
 
 // ── Afficher les numéros de téléphone des serviteurs ? ──
 // Passez à false pour masquer tous les contacts sur le site public.
@@ -64,15 +66,17 @@ const SocialLinks = ({ eglise }: { eglise: Eglise }) => {
 };
 
 // ── Ligne serviteur (équipe) ──
-const ServiteurRow = ({ p }: { p: Pasteur }) => (
+const ServiteurRow = ({ p, eglise }: { p: Pasteur; eglise: Eglise }) => (
   <div className="flex items-center gap-3 py-2">
-    <div className="w-9 h-9 rounded-full bg-muted text-muted-foreground font-semibold text-xs flex items-center justify-center flex-shrink-0">
-      {getInitials(p.nom)}
-    </div>
-    <div className="min-w-0 flex-1">
-      <p className="text-sm font-medium text-foreground leading-tight">{p.nom}</p>
-      {p.titre && <p className="text-xs text-muted-foreground">{p.titre}</p>}
-    </div>
+    <Link to={lienServiteur(eglise, p)} className="flex items-center gap-3 min-w-0 flex-1 group">
+      <div className="w-9 h-9 rounded-full bg-muted text-muted-foreground font-semibold text-xs flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+        {getInitials(p.nom)}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-foreground leading-tight group-hover:text-primary transition-colors">{p.nom}</p>
+        {p.titre && <p className="text-xs text-muted-foreground">{p.titre}</p>}
+      </div>
+    </Link>
     {AFFICHER_CONTACTS && p.telephone && (
       <a href={`tel:${p.telephone.replace(/[^+\d]/g, "")}`}
          className="text-xs text-primary hover:underline flex items-center gap-1 flex-shrink-0">
@@ -140,8 +144,17 @@ const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
 
       {open && hasDetails && (
         <div className="px-5 pb-5 pt-1 border-t border-border space-y-4">
+          {/* Lien vers la fiche du serviteur principal */}
+          <div className="pt-3">
+            <Link to={lienServiteur(eglise, eglise.pasteur)}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
+              Voir la fiche de {eglise.pasteur.nom}
+              <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
           {/* Coordonnées du principal */}
-          <div className="space-y-2 pt-3">
+          <div className="space-y-2">
             {eglise.adresse && (
               <a href={mapsLink} target="_blank" rel="noopener noreferrer"
                  className="flex items-start gap-2 text-sm text-foreground hover:text-primary transition-colors group">
@@ -177,7 +190,7 @@ const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
               </p>
               <div className="divide-y divide-border">
                 {eglise.equipe.map((p) => (
-                  <ServiteurRow key={p.nom} p={p} />
+                  <ServiteurRow key={p.nom} p={p} eglise={eglise} />
                 ))}
               </div>
             </div>
