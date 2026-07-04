@@ -8,7 +8,7 @@ import { eglises, ordreRegions, type Eglise, type Pasteur } from "@/data/eglises
 
 // ── Afficher les numéros de téléphone des serviteurs ? ──
 // Passez à false pour masquer tous les contacts sur le site public.
-const AFFICHER_CONTACTS = true;
+const AFFICHER_CONTACTS = false;
 
 // ── Icône TikTok (SVG sur mesure, absente de lucide) ──
 const TikTokIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
