@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   User as UserIcon, Mail, MapPin, Phone, LogOut, ArrowLeft, Loader2, Save,
   Church, ShieldCheck, HeartHandshake, Send, Clock, CheckCircle2, Camera,
-  Megaphone, Users, Heart, ExternalLink, Calendar, XCircle, Sparkles,
+  Megaphone, Users, Heart, ExternalLink, Calendar, XCircle, Sparkles, KeyRound,
 } from "lucide-react";
 import { eglisesGroupees, nomEglise } from "@/lib/serviteurs";
 import { departements } from "@/data/departements";
@@ -62,6 +62,10 @@ const Profile = () => {
   const [deptChoisi, setDeptChoisi] = useState<string | null>(null);
   const [messageDept, setMessageDept] = useState("");
   const [envoiDept, setEnvoiDept] = useState(false);
+
+  // Code serviteur
+  const [codeServ, setCodeServ] = useState("");
+  const [activation, setActivation] = useState(false);
 
   // Soutien
   const [montant, setMontant] = useState("");
@@ -187,6 +191,24 @@ const Profile = () => {
       setDeptChoisi(null); setMessageDept(""); chargerDemandes();
     }
     setEnvoiDept(false);
+  };
+
+  const activerCode = async () => {
+    if (!codeServ.trim()) return;
+    setActivation(true);
+    const { data: res, error } = await supabase.rpc("activer_code_pasteur", {
+      p_code: codeServ.trim(),
+    });
+    if (error) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+    } else if (res === "ok") {
+      toast({ title: "Espace Pasteur activé ✓", description: "Bienvenue, serviteur de Dieu ! 🙏" });
+      setCodeServ("");
+      await refreshProfil();
+    } else {
+      toast({ title: "Code invalide", description: "Vérifiez le code auprès de l'administration.", variant: "destructive" });
+    }
+    setActivation(false);
   };
 
   const donner = () => {
@@ -338,6 +360,31 @@ const Profile = () => {
                     </select>
                   </div>
                 </div>
+                {!isPasteur && (
+                  <div className="rounded-xl border border-border bg-muted/30 p-4">
+                    <p className="text-sm font-medium text-foreground flex items-center gap-2 mb-1">
+                      <KeyRound className="w-4 h-4 text-primary" />
+                      Vous êtes serviteur MIEDA ?
+                    </p>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Entrez le code serviteur fourni par l'administration pour activer
+                      votre Espace Pasteur.
+                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={codeServ}
+                        onChange={(e) => setCodeServ(e.target.value.toUpperCase())}
+                        placeholder="MIEDA-XXXX-XXXX"
+                        className="flex-1 px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm uppercase focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                      <Button onClick={activerCode} disabled={activation || !codeServ.trim()} size="sm" className="px-4">
+                        {activation ? <Loader2 className="w-4 h-4 animate-spin" /> : "Activer"}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <Button onClick={handleSave} disabled={saving} size="lg" className="flex-1">
                     {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Save className="w-4 h-4 mr-2" /> Enregistrer</>}
