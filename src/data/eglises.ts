@@ -2818,8 +2818,8 @@ export const eglises: Eglise[] = [
     },
   },
   {
-    id: "usa",
-    nom: "MIEDA Diaspora — USA",
+    id: "Diaspora",
+    nom: "MIEDA Diaspora",
     ville: "États-Unis",
     pays: "États-Unis",
     drapeau: "🇺🇸",
