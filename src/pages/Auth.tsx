@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Lock, User as UserIcon, MapPin, ArrowLeft, Loader2, Church } from "lucide-react";
+import { Mail, Lock, User as UserIcon, MapPin, ArrowLeft, Loader2, Church, KeyRound, ShieldCheck } from "lucide-react";
 import { eglisesGroupees } from "@/lib/serviteurs";
 import logo from "@/assets/mieda-logo.png";
 
@@ -16,6 +16,8 @@ const Auth = () => {
   const [ville, setVille] = useState("");
   const [pays, setPays] = useState("");
   const [egliseId, setEgliseId] = useState("");
+  const [estServiteur, setEstServiteur] = useState(false);
+  const [codeServiteur, setCodeServiteur] = useState("");
   const groupes = eglisesGroupees();
   const [submitting, setSubmitting] = useState(false);
 
@@ -65,6 +67,27 @@ const Auth = () => {
             eglise_id: egliseId || null,
             role: "membre",
           });
+
+          // Activation du code serviteur (si session active)
+          if (estServiteur && codeServiteur.trim() && data.session) {
+            const { data: res } = await supabase.rpc("activer_code_pasteur", {
+              p_code: codeServiteur.trim(),
+            });
+            if (res === "ok") {
+              toast({ title: "Espace Pasteur activé ✓", description: "Bienvenue, serviteur de Dieu ! 🙏" });
+            } else if (res === "code_invalide") {
+              toast({
+                title: "Code invalide",
+                description: "Vous pourrez réessayer depuis votre profil.",
+                variant: "destructive",
+              });
+            }
+          } else if (estServiteur && codeServiteur.trim()) {
+            toast({
+              title: "Code enregistré pour plus tard",
+              description: "Après confirmation de votre email, entrez votre code dans votre espace profil.",
+            });
+          }
         }
 
         toast({
@@ -182,6 +205,37 @@ const Auth = () => {
                     </optgroup>
                   ))}
                 </select>
+              </div>
+            )}
+
+            {mode === "signup" && (
+              <div className="rounded-xl border border-border bg-muted/30 p-3.5">
+                <label className="flex items-center gap-2.5 text-sm text-foreground cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={estServiteur}
+                    onChange={(e) => setEstServiteur(e.target.checked)}
+                    className="rounded border-input"
+                  />
+                  <ShieldCheck className="w-4 h-4 text-primary" />
+                  Je suis serviteur MIEDA (pasteur, évangéliste...)
+                </label>
+                {estServiteur && (
+                  <div className="relative mt-3">
+                    <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <input
+                      type="text"
+                      placeholder="Code serviteur (ex: MIEDA-VAVOUA-7K2F)"
+                      value={codeServiteur}
+                      onChange={(e) => setCodeServiteur(e.target.value.toUpperCase())}
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary uppercase"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1.5">
+                      Fourni par l'administration MIEDA. Sans code, inscrivez-vous
+                      comme membre — votre accès pasteur pourra être activé plus tard.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
