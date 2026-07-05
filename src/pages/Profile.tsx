@@ -80,20 +80,19 @@ const Profile = () => {
       setForm({
         full_name: profil.full_name, phone: profil.phone, ville: profil.ville,
         pays: profil.pays, eglise_id: profil.eglise_id ?? "",
-        photo_url: (profil as any).photo_url ?? "",
+        photo_url: profil.photo_url ?? "",
       });
       setLoading(false);
     }
   }, [profil]);
 
-  // Charger photo_url directement (au cas où le contexte ne l'a pas)
+  // Sécurité : si le compte n'a pas encore de ligne profil, ne pas bloquer l'écran
   useEffect(() => {
-    if (!user) return;
-    supabase.from("profiles").select("photo_url").eq("id", user.id).single()
-      .then(({ data }) => {
-        if (data?.photo_url) setForm((f) => ({ ...f, photo_url: data.photo_url }));
-      });
-  }, [user]);
+    if (!authLoading && user && profil === null) {
+      const t = setTimeout(() => setLoading(false), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [authLoading, user, profil]);
 
   // Mes prières
   useEffect(() => {
