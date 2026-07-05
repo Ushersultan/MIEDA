@@ -3,6 +3,7 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface ProfilData {
+  photo_url: string;
   full_name: string;
   phone: string;
   ville: string;
@@ -35,6 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .from("profiles").select("*").eq("id", u.id).single();
     if (data) {
       setProfil({
+        photo_url: data.photo_url ?? "",
         full_name: data.full_name ?? "",
         phone: data.phone ?? "",
         ville: data.ville ?? "",
