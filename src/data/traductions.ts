@@ -1,0 +1,158 @@
+// ════════════════════════════════════════════════════════════════
+//  TRADUCTIONS DU SITE MIEDA — Français / English
+//  Pour ajouter une clé : ajoutez-la dans "fr" ET dans "en".
+// ════════════════════════════════════════════════════════════════
+
+export type Langue = "fr" | "en";
+
+export const traductions: Record<Langue, Record<string, string>> = {
+  fr: {
+    // ── Navigation ──
+    "nav.accueil": "Accueil",
+    "nav.eglise": "L'Église",
+    "nav.apropos": "À Propos / Le Fondateur",
+    "nav.apropos.desc": "Notre histoire et notre vision",
+    "nav.lieux": "Nos Lieux de Cultes",
+    "nav.lieux.desc": "Nos églises dans le monde",
+    "nav.departements": "Départements & Instituts",
+    "nav.departements.desc": "Nos ministères et formations",
+    "nav.projets": "Nos Projets",
+    "nav.projets.desc": "Ce que nous bâtissons",
+    "nav.cultes": "Cultes",
+    "nav.culte.yakro": "Culte Yamoussoukro",
+    "nav.culte.yakro.desc": "Siège principal",
+    "nav.culte.ecole": "École de Dimanche",
+    "nav.culte.ecole.desc": "Pour les 4–12 ans",
+    "nav.culte.ligne": "Culte en Ligne",
+    "nav.culte.ligne.desc": "MIEDA Diaspora · Zoom",
+    "nav.evenements": "Événements",
+    "nav.contact": "Contact",
+    "nav.connecter": "Se Connecter",
+    "nav.espace": "Mon espace",
+
+    // ── Hero ──
+    "hero.bienvenue": "Bienvenue à la MIEDA",
+    "hero.mission": "Mission Internationale d'Évangélisation et de Délivrance des Âmes",
+    "hero.verset": "« Voici, je viens pour faire ta volonté. » Hébreux 10:9.",
+    "hero.savoir": "En Savoir Plus",
+
+    // ── Accueil ──
+    "accueil.experience.titre": "Trouvez l'expérience qui vous convient",
+    "accueil.experience.sous": "Peu importe où vous êtes, en ligne ou en personne, faites partie de tout ce que Dieu fait.",
+    "accueil.lieux.titre": "Nos Lieux de Cultes",
+    "accueil.lieux.desc": "Découvrez les églises MIEDA à travers le monde, leurs pasteurs et leurs coordonnées.",
+    "accueil.lieux.cta": "Voir nos églises",
+    "accueil.ligne.titre": "Culte en Ligne",
+    "accueil.ligne.desc": "Rejoignez la communauté MIEDA Diaspora en direct sur Zoom, partout dans le monde.",
+    "accueil.ligne.cta": "Voir les horaires",
+    "accueil.dept.titre": "Nos Départements",
+    "accueil.dept.desc": "Engagez-vous dans l'un de nos ministères et grandissez au service de Dieu.",
+    "accueil.dept.cta": "Découvrir",
+    "accueil.explorer.titre": "Explorez MIEDA",
+    "accueil.explorer.sous": "Découvrez tout ce que notre communauté a à offrir.",
+    "accueil.explorer.cultes": "Nos Cultes",
+    "accueil.explorer.cultes.desc": "Sur place, en direct YouTube ou en ligne sur Zoom.",
+    "accueil.explorer.event": "Événements",
+    "accueil.explorer.event.desc": "Les prochains rendez-vous de la communauté MIEDA.",
+    "accueil.explorer.dept": "Départements & Instituts",
+    "accueil.explorer.dept.desc": "Nos ministères et formations pour grandir et servir.",
+    "accueil.explorer.projets": "Nos Projets",
+    "accueil.explorer.projets.desc": "Ce que nous bâtissons ensemble pour l'avenir.",
+
+    // ── Footer ──
+    "footer.liens": "Liens Rapides",
+    "footer.accueil": "Accueil",
+    "footer.apropos": "À Propos",
+    "footer.cultes": "Cultes",
+    "footer.evenements": "Événements",
+    "footer.projets": "Nos Projets",
+    "footer.contact": "Contact",
+
+    // ── Bandeau prophétique ──
+    "msg.badge": "Message du Prophète",
+    "msg.pause": "Pause",
+    "msg.defiler": "Défiler",
+    "msg.ecouter": "Écouter",
+    "msg.arreter": "Arrêter la lecture",
+    "msg.lu": "× lu",
+    "msg.termine": "Lecture terminée (3×) — appuyez pour réécouter",
+    "msg.precedent": "Verset précédent",
+    "msg.suivant": "Verset suivant",
+    "msg.fermer": "Fermer",
+  },
+
+  en: {
+    // ── Navigation ──
+    "nav.accueil": "Home",
+    "nav.eglise": "The Church",
+    "nav.apropos": "About / The Founder",
+    "nav.apropos.desc": "Our history and vision",
+    "nav.lieux": "Our Places of Worship",
+    "nav.lieux.desc": "Our churches around the world",
+    "nav.departements": "Departments & Institutes",
+    "nav.departements.desc": "Our ministries and training",
+    "nav.projets": "Our Projects",
+    "nav.projets.desc": "What we are building",
+    "nav.cultes": "Services",
+    "nav.culte.yakro": "Yamoussoukro Service",
+    "nav.culte.yakro.desc": "Headquarters",
+    "nav.culte.ecole": "Sunday School",
+    "nav.culte.ecole.desc": "Ages 4–12",
+    "nav.culte.ligne": "Online Service",
+    "nav.culte.ligne.desc": "MIEDA Diaspora · Zoom",
+    "nav.evenements": "Events",
+    "nav.contact": "Contact",
+    "nav.connecter": "Sign In",
+    "nav.espace": "My Space",
+
+    // ── Hero ──
+    "hero.bienvenue": "Welcome to MIEDA",
+    "hero.mission": "International Mission of Evangelization and Deliverance of Souls",
+    "hero.verset": "\u201cBehold, I have come to do your will.\u201d Hebrews 10:9.",
+    "hero.savoir": "Learn More",
+
+    // ── Home ──
+    "accueil.experience.titre": "Find the experience that fits you",
+    "accueil.experience.sous": "Wherever you are, online or in person, be part of everything God is doing.",
+    "accueil.lieux.titre": "Our Places of Worship",
+    "accueil.lieux.desc": "Discover MIEDA churches around the world, their pastors and contact details.",
+    "accueil.lieux.cta": "See our churches",
+    "accueil.ligne.titre": "Online Service",
+    "accueil.ligne.desc": "Join the MIEDA Diaspora community live on Zoom, anywhere in the world.",
+    "accueil.ligne.cta": "See schedules",
+    "accueil.dept.titre": "Our Departments",
+    "accueil.dept.desc": "Get involved in one of our ministries and grow in serving God.",
+    "accueil.dept.cta": "Discover",
+    "accueil.explorer.titre": "Explore MIEDA",
+    "accueil.explorer.sous": "Discover everything our community has to offer.",
+    "accueil.explorer.cultes": "Our Services",
+    "accueil.explorer.cultes.desc": "In person, live on YouTube, or online on Zoom.",
+    "accueil.explorer.event": "Events",
+    "accueil.explorer.event.desc": "Upcoming gatherings of the MIEDA community.",
+    "accueil.explorer.dept": "Departments & Institutes",
+    "accueil.explorer.dept.desc": "Our ministries and training to grow and serve.",
+    "accueil.explorer.projets": "Our Projects",
+    "accueil.explorer.projets.desc": "What we are building together for the future.",
+
+    // ── Footer ──
+    "footer.liens": "Quick Links",
+    "footer.accueil": "Home",
+    "footer.apropos": "About",
+    "footer.cultes": "Services",
+    "footer.evenements": "Events",
+    "footer.projets": "Our Projects",
+    "footer.contact": "Contact",
+
+    // ── Prophetic banner ──
+    "msg.badge": "Message from the Prophet",
+    "msg.pause": "Pause",
+    "msg.defiler": "Scroll",
+    "msg.ecouter": "Listen",
+    "msg.arreter": "Stop reading",
+    "msg.lu": "× read",
+    "msg.termine": "Reading complete (3×) — press to listen again",
+    "msg.precedent": "Previous verse",
+    "msg.suivant": "Next verse",
+    "msg.fermer": "Close",
+  },
+};
