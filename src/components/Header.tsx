@@ -2,25 +2,25 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Menu, X, ChevronDown, MapPin, Baby, Globe, User as UserIcon,
-  Info, Building2, Lightbulb, MapPinned,
+  Info, Building2, Lightbulb, MapPinned, Languages,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLang } from "@/contexts/LanguageContext";
 import logo from "@/assets/mieda-logo.png";
 
-// ── Sous-menu "L'Église" ──
-const egliseItems = [
-  { label: "À Propos / Le Fondateur", to: "/a-propos", icon: Info, desc: "Notre histoire et notre vision" },
-  { label: "Nos Lieux de Cultes", to: "/lieux-de-cultes", icon: MapPinned, desc: "Nos églises dans le monde" },
-  { label: "Départements & Instituts", to: "/departements", icon: Building2, desc: "Nos ministères et formations" },
-  { label: "Nos Projets", to: "/projets", icon: Lightbulb, desc: "Ce que nous bâtissons" },
+// ── Sous-menus construits avec les traductions ──
+const buildEgliseItems = (t: (k: string) => string) => [
+  { label: t("nav.apropos"), to: "/a-propos", icon: Info, desc: t("nav.apropos.desc") },
+  { label: t("nav.lieux"), to: "/lieux-de-cultes", icon: MapPinned, desc: t("nav.lieux.desc") },
+  { label: t("nav.departements"), to: "/departements", icon: Building2, desc: t("nav.departements.desc") },
+  { label: t("nav.projets"), to: "/projets", icon: Lightbulb, desc: t("nav.projets.desc") },
 ];
 
-// ── Sous-menu "Cultes" ──
-const culteItems = [
-  { label: "Culte Yamoussoukro", to: "/cultes#culte-yamoussoukro", icon: MapPin, desc: "Siège principal" },
-  { label: "École de Dimanche", to: "/cultes#ecole-de-dimanche", icon: Baby, desc: "Pour les 4–12 ans" },
-  { label: "Culte en Ligne", to: "/cultes#culte-en-ligne", icon: Globe, desc: "MIEDA Diaspora · Zoom" },
+const buildCulteItems = (t: (k: string) => string) => [
+  { label: t("nav.culte.yakro"), to: "/cultes#culte-yamoussoukro", icon: MapPin, desc: t("nav.culte.yakro.desc") },
+  { label: t("nav.culte.ecole"), to: "/cultes#ecole-de-dimanche", icon: Baby, desc: t("nav.culte.ecole.desc") },
+  { label: t("nav.culte.ligne"), to: "/cultes#culte-en-ligne", icon: Globe, desc: t("nav.culte.ligne.desc") },
 ];
 
 type DropItem = { label: string; to: string; icon: any; desc: string };
@@ -30,7 +30,10 @@ const Header = () => {
   const [openMenu, setOpenMenu] = useState<"eglise" | "cultes" | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+  const { lang, setLang, t } = useLang();
   const location = useLocation();
+  const egliseItems = buildEgliseItems(t);
+  const culteItems = buildCulteItems(t);
 
   // Ferme les menus au changement de page
   useEffect(() => {
@@ -102,22 +105,32 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav ref={navRef} className="hidden lg:flex items-center gap-7">
-            <Link to="/" className={linkClass}>Accueil</Link>
-            <Dropdown id="eglise" label="L'Église" items={egliseItems} />
-            <Dropdown id="cultes" label="Cultes" items={culteItems} />
-            <Link to="/evenements" className={linkClass}>Événements</Link>
-            <Link to="/contact" className={linkClass}>Contact</Link>
+            <Link to="/" className={linkClass}>{t("nav.accueil")}</Link>
+            <Dropdown id="eglise" label={t("nav.eglise")} items={egliseItems} />
+            <Dropdown id="cultes" label={t("nav.cultes")} items={culteItems} />
+            <Link to="/evenements" className={linkClass}>{t("nav.evenements")}</Link>
+            <Link to="/contact" className={linkClass}>{t("nav.contact")}</Link>
+
+            {/* Sélecteur de langue */}
+            <button
+              onClick={() => setLang(lang === "fr" ? "en" : "fr")}
+              className="flex items-center gap-1.5 text-sm font-semibold text-foreground hover:text-primary transition-colors border border-border rounded-lg px-2.5 py-1.5"
+              aria-label="Changer de langue / Switch language"
+            >
+              <Languages className="w-4 h-4" />
+              {lang === "fr" ? "EN" : "FR"}
+            </button>
 
             {user ? (
               <Link to="/profil">
                 <Button variant="default" size="lg">
                   <UserIcon className="w-4 h-4 mr-2" />
-                  Mon espace
+                  {t("nav.espace")}
                 </Button>
               </Link>
             ) : (
               <Link to="/auth">
-                <Button variant="default" size="lg">Se Connecter</Button>
+                <Button variant="default" size="lg">{t("nav.connecter")}</Button>
               </Link>
             )}
           </nav>
@@ -137,13 +150,13 @@ const Header = () => {
           <nav className="lg:hidden py-4 border-t animate-fade-in max-h-[80vh] overflow-y-auto">
             <div className="flex flex-col gap-1">
               <Link to="/" className="font-medium py-2 px-2 rounded-lg hover:bg-muted text-foreground">
-                Accueil
+                {t("nav.accueil")}
               </Link>
 
               {/* L'Église */}
               <div className="py-2 px-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  L'Église
+                  {t("nav.eglise")}
                 </p>
                 {egliseItems.map((item) => (
                   <Link
@@ -160,7 +173,7 @@ const Header = () => {
               {/* Cultes */}
               <div className="py-2 px-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  Cultes
+                  {t("nav.cultes")}
                 </p>
                 {culteItems.map((item) => (
                   <Link
@@ -175,23 +188,31 @@ const Header = () => {
               </div>
 
               <Link to="/evenements" className="font-medium py-2 px-2 rounded-lg hover:bg-muted text-foreground">
-                Événements
+                {t("nav.evenements")}
               </Link>
               <Link to="/contact" className="font-medium py-2 px-2 rounded-lg hover:bg-muted text-foreground">
-                Contact
+                {t("nav.contact")}
               </Link>
+
+              <button
+                onClick={() => setLang(lang === "fr" ? "en" : "fr")}
+                className="flex items-center gap-2 font-medium py-2 px-2 rounded-lg hover:bg-muted text-foreground"
+              >
+                <Languages className="w-4 h-4 text-primary" />
+                {lang === "fr" ? "English" : "Français"}
+              </button>
 
               {user ? (
                 <Link to="/profil">
                   <Button variant="default" size="lg" className="w-full mt-2">
                     <UserIcon className="w-4 h-4 mr-2" />
-                    Mon espace
+                    {t("nav.espace")}
                   </Button>
                 </Link>
               ) : (
                 <Link to="/auth">
                   <Button variant="default" size="lg" className="w-full mt-2">
-                    Se Connecter
+                    {t("nav.connecter")}
                   </Button>
                 </Link>
               )}

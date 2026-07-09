@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import { useLang } from "@/contexts/LanguageContext";
 import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 import logo from "@/assets/mieda-logo.png";
 
 const Footer = () => {
+  const { t } = useLang();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -57,14 +59,14 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-bold text-lg mb-4">Liens Rapides</h3>
+            <h3 className="font-bold text-lg mb-4">{t("footer.liens")}</h3>
             <ul className="space-y-2 text-primary-foreground/80">
-              <li><Link to="/" className="hover:text-primary-foreground transition-colors">Accueil</Link></li>
-              <li><Link to="/a-propos" className="hover:text-primary-foreground transition-colors">À Propos</Link></li>
-              <li><Link to="/cultes" className="hover:text-primary-foreground transition-colors">Cultes</Link></li>
-              <li><Link to="/evenements" className="hover:text-primary-foreground transition-colors">Événements</Link></li>
-              <li><Link to="/projets" className="hover:text-primary-foreground transition-colors">Nos Projets</Link></li>
-              <li><Link to="/contact" className="hover:text-primary-foreground transition-colors">Contact</Link></li>
+              <li><Link to="/" className="hover:text-primary-foreground transition-colors">{t("footer.accueil")}</Link></li>
+              <li><Link to="/a-propos" className="hover:text-primary-foreground transition-colors">{t("footer.apropos")}</Link></li>
+              <li><Link to="/cultes" className="hover:text-primary-foreground transition-colors">{t("footer.cultes")}</Link></li>
+              <li><Link to="/evenements" className="hover:text-primary-foreground transition-colors">{t("footer.evenements")}</Link></li>
+              <li><Link to="/projets" className="hover:text-primary-foreground transition-colors">{t("footer.projets")}</Link></li>
+              <li><Link to="/contact" className="hover:text-primary-foreground transition-colors">{t("footer.contact")}</Link></li>
             </ul>
           </div>
 

@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useLang } from "@/contexts/LanguageContext";
 import heroImage from "@/assets/hero-worship.jpg";
 
 const Hero = () => {
+  const { t } = useLang();
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background Image with Overlay */}
@@ -19,14 +21,14 @@ const Hero = () => {
       <div className="container mx-auto px-4 z-10 text-center">
         <div className="max-w-4xl mx-auto animate-fade-in">
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
-            Bienvenue à la MIEDA 
+            {t("hero.bienvenue")}
           </h1>
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
             <span className="font-semibold">
-              Mission Internationale d'Évangélisation et de Délivrance des Âmes
+              {t("hero.mission")}
             </span>
             <br />
-            « Voici, je viens pour faire ta volonté. » Hébreux 10:9.
+            {t("hero.verset")}
             <br />
             Rejoignez notre communauté de foi.
           </p>
@@ -38,7 +40,7 @@ const Hero = () => {
               className="text-lg px-8 py-6 hover:scale-105 transition-transform"
               asChild
             >
-              <Link to="/auth">Se Connecter</Link>
+              <Link to="/auth">{t("nav.connecter")}</Link>
             </Button>
             <Button 
               size="lg" 
@@ -46,7 +48,7 @@ const Hero = () => {
               className="text-lg px-8 py-6 bg-primary-foreground/10 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary hover:scale-105 transition-all"
               asChild
             >
-              <Link to="/a-propos">En Savoir Plus</Link>
+              <Link to="/a-propos">{t("hero.savoir")}</Link>
             </Button>
           </div>
         </div>

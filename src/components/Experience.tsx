@@ -2,28 +2,30 @@ import { MapPin, Monitor, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { useLang } from "@/contexts/LanguageContext";
 
 const Experience = () => {
+  const { t } = useLang();
   const experiences = [
     {
       icon: MapPin,
-      title: "Nos Lieux de Cultes",
-      description: "Découvrez les églises MIEDA à travers le monde, leurs pasteurs et leurs coordonnées.",
-      cta: "Voir nos églises",
+      title: t("accueil.lieux.titre"),
+      description: t("accueil.lieux.desc"),
+      cta: t("accueil.lieux.cta"),
       to: "/lieux-de-cultes",
     },
     {
       icon: Monitor,
-      title: "Culte en Ligne",
-      description: "Rejoignez la communauté MIEDA Diaspora en direct sur Zoom, partout dans le monde.",
-      cta: "Voir les horaires",
+      title: t("accueil.ligne.titre"),
+      description: t("accueil.ligne.desc"),
+      cta: t("accueil.ligne.cta"),
       to: "/cultes#culte-en-ligne",
     },
     {
       icon: Users,
-      title: "Nos Départements",
-      description: "Engagez-vous dans l'un de nos ministères et grandissez au service de Dieu.",
-      cta: "Découvrir",
+      title: t("accueil.dept.titre"),
+      description: t("accueil.dept.desc"),
+      cta: t("accueil.dept.cta"),
       to: "/departements",
     },
   ];
@@ -33,10 +35,10 @@ const Experience = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Trouvez l'expérience qui vous convient
+            {t("accueil.experience.titre")}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Peu importe où vous êtes, en ligne ou en personne, faites partie de tout ce que Dieu fait.
+            {t("accueil.experience.sous")}
           </p>
         </div>
 
