@@ -20,7 +20,7 @@ const ScrollManager = () => {
         } else {
           window.scrollTo(0, 0);
         }
-      }, 120);
+      }, 300);
       return () => clearTimeout(timer);
     } else {
       window.scrollTo(0, 0);

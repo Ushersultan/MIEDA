@@ -609,7 +609,7 @@ const Profile = () => {
                   <p className="text-xs text-muted-foreground mb-3">
                     Virement bancaire (USA), Wave (Côte d'Ivoire), virement IBAN (France/International).
                   </p>
-                  <Link to="/contact">
+                  <Link to="/contact#offrandes">
                     <Button variant="outline" size="sm" className="w-full">
                       Voir tous les moyens de donner
                     </Button>

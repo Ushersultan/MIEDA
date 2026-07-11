@@ -5,6 +5,67 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import paypalQr from "@/assets/paypal-qr.png";
+import { useLang } from "@/contexts/LanguageContext";
+
+// ── Textes bilingues ──
+const TXT = {
+  fr: {
+    badge: "Dîmes & Offrandes — MIEDA Diaspora",
+    titre: "Soutenez la Mission de Dieu",
+    para: "Vos dons permettent à MIEDA de poursuivre son œuvre d'évangélisation, d'enseignement et de délivrance partout dans le monde.",
+    citation: "« Apportez toutes les dîmes dans la maison du trésor… et éprouvez-moi ainsi, dit l'Éternel des armées. »",
+    citationRef: "— Malachie 3:10",
+    secur: "Paiement sécurisé via PayPal",
+    securSous: "Vos informations bancaires ne nous sont jamais transmises",
+    enLigne: "Donner en ligne — Offrande ou Dîme",
+    type: "Type de don", offrande: "Offrande", dime: "Dîme",
+    rapide: "Montant rapide", ou: "Ou entrez un montant",
+    designation: "Désignation (optionnel)",
+    designationPh: "Ex: Construction, Missions, Jeunes...",
+    donner: "Donner", via: "via PayPal",
+    scan: "Scannez-moi",
+    scanSous: "Scannez ce code avec l'appareil photo de votre téléphone pour donner directement via PayPal.",
+    redirect: "Vous serez redirigé vers PayPal pour finaliser votre don en toute sécurité.",
+    autres: "Autres moyens de donner",
+    virement: "Virement bancaire", usa: "États-Unis 🇺🇸",
+    wave: "Wave", waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
+    waveNote: "Envoyez votre dîme ou offrande directement via l'application Wave.",
+    iban: "Virement IBAN", france: "France / International 🇫🇷",
+    ibanNote: "Précisez « Offrande » ou « Dîme » en libellé de votre virement.",
+    lBanque: "Banque", lAdresse: "Adresse", lBenef: "Bénéficiaire",
+    lCompte: "Numéro de compte", lChips: "CHIPS / ABA", lSwift: "Code SWIFT",
+    lNom: "Nom", lNumero: "Numéro", lIban: "IBAN", lBic: "Code B.I.C.", lTitulaire: "Titulaire du compte",
+    benediction: "Dieu vous bénisse 🙏",
+  },
+  en: {
+    badge: "Tithes & Offerings — MIEDA Diaspora",
+    titre: "Support God's Mission",
+    para: "Your gifts enable MIEDA to continue its work of evangelism, teaching and deliverance around the world.",
+    citation: "\u201cBring the whole tithe into the storehouse\u2026 and test me in this, says the LORD of hosts.\u201d",
+    citationRef: "— Malachi 3:10",
+    secur: "Secure payment via PayPal",
+    securSous: "Your banking details are never shared with us",
+    enLigne: "Give online — Offering or Tithe",
+    type: "Gift type", offrande: "Offering", dime: "Tithe",
+    rapide: "Quick amount", ou: "Or enter an amount",
+    designation: "Designation (optional)",
+    designationPh: "E.g.: Building, Missions, Youth...",
+    donner: "Give", via: "via PayPal",
+    scan: "Scan me",
+    scanSous: "Scan this code with your phone camera to give directly via PayPal.",
+    redirect: "You will be redirected to PayPal to complete your gift securely.",
+    autres: "Other ways to give",
+    virement: "Bank transfer", usa: "United States 🇺🇸",
+    wave: "Wave", waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
+    waveNote: "Send your tithe or offering directly through the Wave app.",
+    iban: "IBAN transfer", france: "France / International 🇫🇷",
+    ibanNote: "Please write \u201cOffering\u201d or \u201cTithe\u201d as the transfer reference.",
+    lBanque: "Bank", lAdresse: "Address", lBenef: "Beneficiary",
+    lCompte: "Account number", lChips: "CHIPS / ABA", lSwift: "SWIFT code",
+    lNom: "Name", lNumero: "Number", lIban: "IBAN", lBic: "B.I.C. code", lTitulaire: "Account holder",
+    benediction: "God bless you 🙏",
+  },
+};
 
 // ══════════════════════════════════════════════
 //  CONFIGURATION
@@ -78,7 +139,7 @@ const CopyRow = ({ label, value, copyValue }: { label: string; value: string; co
 // ══════════════════════════════════════════════
 //  FORMULAIRE PAYPAL — Offrande ou Dîme
 // ══════════════════════════════════════════════
-const PayPalForm = () => {
+const PayPalForm = ({ L }: { L: typeof TXT.fr }) => {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<"offrande" | "dime">("offrande");
   const [note, setNote] = useState("");
@@ -97,10 +158,10 @@ const PayPalForm = () => {
       {/* Type de don */}
       <div>
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">
-          Type de don
+          {L.type}
         </label>
         <div className="flex gap-2">
-          {([["offrande", "Offrande"], ["dime", "Dîme"]] as const).map(([val, lbl]) => (
+          {([["offrande", L.offrande], ["dime", L.dime]] as const).map(([val, lbl]) => (
             <button
               key={val}
               onClick={() => setType(val)}
@@ -119,7 +180,7 @@ const PayPalForm = () => {
       {/* Montants rapides */}
       <div>
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">
-          Montant rapide
+          {L.rapide}
         </label>
         <div className="flex flex-wrap gap-2">
           {presets.map((p) => (
@@ -141,7 +202,7 @@ const PayPalForm = () => {
       {/* Montant personnalisé */}
       <div>
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
-          Ou entrez un montant
+          {L.ou}
         </label>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
@@ -162,11 +223,11 @@ const PayPalForm = () => {
       {/* Note optionnelle */}
       <div>
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
-          Désignation (optionnel)
+          {L.designation}
         </label>
         <Input
           type="text"
-          placeholder="Ex: Construction, Missions, Jeunes..."
+          placeholder={L.designationPh}
           value={note}
           onChange={(e) => setNote(e.target.value)}
           maxLength={60}
@@ -180,7 +241,7 @@ const PayPalForm = () => {
         disabled={!amount || parseFloat(amount) <= 0}
       >
         <Heart className="w-4 h-4 mr-2" />
-        Donner ${amount || "0.00"} via PayPal
+        {L.donner} ${amount || "0.00"} {L.via}
         <ExternalLink className="w-4 h-4 ml-2 opacity-60" />
       </Button>
 
@@ -194,17 +255,16 @@ const PayPalForm = () => {
         <div>
           <p className="text-sm font-semibold text-foreground flex items-center gap-1.5 mb-1">
             <QrCode className="w-4 h-4 text-primary" />
-            Scannez-moi
+            {L.scan}
           </p>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Scannez ce code avec l'appareil photo de votre téléphone pour donner
-            directement via PayPal.
+            {L.scanSous}
           </p>
         </div>
       </div>
 
       <p className="text-xs text-muted-foreground text-center">
-        Vous serez redirigé vers PayPal pour finaliser votre don en toute sécurité.
+        {L.redirect}
       </p>
     </div>
   );
@@ -214,6 +274,8 @@ const PayPalForm = () => {
 //  COMPOSANT PRINCIPAL
 // ══════════════════════════════════════════════
 const Offering = () => {
+  const { lang } = useLang();
+  const L = TXT[lang];
   return (
     <section id="offrandes" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -224,23 +286,20 @@ const Offering = () => {
             <div className="inline-block px-4 py-2 bg-secondary/20 rounded-full mb-6">
               <span className="text-sm font-semibold text-secondary-foreground flex items-center gap-2">
                 <Heart className="w-4 h-4" />
-                Dîmes &amp; Offrandes — MIEDA Diaspora
+                {L.badge}
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Soutenez la Mission de Dieu
+              {L.titre}
             </h2>
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              Vos dons permettent à MIEDA de poursuivre son œuvre
-              d'évangélisation, d'enseignement et de délivrance partout dans le
-              monde.
+              {L.para}
             </p>
             <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground mb-8">
-              « Apportez toutes les dîmes dans la maison du trésor… et éprouvez-moi
-              ainsi, dit l'Éternel des armées. »
+              {L.citation}
               <br />
               <span className="text-sm not-italic font-medium text-foreground mt-2 block">
-                — Malachie 3:10
+                {L.citationRef}
               </span>
             </blockquote>
 
@@ -253,8 +312,8 @@ const Offering = () => {
                 </svg>
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">Paiement sécurisé via PayPal</p>
-                <p className="text-xs text-muted-foreground">Vos informations bancaires ne nous sont jamais transmises</p>
+                <p className="text-sm font-medium text-foreground">{L.secur}</p>
+                <p className="text-xs text-muted-foreground">{L.securSous}</p>
               </div>
             </div>
           </div>
@@ -264,11 +323,11 @@ const Offering = () => {
             <div className="border-b border-border px-6 py-4">
               <p className="font-semibold text-foreground flex items-center gap-2">
                 <Heart className="w-4 h-4 text-primary" />
-                Donner en ligne — Offrande ou Dîme
+                {L.enLigne}
               </p>
             </div>
             <div className="p-6">
-              <PayPalForm />
+              <PayPalForm L={L} />
             </div>
           </div>
         </div>
@@ -277,7 +336,7 @@ const Offering = () => {
         <div className="flex items-center gap-4 mb-8">
           <div className="flex-1 h-px bg-border" />
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            Autres moyens de donner
+            {L.autres}
           </h3>
           <div className="flex-1 h-px bg-border" />
         </div>
@@ -290,17 +349,17 @@ const Offering = () => {
                 <Landmark className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="font-semibold text-foreground">Virement bancaire</p>
-                <p className="text-xs text-muted-foreground">États-Unis 🇺🇸</p>
+                <p className="font-semibold text-foreground">{L.virement}</p>
+                <p className="text-xs text-muted-foreground">{L.usa}</p>
               </div>
             </div>
             <div className="divide-y divide-border">
-              <CopyRow label="Banque" value={BANQUE_US.banque} />
-              <CopyRow label="Adresse" value={BANQUE_US.adresse} />
-              <CopyRow label="Bénéficiaire" value={BANQUE_US.beneficiaire} />
-              <CopyRow label="Numéro de compte" value={BANQUE_US.compte} />
-              <CopyRow label="CHIPS / ABA" value={BANQUE_US.chipsAba} />
-              <CopyRow label="Code SWIFT" value={BANQUE_US.swift} />
+              <CopyRow label={L.lBanque} value={BANQUE_US.banque} />
+              <CopyRow label={L.lAdresse} value={BANQUE_US.adresse} />
+              <CopyRow label={L.lBenef} value={BANQUE_US.beneficiaire} />
+              <CopyRow label={L.lCompte} value={BANQUE_US.compte} />
+              <CopyRow label={L.lChips} value={BANQUE_US.chipsAba} />
+              <CopyRow label={L.lSwift} value={BANQUE_US.swift} />
             </div>
           </div>
 
@@ -312,15 +371,15 @@ const Offering = () => {
               </div>
               <div>
                 <p className="font-semibold text-foreground">Wave</p>
-                <p className="text-xs text-muted-foreground">Mobile Money · Côte d'Ivoire 🇨🇮</p>
+                <p className="text-xs text-muted-foreground">{L.waveSous}</p>
               </div>
             </div>
             <div className="divide-y divide-border">
-              <CopyRow label="Nom" value={WAVE.nom} />
-              <CopyRow label="Numéro" value={WAVE.tel} copyValue={WAVE.tel.replace(/\s/g, "")} />
+              <CopyRow label={L.lNom} value={WAVE.nom} />
+              <CopyRow label={L.lNumero} value={WAVE.tel} copyValue={WAVE.tel.replace(/\s/g, "")} />
             </div>
             <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
-              Envoyez votre dîme ou offrande directement via l'application Wave.
+              {L.waveNote}
             </p>
           </div>
 
@@ -331,24 +390,24 @@ const Offering = () => {
                 <Globe2 className="w-5 h-5 text-secondary-foreground" />
               </div>
               <div>
-                <p className="font-semibold text-foreground">Virement IBAN</p>
-                <p className="text-xs text-muted-foreground">France / International 🇫🇷</p>
+                <p className="font-semibold text-foreground">{L.iban}</p>
+                <p className="text-xs text-muted-foreground">{L.france}</p>
               </div>
             </div>
             <div className="divide-y divide-border">
-              <CopyRow label="IBAN" value={IBAN_FR.iban} copyValue={IBAN_FR.iban.replace(/\s/g, "")} />
-              <CopyRow label="Code B.I.C." value={IBAN_FR.bic} />
-              <CopyRow label="Titulaire du compte" value={IBAN_FR.titulaire} />
-              <CopyRow label="Adresse" value={IBAN_FR.adresse} />
+              <CopyRow label={L.lIban} value={IBAN_FR.iban} copyValue={IBAN_FR.iban.replace(/\s/g, "")} />
+              <CopyRow label={L.lBic} value={IBAN_FR.bic} />
+              <CopyRow label={L.lTitulaire} value={IBAN_FR.titulaire} />
+              <CopyRow label={L.lAdresse} value={IBAN_FR.adresse} />
             </div>
             <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
-              Précisez « Offrande » ou « Dîme » en libellé de votre virement.
+              {L.ibanNote}
             </p>
           </div>
         </div>
 
         <p className="text-center text-sm font-medium text-foreground mt-10">
-          Dieu vous bénisse 🙏
+          {L.benediction}
         </p>
       </div>
     </section>

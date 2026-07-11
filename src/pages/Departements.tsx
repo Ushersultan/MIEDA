@@ -3,7 +3,8 @@ import {
   BookOpen, HeartPulse, SprayCan, ClipboardCheck, ShieldCheck, Radio,
   Calculator, HeartHandshake, GraduationCap,
 } from "lucide-react";
-import { departements as departementsData } from "@/data/departements";
+import { departements as departementsData, titreDept, descDept } from "@/data/departements";
+import { useLang } from "@/contexts/LanguageContext";
 
 const icones: Record<string, any> = {
   "louange": Music, "intercession": HandHelping, "evangelisation": Megaphone,
@@ -14,24 +15,49 @@ const icones: Record<string, any> = {
   "social": HeartHandshake,
 };
 
-const departements = departementsData.map((d) => ({
-  icon: icones[d.id] ?? Users, title: d.titre, desc: d.desc,
+const buildDepartements = (lang: "fr" | "en") => departementsData.map((d) => ({
+  icon: icones[d.id] ?? Users, title: titreDept(d, lang), desc: descDept(d, lang),
 }));
 
-const instituts = [
-  { icon: BookOpen, title: "Institut Biblique", desc: "Une formation approfondie à la Parole de Dieu pour affermir les fidèles." },
-  { icon: GraduationCap, title: "École de Formation Ministérielle", desc: "Équiper les serviteurs et futurs leaders pour le ministère." },
-];
+const INSTITUTS = {
+  fr: [
+    { icon: BookOpen, title: "Institut Biblique", desc: "Une formation approfondie à la Parole de Dieu pour affermir les fidèles." },
+    { icon: GraduationCap, title: "École de Formation Ministérielle", desc: "Équiper les serviteurs et futurs leaders pour le ministère." },
+  ],
+  en: [
+    { icon: BookOpen, title: "Bible Institute", desc: "In-depth training in God's Word to strengthen the faithful." },
+    { icon: GraduationCap, title: "School of Ministerial Training", desc: "Equipping servants and future leaders for ministry." },
+  ],
+};
+
+const TXT = {
+  fr: {
+    titre: "Départements & Instituts",
+    sous: "Les ministères et formations qui font vivre la mission MIEDA au quotidien.",
+    badge1: "Nos Départements", h2a: "Servir ensemble",
+    badge2: "Nos Instituts", h2b: "Se former, grandir, servir",
+  },
+  en: {
+    titre: "Departments & Institutes",
+    sous: "The ministries and training programs that bring the MIEDA mission to life every day.",
+    badge1: "Our Departments", h2a: "Serving together",
+    badge2: "Our Institutes", h2b: "Learn, grow, serve",
+  },
+};
 
 const Departements = () => {
+  const { lang } = useLang();
+  const departements = buildDepartements(lang);
+  const instituts = INSTITUTS[lang];
+  const L = TXT[lang];
   return (
     <div className="pt-20">
       {/* Bandeau */}
       <div className="text-white py-16 md:py-20" style={{ background: "var(--hero-gradient)" }}>
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Départements & Instituts</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{L.titre}</h1>
           <p className="text-lg text-white/85 max-w-2xl mx-auto">
-            Les ministères et formations qui font vivre la mission MIEDA au quotidien.
+            {L.sous}
           </p>
         </div>
       </div>
@@ -40,8 +66,8 @@ const Departements = () => {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">Nos Départements</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">Servir ensemble</h2>
+            <span className="text-sm font-semibold text-primary uppercase tracking-wider">{L.badge1}</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">{L.h2a}</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {departements.map((d) => (
@@ -61,8 +87,8 @@ const Departements = () => {
       <section className="py-20 bg-[var(--section-bg)]">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-12">
-            <span className="text-sm font-semibold text-accent uppercase tracking-wider">Nos Instituts</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">Se former, grandir, servir</h2>
+            <span className="text-sm font-semibold text-accent uppercase tracking-wider">{L.badge2}</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">{L.h2b}</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             {instituts.map((i) => (

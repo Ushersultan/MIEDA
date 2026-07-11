@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Layout from "@/components/Layout";
+import MfaGate from "@/components/MfaGate";
 import Index from "./pages/Index";
 import { Loader2 } from "lucide-react";
 
@@ -57,8 +58,8 @@ const App = () => (
 
               {/* Pages plein écran (sans Header/Footer) */}
               <Route path="/auth" element={<Auth />} />
-              <Route path="/profil" element={<Profile />} />
-              <Route path="/espace-pasteur" element={<EspacePasteur />} />
+              <Route path="/profil" element={<MfaGate><Profile /></MfaGate>} />
+              <Route path="/espace-pasteur" element={<MfaGate><EspacePasteur /></MfaGate>} />
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

@@ -2830,4 +2830,17 @@ export const eglises: Eglise[] = [
       telephone: "+1 571-206-9260",
     },
   },
+  {
+    id: "france",
+    nom: "MIEDA France — Fontenay-sous-Bois",
+    ville: "Fontenay-sous-Bois",
+    pays: "France",
+    drapeau: "🇫🇷",
+    continent: "Europe",
+    adresse: "136 Rue Descartes, 94120 Fontenay-sous-Bois, France",
+    pasteur: {
+      nom: "Pasteur responsable (à confirmer)",
+      titre: "MIEDA France",
+    },
+  },
 ];

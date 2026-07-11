@@ -56,7 +56,7 @@ const Projets = () => {
               Votre contribution permet de faire avancer l'œuvre de Dieu et de
               concrétiser ces projets au service de la communauté.
             </p>
-            <Link to="/contact">
+            <Link to="/contact#offrandes">
               <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-semibold">
                 Faire un don / Contribuer
                 <ArrowRight className="w-4 h-4 ml-2" />

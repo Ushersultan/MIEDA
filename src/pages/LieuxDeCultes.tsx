@@ -7,6 +7,45 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { eglises, ordreRegions, type Eglise, type Pasteur } from "@/data/eglises";
 import { lienServiteur } from "@/lib/serviteurs";
+import { useLang } from "@/contexts/LanguageContext";
+
+// ── Textes bilingues de la page ──
+const TXT = {
+  fr: {
+    presence: "Présence mondiale",
+    titre: "Nos Lieux de Cultes",
+    sous: "La mission MIEDA rassemble des fidèles à travers le monde. Trouvez l'église la plus proche, son pasteur et ses moyens de communication.",
+    eglises: "Églises", serviteurs: "Serviteurs", pays: "Pays",
+    recherche: "Rechercher une église, une ville, un pasteur...",
+    aucune: "Aucune église trouvée pour",
+    region: "Région",
+    internationale: "MIEDA Internationale",
+    fiche: "Voir la fiche de",
+    equipe: "Équipe pastorale",
+    chaine: "Voir les cultes en direct / la chaîne",
+    implanter: "Vous souhaitez implanter une église MIEDA ?",
+    implanterSous: "Contactez-nous pour rejoindre la mission et ouvrir un lieu de culte dans votre ville.",
+    contacter: "Nous contacter",
+    siege: "Siège",
+  },
+  en: {
+    presence: "Worldwide presence",
+    titre: "Our Places of Worship",
+    sous: "The MIEDA mission gathers believers across the world. Find the nearest church, its pastor and how to reach them.",
+    eglises: "Churches", serviteurs: "Servants", pays: "Countries",
+    recherche: "Search for a church, a city, a pastor...",
+    aucune: "No church found for",
+    region: "Region",
+    internationale: "MIEDA International",
+    fiche: "View the profile of",
+    equipe: "Pastoral team",
+    chaine: "Watch live services / the channel",
+    implanter: "Would you like to plant a MIEDA church?",
+    implanterSous: "Contact us to join the mission and open a place of worship in your city.",
+    contacter: "Contact us",
+    siege: "HQ",
+  },
+};
 
 // ── Afficher les numéros de téléphone des serviteurs ? ──
 // Passez à false pour masquer tous les contacts sur le site public.
@@ -88,7 +127,7 @@ const ServiteurRow = ({ p, eglise }: { p: Pasteur; eglise: Eglise }) => (
 );
 
 // ── Carte d'une église (dépliable) ──
-const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
+const EgliseCard = ({ eglise, L }: { eglise: Eglise; L: typeof TXT.fr }) => {
   const [open, setOpen] = useState(false);
   const hasDetails = Boolean(
     eglise.adresse || (AFFICHER_CONTACTS && (eglise.pasteur.telephone || eglise.pasteur.email)) ||
@@ -113,7 +152,7 @@ const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
             <h3 className="font-semibold text-foreground text-base leading-tight">{eglise.nom}</h3>
             {eglise.estSiege && (
               <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary text-primary-foreground">
-                Siège
+                {L.siege}
               </span>
             )}
           </div>
@@ -148,7 +187,7 @@ const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
           <div className="pt-3">
             <Link to={lienServiteur(eglise, eglise.pasteur)}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
-              Voir la fiche de {eglise.pasteur.nom}
+              {L.fiche} {eglise.pasteur.nom}
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -186,7 +225,7 @@ const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
           {eglise.equipe && eglise.equipe.length > 0 && (
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                Équipe pastorale
+                {L.equipe}
               </p>
               <div className="divide-y divide-border">
                 {eglise.equipe.map((p) => (
@@ -209,7 +248,7 @@ const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
             <a href={eglise.media.youtubeChannel} target="_blank" rel="noopener noreferrer">
               <Button variant="outline" size="sm" className="w-full">
                 <Video className="w-4 h-4 mr-2" />
-                Voir les cultes en direct / la chaîne
+                {L.chaine}
               </Button>
             </a>
           )}
@@ -221,6 +260,8 @@ const EgliseCard = ({ eglise }: { eglise: Eglise }) => {
 
 // ── Page principale ──
 const LieuxDeCultes = () => {
+  const { lang } = useLang();
+  const L = TXT[lang];
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -257,12 +298,11 @@ const LieuxDeCultes = () => {
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/15 rounded-full mb-5 backdrop-blur-sm">
             <Globe2 className="w-4 h-4" />
-            <span className="text-sm font-semibold uppercase tracking-wider">Présence mondiale</span>
+            <span className="text-sm font-semibold uppercase tracking-wider">{L.presence}</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Nos Lieux de Cultes</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{L.titre}</h1>
           <p className="text-lg text-white/85 max-w-2xl mx-auto mb-8">
-            La mission MIEDA rassemble des fidèles à travers le monde. Trouvez
-            l'église la plus proche, son pasteur et ses moyens de communication.
+            {L.sous}
           </p>
 
           {/* Statistiques */}
@@ -272,21 +312,21 @@ const LieuxDeCultes = () => {
                 <Church className="w-5 h-5" />
                 <span className="text-3xl font-bold">{eglises.length}</span>
               </div>
-              <p className="text-xs uppercase tracking-wider text-white/70">Églises</p>
+              <p className="text-xs uppercase tracking-wider text-white/70">{L.eglises}</p>
             </div>
             <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-4 min-w-[110px]">
               <div className="flex items-center justify-center gap-2 mb-1">
                 <Users className="w-5 h-5" />
                 <span className="text-3xl font-bold">{nbServiteurs}</span>
               </div>
-              <p className="text-xs uppercase tracking-wider text-white/70">Serviteurs</p>
+              <p className="text-xs uppercase tracking-wider text-white/70">{L.serviteurs}</p>
             </div>
             <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-4 min-w-[110px]">
               <div className="flex items-center justify-center gap-2 mb-1">
                 <Globe2 className="w-5 h-5" />
                 <span className="text-3xl font-bold">{nbPays}</span>
               </div>
-              <p className="text-xs uppercase tracking-wider text-white/70">Pays</p>
+              <p className="text-xs uppercase tracking-wider text-white/70">{L.pays}</p>
             </div>
           </div>
         </div>
@@ -302,7 +342,7 @@ const LieuxDeCultes = () => {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher une église, une ville, un pasteur..."
+              placeholder={L.recherche}
               className="w-full pl-12 pr-11 py-3.5 rounded-2xl border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
             />
             {query && (
@@ -316,7 +356,7 @@ const LieuxDeCultes = () => {
 
           {filtered.length === 0 && (
             <p className="text-center text-muted-foreground py-10">
-              Aucune église trouvée pour « {query} ».
+              {L.aucune} « {query} ».
             </p>
           )}
 
@@ -332,7 +372,7 @@ const LieuxDeCultes = () => {
               {civParRegion.map(({ region, liste }) => (
                 <div key={region} className="mb-10 last:mb-0">
                   <div className="flex items-center gap-3 mb-4">
-                    <h3 className="text-lg font-bold text-primary">Région {region}</h3>
+                    <h3 className="text-lg font-bold text-primary">{L.region} {region}</h3>
                     <span className="text-sm font-medium text-muted-foreground bg-muted px-2.5 py-0.5 rounded-full">
                       {liste.length}
                     </span>
@@ -340,7 +380,7 @@ const LieuxDeCultes = () => {
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {liste.map((eglise) => (
-                      <EgliseCard key={eglise.id} eglise={eglise} />
+                      <EgliseCard key={eglise.id} eglise={eglise} L={L} />
                     ))}
                   </div>
                 </div>
@@ -353,12 +393,12 @@ const LieuxDeCultes = () => {
             <div className="mb-14">
               <div className="flex items-center gap-3 mb-8">
                 <Globe2 className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold text-foreground">MIEDA Internationale</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground">{L.internationale}</h2>
                 <div className="flex-1 h-px bg-border" />
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {international.map((eglise) => (
-                  <EgliseCard key={eglise.id} eglise={eglise} />
+                  <EgliseCard key={eglise.id} eglise={eglise} L={L} />
                 ))}
               </div>
             </div>
@@ -368,14 +408,13 @@ const LieuxDeCultes = () => {
           <div className="mt-4 text-center bg-[var(--section-bg)] rounded-2xl p-8 md:p-10">
             <Users className="w-10 h-10 text-primary mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-foreground mb-2">
-              Vous souhaitez implanter une église MIEDA ?
+              {L.implanter}
             </h3>
             <p className="text-muted-foreground max-w-xl mx-auto mb-6">
-              Contactez-nous pour rejoindre la mission et ouvrir un lieu de culte
-              dans votre ville.
+              {L.implanterSous}
             </p>
             <a href="/contact">
-              <Button size="lg">Nous contacter</Button>
+              <Button size="lg">{L.contacter}</Button>
             </a>
           </div>
         </div>
