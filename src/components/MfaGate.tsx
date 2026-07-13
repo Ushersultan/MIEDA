@@ -18,7 +18,20 @@ const SMS_ACTIF = false;         // passez à true après avoir configuré Twili
 
 type Etape = "verification" | "choix" | "enrolement" | "defi" | "email" | "ok";
 
-const cleSession = (uid: string) => `mieda-mfa-ok-${uid}`;
+const CLE_MFA = (uid: string) => `mieda-mfa-verified-${uid}`;
+const DUREE_SESSION_MS = 12 * 60 * 60 * 1000; // 12 heures
+
+const mfaValideRecemment = (uid: string): boolean => {
+  try {
+    const ts = localStorage.getItem(CLE_MFA(uid));
+    if (!ts) return false;
+    return (Date.now() - parseInt(ts, 10)) < DUREE_SESSION_MS;
+  } catch { return false; }
+};
+
+const enregistrerMfaValide = (uid: string) => {
+  try { localStorage.setItem(CLE_MFA(uid), String(Date.now())); } catch { /* noop */ }
+};
 
 const MfaGate = ({ children }: { children: ReactNode }) => {
   const { user, loading: authLoading, profil, signOut } = useAuth();
@@ -41,10 +54,8 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
     if (!user) return;
     setErreur(""); setInfo("");
 
-    // Déjà validé par email dans cette session de navigation ?
-    try {
-      if (sessionStorage.getItem(cleSession(user.id)) === "1") { setEtape("ok"); return; }
-    } catch { /* noop */ }
+    // Déjà validé dans les 12 dernières heures ?
+    if (mfaValideRecemment(user.id)) { setEtape("ok"); return; }
 
     const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
     if (aal?.currentLevel === "aal2") { setEtape("ok"); return; }
@@ -96,6 +107,7 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
       const { error } = await supabase.auth.mfa.verify({ factorId, challengeId: chId, code });
       if (error) throw error;
       setCode(""); setChallengeId("");
+      enregistrerMfaValide(user!.id);
       setEtape("ok");
     } catch {
       setErreur("Code incorrect ou expiré. Réessayez.");
@@ -143,7 +155,7 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
     setBusy(true); setErreur("");
     try {
       await appelApi({ action: "verify", code });
-      try { sessionStorage.setItem(cleSession(user!.id), "1"); } catch { /* noop */ }
+      enregistrerMfaValide(user!.id);
       setCode("");
       setEtape("ok");
     } catch (e: any) {
