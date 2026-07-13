@@ -16,7 +16,7 @@ const APropos = () => {
       <div className="text-white py-16 md:py-20" style={{ background: "var(--hero-gradient)" }}>
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <img src={logo} alt="MIEDA" className="h-20 w-auto mx-auto mb-6" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">À Propos de MIEDA</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">À Propos de la MIEDA</h1>
           <p className="text-lg text-white/85 max-w-2xl mx-auto">
             Mission Internationale d'Évangélisation et de Délivrance des Âmes —
             au service de Dieu et du salut des âmes.
@@ -35,8 +35,8 @@ const APropos = () => {
               <h2 className="text-2xl font-bold text-foreground mb-3">Notre Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Proclamer l'Évangile de Jésus-Christ, conduire les âmes à la
-                délivrance et à la restauration, et contribuer au développement
-                spirituel, humain et social de l'Afrique par la puissance de la
+                délivrance et à la restauration, contribuer au développement
+                spirituel, humain et social par la puissance de la
                 Parole de Dieu.
               </p>
             </div>
@@ -63,7 +63,7 @@ const APropos = () => {
               Le Fondateur
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">
-              Révérend Docteur Prophète Djeha Kouadio
+              Révérend Docteur Prophète DJEHA Kouadio
             </h2>
           </div>
           <div className="bg-card border border-border rounded-2xl p-6 md:p-10 grid md:grid-cols-[280px_1fr] gap-8 items-center">
@@ -81,9 +81,9 @@ const APropos = () => {
             <div>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Serviteur de Dieu et fondateur de MIEDA, le Révérend Docteur Prophète
-                Djeha Kouadio consacre sa vie à l'annonce de l'Évangile, à
+                DJEHA Kouadio consacre sa vie à l'annonce de l'Évangile, à
                 l'enseignement de la Parole et à la délivrance des âmes. Sous sa
-                direction, la mission s'étend depuis Yamoussoukro, en Côte d'Ivoire,
+                direction, la Mission s'étend depuis Yamoussoukro, en Côte d'Ivoire,
                 vers de nombreuses nations.
               </p>
               <p className="text-muted-foreground leading-relaxed">
@@ -103,7 +103,7 @@ const APropos = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">Nos Valeurs</h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Les fondements qui guident notre mission au quotidien.
+              Les fondements qui guident notre Mission au quotidien.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
