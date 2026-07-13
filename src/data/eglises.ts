@@ -116,7 +116,7 @@ export const eglises: Eglise[] = [
   },
   {
     id: "millionnaire",
-    nom: "MIEDA Abla Pokou — Yamoussoukro (Millionnaire)",
+    nom: "MIEDA — Yamoussoukro (Millionnaire)",
     ville: "Millionnaire",
     pays: "Côte d'Ivoire",
     drapeau: "🇨🇮",
