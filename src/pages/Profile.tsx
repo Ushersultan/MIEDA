@@ -306,13 +306,29 @@ const Profile = () => {
               </div>
             </div>
 
-            {isPasteur && (
-              <div className="sm:ml-auto">
-                <Link to="/espace-pasteur">
-                  <Button variant="secondary" size="lg">
-                    <ShieldCheck className="w-4 h-4 mr-2" /> Espace Pasteur
-                  </Button>
-                </Link>
+            {(isPasteur || profil?.role === "prophete" || profil?.role === "admin") && (
+              <div className="sm:ml-auto flex flex-col gap-2">
+                {profil?.role === "prophete" && (
+                  <Link to="/espace-prophete">
+                    <Button variant="secondary" size="lg" className="w-full bg-yellow-600 hover:bg-yellow-700 text-white">
+                      👑 Espace Prophète
+                    </Button>
+                  </Link>
+                )}
+                {profil?.role === "admin" && (
+                  <Link to="/admin">
+                    <Button variant="secondary" size="lg" className="w-full">
+                      🛡️ Administration
+                    </Button>
+                  </Link>
+                )}
+                {isPasteur && (
+                  <Link to="/espace-pasteur">
+                    <Button variant="secondary" size="lg" className="w-full">
+                      <ShieldCheck className="w-4 h-4 mr-2" /> Espace Pasteur
+                    </Button>
+                  </Link>
+                )}
               </div>
             )}
           </div>
