@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import QRCode from "qrcode";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +15,7 @@ import {
 //  ENFORCE_FOR_ALL = true  → tous les comptes | false → pasteurs/admins
 // ════════════════════════════════════════════════════════════════
 const ENFORCE_FOR_ALL = false;   // false = MFA imposé aux pasteurs/admins seulement
-const SMS_ACTIF = false;         // passez à true après avoir configuré Twilio dans Vercel
+const SMS_ACTIF = true;          // SMS activé (Twilio requis en env vars)
 
 type Etape = "verification" | "choix" | "enrolement" | "defi" | "email" | "ok";
 
@@ -33,10 +34,29 @@ const enregistrerMfaValide = (uid: string) => {
   try { localStorage.setItem(CLE_MFA(uid), String(Date.now())); } catch { /* noop */ }
 };
 
+// ── Persistance de la progression (survit à un rechargement de page) ──
+const CLE_PROG = (uid: string) => `mieda-mfa-progress-${uid}`;
+const sauverProgression = (uid: string, data: any) => {
+  try { sessionStorage.setItem(CLE_PROG(uid), JSON.stringify({ ...data, ts: Date.now() })); } catch { /* noop */ }
+};
+const lireProgression = (uid: string): any => {
+  try {
+    const raw = sessionStorage.getItem(CLE_PROG(uid));
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (Date.now() - data.ts > 30 * 60 * 1000) return null; // 30 min max
+    return data;
+  } catch { return null; }
+};
+const effacerProgression = (uid: string) => {
+  try { sessionStorage.removeItem(CLE_PROG(uid)); } catch { /* noop */ }
+};
+
 const MfaGate = ({ children }: { children: ReactNode }) => {
   const { user, loading: authLoading, profil, signOut } = useAuth();
   const [etape, setEtape] = useState<Etape>("verification");
   const [qrCode, setQrCode] = useState("");
+  const [qrDataUrl, setQrDataUrl] = useState("");
   const [secret, setSecret] = useState("");
   const [factorId, setFactorId] = useState("");
   const [challengeId, setChallengeId] = useState("");
@@ -56,6 +76,25 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
 
     // Déjà validé dans les 12 dernières heures ?
     if (mfaValideRecemment(user.id)) { setEtape("ok"); return; }
+
+    // Reprendre la progression sauvegardée (survit à un rechargement)
+    const progression = lireProgression(user.id);
+    if (progression) {
+      if (progression.etape === "enrolement" && progression.factorId) {
+        setFactorId(progression.factorId);
+        setQrCode(progression.qrCode || "");
+        setSecret(progression.secret || "");
+        setQrDataUrl(progression.qrDataUrl || "");
+        setEtape("enrolement");
+        return;
+      }
+      if (progression.etape === "email" && progression.canal) {
+        setCanal(progression.canal);
+        setEnvoiFait(true);
+        setEtape("email");
+        return;
+      }
+    }
 
     const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
     if (aal?.currentLevel === "aal2") { setEtape("ok"); return; }
@@ -92,6 +131,24 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
     setSecret(data.totp.secret);
     setCode("");
     setEtape("enrolement");
+    let generatedUrl = "";
+    try {
+      const uri = (data.totp as any).uri;
+      if (uri) {
+        generatedUrl = await QRCode.toDataURL(uri, {
+          width: 240, margin: 1,
+          color: { dark: "#1e40af", light: "#ffffff" },
+        });
+        setQrDataUrl(generatedUrl);
+      }
+    } catch (e) {
+      console.error("QR generation failed:", e);
+    }
+    // Sauvegarder la progression au cas où la page se rechargerait
+    if (user) sauverProgression(user.id, {
+      etape: "enrolement", factorId: data.id, qrCode: data.totp.qr_code,
+      secret: data.totp.secret, qrDataUrl: generatedUrl,
+    });
   };
 
   const verifierTotp = async () => {
@@ -108,6 +165,7 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
       if (error) throw error;
       setCode(""); setChallengeId("");
       enregistrerMfaValide(user!.id);
+      effacerProgression(user!.id);
       setEtape("ok");
     } catch {
       setErreur("Code incorrect ou expiré. Réessayez.");
@@ -143,6 +201,7 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
         : `Code envoyé à ${user?.email}. Vérifiez aussi vos spams.`);
       setEtape("email");
       setCode("");
+      if (user) sauverProgression(user.id, { etape: "email", canal: c });
     } catch (e: any) {
       setErreur(e.message);
     }
@@ -156,6 +215,7 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
     try {
       await appelApi({ action: "verify", code });
       enregistrerMfaValide(user!.id);
+      effacerProgression(user!.id);
       setCode("");
       setEtape("ok");
     } catch (e: any) {
@@ -182,7 +242,7 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
     <div className="min-h-screen flex items-center justify-center bg-[var(--section-bg)] px-4 py-10">
       <div className="w-full max-w-md bg-card rounded-2xl shadow-xl border border-border p-8">
         {retour && (
-          <button onClick={() => { setErreur(""); setCode(""); setEtape("choix"); }}
+          <button onClick={() => { setErreur(""); setCode(""); setQrDataUrl(""); if (user) effacerProgression(user.id); setEtape("choix"); }}
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4">
             <ArrowLeft className="w-3 h-3" /> Autre méthode
           </button>
