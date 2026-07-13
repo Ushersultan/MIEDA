@@ -23,6 +23,8 @@ const Serviteur = lazy(() => import("./pages/Serviteur"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Profile = lazy(() => import("./pages/Profile"));
 const EspacePasteur = lazy(() => import("./pages/EspacePasteur"));
+const Admin = lazy(() => import("./pages/Admin"));
+const EspaceProphete = lazy(() => import("./pages/EspaceProphete"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -60,6 +62,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/profil" element={<MfaGate><Profile /></MfaGate>} />
               <Route path="/espace-pasteur" element={<MfaGate><EspacePasteur /></MfaGate>} />
+              <Route path="/admin" element={<MfaGate><Admin /></MfaGate>} />
+              <Route path="/espace-prophete" element={<MfaGate><EspaceProphete /></MfaGate>} />
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
