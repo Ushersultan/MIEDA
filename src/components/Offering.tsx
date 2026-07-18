@@ -1,119 +1,117 @@
 import { useState } from "react";
 import {
-  Heart, ExternalLink, Landmark, Smartphone, QrCode, Copy, Check, Globe2,
+  Heart, ExternalLink, Landmark, Smartphone, QrCode, Copy, Check, Globe2, HandHeart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import paypalQr from "@/assets/paypal-qr.png";
 import { useLang } from "@/contexts/LanguageContext";
 
-// ── Textes bilingues ──
+// ── Textes bilingues — 100 % « don » ──
 const TXT = {
   fr: {
-  badge: "Don",
-  titre: "Soutenez la mission de Dieu",
-  para: "Vos dons permettent à la MIEDA de poursuivre son œuvre d’évangélisation, d’enseignement et de délivrance à travers le monde.",
+    badge: "Faire un don",
+    titre: "Soutenez la mission de Dieu",
+    para: "Vos dons permettent à la MIEDA de poursuivre son œuvre d'évangélisation, d'enseignement et de délivrance à travers le monde.",
 
-  citation: "« Apportez à la maison du trésor toutes les dîmes, afin qu’il y ait de la nourriture dans ma maison. Mettez-moi ainsi à l’épreuve, dit l’Éternel des armées. »",
-  citationRef: "— Malachie 3:10",
+    citation: "« Que chacun donne comme il l'a résolu en son cœur, sans tristesse ni contrainte ; car Dieu aime celui qui donne avec joie. »",
+    citationRef: "— 2 Corinthiens 9:7",
 
-  secur: "Paiement sécurisé avec PayPal",
-  securSous: "Vos informations bancaires ne nous sont jamais transmises.",
+    secur: "Paiement sécurisé avec PayPal",
+    securSous: "Vos informations bancaires ne nous sont jamais transmises.",
 
-  enLigne: "Faire un don en ligne",
-  designation: "Désignation du don (facultatif)",
-  designationPh: "Ex. : Construction, missions, jeunesse…",
-  rapide: "Choisissez un montant",
-  ou: "Ou saisissez un autre montant",
+    enLigne: "Faire un don en ligne",
+    rapide: "Choisissez un montant",
+    ou: "Ou saisissez un autre montant",
+    designation: "Affecter mon don à… (facultatif)",
+    designationPh: "Ex. : Construction, missions, jeunesse…",
 
-  donner: "Donner",
-  via: "avec PayPal",
+    donner: "Donner",
+    via: "avec PayPal",
 
-  scan: "Scannez le code",
-  scanSous: "Scannez ce code avec l’appareil photo de votre téléphone pour faire un don directement avec PayPal.",
-  redirect: "Vous serez redirigé vers PayPal afin de finaliser votre don en toute sécurité.",
+    scan: "Scannez le code",
+    scanSous: "Scannez ce code avec l'appareil photo de votre téléphone pour faire un don directement avec PayPal.",
+    redirect: "Vous serez redirigé vers PayPal afin de finaliser votre don en toute sécurité.",
 
-  autres: "Autres moyens de faire un don",
+    autres: "Autres moyens de faire un don",
 
-  virement: "Virement bancaire",
-  usa: "États-Unis 🇺🇸",
+    virement: "Virement bancaire",
+    usa: "États-Unis 🇺🇸",
 
-  wave: "Wave",
-  waveSous: "Mobile Money · Côte d’Ivoire 🇨🇮",
-  waveNote: "Envoyez directement votre dîme ou votre offrande à l’aide de l’application Wave.",
+    waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
+    waveNote: "Envoyez votre don directement à l'aide de l'application Wave.",
 
-  iban: "Virement bancaire par IBAN",
-  france: "France / International 🇫🇷",
-  ibanNote: "Veuillez préciser « Offrande » ou « Dîme » dans le libellé de votre virement.",
+    iban: "Virement bancaire par IBAN",
+    france: "France / International 🇫🇷",
+    ibanNote: "Veuillez préciser « Don MIEDA » dans le libellé de votre virement.",
 
-  lBanque: "Banque",
-  lAdresse: "Adresse",
-  lBenef: "Bénéficiaire",
-  lCompte: "Numéro de compte",
-  lChips: "CHIPS / ABA",
-  lSwift: "Code SWIFT",
-  lNom: "Nom",
-  lNumero: "Numéro",
-  lIban: "IBAN",
-  lBic: "Code BIC",
-  lTitulaire: "Titulaire du compte",
+    lBanque: "Banque",
+    lAdresse: "Adresse",
+    lBenef: "Bénéficiaire",
+    lCompte: "Numéro de compte",
+    lChips: "CHIPS / ABA",
+    lSwift: "Code SWIFT",
+    lNom: "Nom",
+    lNumero: "Numéro",
+    lIban: "IBAN",
+    lBic: "Code BIC",
+    lTitulaire: "Titulaire du compte",
 
-  benediction: "Que Dieu vous bénisse 🙏",
-},
+    merci: "Chaque don, quel que soit son montant, fait avancer l'œuvre de Dieu.",
+    benediction: "Que Dieu vous bénisse 🙏",
+  },
 
-en: {
-  badge: "online donation",
-  titre: "Support God’s Mission",
-  para: "Your donations enable MIEDA to continue its work of evangelism, teaching, and deliverance throughout the world.",
+  en: {
+    badge: "Donate",
+    titre: "Support God's Mission",
+    para: "Your donations enable MIEDA to continue its work of evangelism, teaching, and deliverance throughout the world.",
 
-  citation: "“Bring the whole tithe into the storehouse, so that there may be food in my house. Test me in this,” says the LORD of hosts.",
-  citationRef: "— Malachi 3:10",
+    citation: "\u201cEach of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.\u201d",
+    citationRef: "— 2 Corinthians 9:7",
 
-  secur: "Secure payment with PayPal",
-  securSous: "Your banking information is never shared with us.",
+    secur: "Secure payment with PayPal",
+    securSous: "Your banking information is never shared with us.",
 
-  enLigne: "Make an online donation",
-  designation: "Donation designation (optional)",
-  designationPh: "E.g.: Construction, missions, youth…",
+    enLigne: "Make an online donation",
+    rapide: "Choose an amount",
+    ou: "Or enter another amount",
+    designation: "Designate my gift to… (optional)",
+    designationPh: "E.g.: Construction, missions, youth…",
 
-  rapide: "Choose an amount",
-  ou: "Or enter another amount",
+    donner: "Donate",
+    via: "with PayPal",
 
-  donner: "Donate",
-  via: "with PayPal",
+    scan: "Scan the code",
+    scanSous: "Scan this code with your phone's camera to make a donation directly through PayPal.",
+    redirect: "You will be redirected to PayPal to complete your donation securely.",
 
-  scan: "Scan the code",
-  scanSous: "Scan this code with your phone’s camera to make a donation directly through PayPal.",
-  redirect: "You will be redirected to PayPal to complete your donation securely.",
+    autres: "Other ways to donate",
 
-  autres: "Other ways to donate",
+    virement: "Bank transfer",
+    usa: "United States 🇺🇸",
 
-  virement: "Bank transfer",
-  usa: "United States 🇺🇸",
+    waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
+    waveNote: "Send your donation directly using the Wave app.",
 
-  wave: "Wave",
-  waveSous: "Mobile Money · Côte d’Ivoire 🇨🇮",
-  waveNote: "Send your tithe or offering directly using the Wave app.",
+    iban: "Bank transfer via IBAN",
+    france: "France / International 🇫🇷",
+    ibanNote: "Please enter \u201cDonation MIEDA\u201d as the payment reference.",
 
-  iban: "Bank transfer via IBAN",
-  france: "France / International 🇫🇷",
-  ibanNote: "Please enter “Offering” or “Tithe” as the payment reference.",
+    lBanque: "Bank",
+    lAdresse: "Address",
+    lBenef: "Beneficiary",
+    lCompte: "Account number",
+    lChips: "CHIPS / ABA",
+    lSwift: "SWIFT code",
+    lNom: "Name",
+    lNumero: "Number",
+    lIban: "IBAN",
+    lBic: "BIC code",
+    lTitulaire: "Account holder",
 
-  lBanque: "Bank",
-  lAdresse: "Address",
-  lBenef: "Beneficiary",
-  lCompte: "Account number",
-  lChips: "CHIPS / ABA",
-  lSwift: "SWIFT code",
-  lNom: "Name",
-  lNumero: "Number",
-  lIban: "IBAN",
-  lBic: "BIC code",
-  lTitulaire: "Account holder",
-
-  benediction: "May God bless you 🙏",
-},
-
+    merci: "Every gift, whatever the amount, moves God's work forward.",
+    benediction: "May God bless you 🙏",
+  },
 };
 
 // ══════════════════════════════════════════════
@@ -122,7 +120,7 @@ en: {
 const PAYPAL_EMAIL = "mieda.diaspora@gmail.com";
 const CURRENCY = "USD";
 
-// ── Coordonnées officielles Dîmes & Offrandes — MIEDA Diaspora ──
+// ── Coordonnées officielles des dons — MIEDA Diaspora ──
 const BANQUE_US = {
   banque: "Manufacturers and Traders Trust Company (M&T Bank)",
   adresse: "One M&T Plaza, Buffalo, NY 14203, USA",
@@ -186,46 +184,22 @@ const CopyRow = ({ label, value, copyValue }: { label: string; value: string; co
 };
 
 // ══════════════════════════════════════════════
-//  FORMULAIRE PAYPAL — Offrande ou Dîme
+//  FORMULAIRE PAYPAL — Don
 // ══════════════════════════════════════════════
 const PayPalForm = ({ L }: { L: typeof TXT.fr }) => {
   const [amount, setAmount] = useState("");
-  const [type, setType] = useState<"offrande" | "dime">("offrande");
   const [note, setNote] = useState("");
   const presets = ["5", "10", "25", "50", "100"];
 
   const handleGive = () => {
     const val = parseFloat(amount);
     if (!val || val <= 0) return;
-    const base = type === "dime" ? "Dîme MIEDA" : "Offrande MIEDA";
-    const desc = note ? `${base} — ${note}` : `${base} — Mission Internationale`;
+    const desc = note ? `Don MIEDA — ${note}` : "Don MIEDA — Mission Internationale";
     window.open(buildPayPalUrl(val.toFixed(2), desc), "_blank");
   };
 
   return (
     <div className="space-y-6">
-      {/* Type de don */}
-      <div>
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">
-          {L.type}
-        </label>
-        <div className="flex gap-2">
-          {([["offrande", L.offrande], ["dime", L.dime]] as const).map(([val, lbl]) => (
-            <button
-              key={val}
-              onClick={() => setType(val)}
-              className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                type === val
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "border-border text-foreground hover:border-primary"
-              }`}
-            >
-              {lbl}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Montants rapides */}
       <div>
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">
@@ -269,7 +243,7 @@ const PayPalForm = ({ L }: { L: typeof TXT.fr }) => {
         </div>
       </div>
 
-      {/* Note optionnelle */}
+      {/* Affectation optionnelle */}
       <div>
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
           {L.designation}
@@ -334,7 +308,7 @@ const Offering = () => {
           <div className="lg:sticky lg:top-24">
             <div className="inline-block px-4 py-2 bg-secondary/20 rounded-full mb-6">
               <span className="text-sm font-semibold text-secondary-foreground flex items-center gap-2">
-                <Heart className="w-4 h-4" />
+                <HandHeart className="w-4 h-4" />
                 {L.badge}
               </span>
             </div>
@@ -381,7 +355,7 @@ const Offering = () => {
           </div>
         </div>
 
-        {/* ── Autres moyens de donner ── */}
+        {/* ── Autres moyens de faire un don ── */}
         <div className="flex items-center gap-4 mb-8">
           <div className="flex-1 h-px bg-border" />
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -455,7 +429,10 @@ const Offering = () => {
           </div>
         </div>
 
-        <p className="text-center text-sm font-medium text-foreground mt-10">
+        <p className="text-center text-sm text-muted-foreground mt-10">
+          {L.merci}
+        </p>
+        <p className="text-center text-sm font-medium text-foreground mt-2">
           {L.benediction}
         </p>
       </div>
