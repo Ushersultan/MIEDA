@@ -18,7 +18,7 @@ const TXT = {
     secur: "Paiement sécurisé via PayPal",
     securSous: "Vos informations bancaires ne nous sont jamais transmises",
     enLigne: "Donner en ligne",
-    type: "Type de don", offrande: "", dime: "",
+    type: "Type de don", designationPh: "",
     rapide: "Montant rapide", ou: "Ou entrez un montant",
     designation: "Désignation (optionnel)",
     designationPh: "Ex: Construction, Missions, Jeunes...",
