@@ -20,7 +20,8 @@ const SMS_ACTIF = true;          // SMS activé (Twilio requis en env vars)
 type Etape = "verification" | "choix" | "enrolement" | "defi" | "email" | "ok";
 
 const CLE_MFA = (uid: string) => `mieda-mfa-verified-${uid}`;
-const DUREE_SESSION_MS = 12 * 60 * 60 * 1000; // 12 heures
+const JOURS_CONFIANCE = 30;
+const DUREE_SESSION_MS = JOURS_CONFIANCE * 24 * 60 * 60 * 1000; // appareil approuvé 30 jours
 
 const mfaValideRecemment = (uid: string): boolean => {
   try {
@@ -253,6 +254,9 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
         <h1 className="text-xl font-bold text-foreground text-center mb-1">{titre}</h1>
         <p className="text-sm text-muted-foreground text-center mb-6">{sousTitre}</p>
         {contenu}
+        <p className="text-[11px] text-muted-foreground text-center mt-4">
+          🔒 Cet appareil restera approuvé pendant {JOURS_CONFIANCE} jours après vérification.
+        </p>
         {info && <p className="text-sm text-green-600 text-center mt-4">{info}</p>}
         {erreur && <p className="text-sm text-destructive text-center mt-4">{erreur}</p>}
         <button onClick={() => signOut()}
