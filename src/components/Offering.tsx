@@ -10,7 +10,7 @@ import { useLang } from "@/contexts/LanguageContext";
 // ── Textes bilingues ──
 const TXT = {
   fr: {
-    badge: "Dîmes & Offrandes — MIEDA Diaspora",
+    badge: "Don",
     titre: "Soutenez la Mission de Dieu",
     para: "Vos dons permettent à MIEDA de poursuivre son œuvre d'évangélisation, d'enseignement et de délivrance partout dans le monde.",
     citation: "« Apportez toutes les dîmes dans la maison du trésor… et éprouvez-moi ainsi, dit l'Éternel des armées. »",
