@@ -14,7 +14,7 @@ const TXT = {
   fr: {
     presence: "Présence mondiale",
     titre: "Nos Lieux de Cultes",
-    sous: "La mission MIEDA rassemble des fidèles à travers le monde. Trouvez l'église la plus proche, son pasteur et ses moyens de communication.",
+    sous: "La MIEDA rassemble des fidèles à travers le monde. Trouvez l'église la plus proche, son pasteur et ses moyens de communication.",
     eglises: "Églises", serviteurs: "Serviteurs", pays: "Pays",
     recherche: "Rechercher une église, une ville, un pasteur...",
     aucune: "Aucune église trouvée pour",
@@ -49,7 +49,7 @@ const TXT = {
 
 // ── Afficher les numéros de téléphone des serviteurs ? ──
 // Passez à false pour masquer tous les contacts sur le site public.
-const AFFICHER_CONTACTS = false;
+const AFFICHER_CONTACTS = true;
 
 // ── Icône TikTok (SVG sur mesure, absente de lucide) ──
 const TikTokIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
