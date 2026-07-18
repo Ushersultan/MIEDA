@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   MapPin, Phone, Mail, Youtube, Facebook, Instagram, Video,
   ChevronDown, ExternalLink, Globe2, Users, Church, Search, X,
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { eglises, ordreRegions, type Eglise, type Pasteur } from "@/data/eglises";
 import { lienServiteur } from "@/lib/serviteurs";
 import { useLang } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 // ── Textes bilingues de la page ──
 const TXT = {
@@ -127,7 +128,7 @@ const ServiteurRow = ({ p, eglise }: { p: Pasteur; eglise: Eglise }) => (
 );
 
 // ── Carte d'une église (dépliable) ──
-const EgliseCard = ({ eglise, L }: { eglise: Eglise; L: typeof TXT.fr }) => {
+const EgliseCard = ({ eglise, L, photo }: { eglise: Eglise; L: typeof TXT.fr; photo?: string }) => {
   const [open, setOpen] = useState(false);
   const hasDetails = Boolean(
     eglise.adresse || (AFFICHER_CONTACTS && (eglise.pasteur.telephone || eglise.pasteur.email)) ||
@@ -146,7 +147,7 @@ const EgliseCard = ({ eglise, L }: { eglise: Eglise; L: typeof TXT.fr }) => {
         onClick={() => hasDetails && setOpen(!open)}
         className={`w-full text-left p-5 flex items-start gap-4 ${hasDetails ? "cursor-pointer hover:bg-muted/40" : "cursor-default"} transition-colors`}
       >
-        <Avatar nom={eglise.pasteur.nom} photo={eglise.pasteur.photo} />
+        <Avatar nom={eglise.pasteur.nom} photo={eglise.pasteur.photo ?? photo} />
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <h3 className="font-semibold text-foreground text-base leading-tight">{eglise.nom}</h3>
@@ -263,6 +264,13 @@ const LieuxDeCultes = () => {
   const { lang } = useLang();
   const L = TXT[lang];
   const [query, setQuery] = useState("");
+  const [photos, setPhotos] = useState<Map<string, string>>(new Map());
+
+  useEffect(() => {
+    supabase.rpc("photos_pasteurs").then(({ data }) => {
+      if (data) setPhotos(new Map(data.map((r: any) => [r.eglise_id, r.photo_url])));
+    });
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -380,7 +388,7 @@ const LieuxDeCultes = () => {
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {liste.map((eglise) => (
-                      <EgliseCard key={eglise.id} eglise={eglise} L={L} />
+                      <EgliseCard key={eglise.id} eglise={eglise} L={L} photo={photos.get(eglise.id)} />
                     ))}
                   </div>
                 </div>
@@ -398,7 +406,7 @@ const LieuxDeCultes = () => {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {international.map((eglise) => (
-                  <EgliseCard key={eglise.id} eglise={eglise} L={L} />
+                  <EgliseCard key={eglise.id} eglise={eglise} L={L} photo={photos.get(eglise.id)} />
                 ))}
               </div>
             </div>

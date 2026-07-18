@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { CLE_CODE_PENDING, tenterActivationCode } from "@/pages/Auth";
 import {
   User as UserIcon, Mail, MapPin, Phone, LogOut, ArrowLeft, Loader2, Save,
   Church, ShieldCheck, HeartHandshake, Send, Clock, CheckCircle2, Camera,
@@ -77,6 +78,36 @@ const Profile = () => {
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth");
   }, [user, authLoading, navigate]);
+
+  // ── Auto-activation du code serviteur en attente (inscription interrompue) ──
+  useEffect(() => {
+    const codePending = (() => {
+      try { return localStorage.getItem(CLE_CODE_PENDING); } catch { return null; }
+    })();
+    if (!user || !profil || !codePending) return;
+    if (profil.role !== "membre") {
+      try { localStorage.removeItem(CLE_CODE_PENDING); } catch { /* noop */ }
+      return;
+    }
+    (async () => {
+      const res = await tenterActivationCode(codePending);
+      if (res === "ok") {
+        try { localStorage.removeItem(CLE_CODE_PENDING); } catch { /* noop */ }
+        toast({ title: "Espace Pasteur activé ✓", description: "Bienvenue, serviteur de Dieu ! 🙏" });
+        setTimeout(() => window.location.reload(), 1200);
+      } else if (res === "code_invalide") {
+        try { localStorage.removeItem(CLE_CODE_PENDING); } catch { /* noop */ }
+        setCodeServ(codePending); // pré-remplir le champ pour correction manuelle
+        toast({
+          title: "Code non reconnu",
+          description: "Vérifiez-le dans le champ « serviteur MIEDA » ci-dessous.",
+          variant: "destructive",
+        });
+      }
+      // 'reessayer' → on laisse le code en attente pour la prochaine visite
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profil]);
 
   useEffect(() => {
     if (profil) {

@@ -1,4 +1,6 @@
 import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   MapPin, Phone, Mail, ArrowLeft, Church, Users, Youtube, Facebook, Video,
 } from "lucide-react";
@@ -14,6 +16,26 @@ const getInitials = (nom: string) => {
 const Serviteur = () => {
   const { egliseId = "", slug = "" } = useParams();
   const res = trouverServiteur(egliseId, slug);
+
+  // Photo du compte pasteur (si le nom correspond et qu'une photo est définie)
+  const [photoCompte, setPhotoCompte] = useState<string | null>(null);
+  const nomServiteur = res?.pasteur.nom ?? "";
+  useEffect(() => {
+    if (!nomServiteur) return;
+    supabase.rpc("photos_pasteurs").then(({ data }) => {
+      if (!data) return;
+      const normaliser = (x: string) =>
+        x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          .replace(/^(reverend|rev\.?|docteur|dr\.?|pasteure?|prophete|evangeliste|apotre|mme|m\.)\s*/gi, "")
+          .split(/\s+/).filter((t) => t.length > 1);
+      const tokensServ = new Set(normaliser(nomServiteur));
+      const match = (data as any[]).find((r) => {
+        const communs = normaliser(r.full_name || "").filter((t) => tokensServ.has(t));
+        return communs.length >= 2;
+      });
+      if (match?.photo_url) setPhotoCompte(match.photo_url);
+    });
+  }, [nomServiteur]);
 
   if (!res) {
     return (
@@ -41,8 +63,8 @@ const Serviteur = () => {
           </Link>
 
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
-            {pasteur.photo ? (
-              <img src={pasteur.photo} alt={pasteur.nom}
+            {(pasteur.photo ?? photoCompte) ? (
+              <img src={pasteur.photo ?? photoCompte!} alt={pasteur.nom}
                 className="w-32 h-32 rounded-2xl object-cover ring-4 ring-white/30 shadow-xl" />
             ) : (
               <div className="w-32 h-32 rounded-2xl bg-white/15 backdrop-blur-sm ring-4 ring-white/30 flex items-center justify-center text-4xl font-bold shadow-xl">

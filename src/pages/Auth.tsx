@@ -8,6 +8,20 @@ import { Mail, Lock, User as UserIcon, MapPin, ArrowLeft, Loader2, Church, KeyRo
 import { eglisesGroupees } from "@/lib/serviteurs";
 import logo from "@/assets/mieda-logo.png";
 
+// ── Code serviteur en attente (survit à la confirmation d'email) ──
+export const CLE_CODE_PENDING = "mieda-code-serviteur-pending";
+
+// Tente l'activation avec réessais (le profil peut mettre ~2 s à être créé)
+export async function tenterActivationCode(code: string): Promise<string> {
+  for (let essai = 0; essai < 5; essai++) {
+    const { data: res } = await supabase.rpc("activer_code_pasteur", { p_code: code });
+    if (res === "ok" || res === "code_invalide") return res as string;
+    // 'profil_en_creation' ou erreur transitoire → attendre puis réessayer
+    await new Promise((r) => setTimeout(r, 1300));
+  }
+  return "reessayer";
+}
+
 const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
@@ -68,18 +82,27 @@ const Auth = () => {
             role: "membre",
           });
 
-          // Activation du code serviteur (si session active)
+          // Activation du code serviteur — sauvegardé puis activé avec réessais
+          if (estServiteur && codeServiteur.trim()) {
+            try { localStorage.setItem(CLE_CODE_PENDING, codeServiteur.trim()); } catch { /* noop */ }
+          }
           if (estServiteur && codeServiteur.trim() && data.session) {
-            const { data: res } = await supabase.rpc("activer_code_pasteur", {
-              p_code: codeServiteur.trim(),
-            });
+            const res = await tenterActivationCode(codeServiteur.trim());
             if (res === "ok") {
+              try { localStorage.removeItem(CLE_CODE_PENDING); } catch { /* noop */ }
               toast({ title: "Espace Pasteur activé ✓", description: "Bienvenue, serviteur de Dieu ! 🙏" });
             } else if (res === "code_invalide") {
+              try { localStorage.removeItem(CLE_CODE_PENDING); } catch { /* noop */ }
               toast({
                 title: "Code invalide",
-                description: "Vous pourrez réessayer depuis votre profil.",
+                description: "Vérifiez le code — vous pourrez réessayer depuis votre profil.",
                 variant: "destructive",
+              });
+            } else {
+              // 'reessayer' → le profil se finalisera à la 1re visite du profil
+              toast({
+                title: "Compte créé ✓",
+                description: "Votre Espace Pasteur sera activé automatiquement à votre première connexion.",
               });
             }
           } else if (estServiteur && codeServiteur.trim()) {
