@@ -21,12 +21,10 @@ const TXT = {
   securSous: "Vos informations bancaires ne nous sont jamais transmises.",
 
   enLigne: "Faire un don en ligne",
-  type: "Type de don",
-  rapide: "Choisissez un montant",
-  ou: "Ou saisissez un autre montant",
-
   designation: "Désignation du don (facultatif)",
   designationPh: "Ex. : Construction, missions, jeunesse…",
+  rapide: "Choisissez un montant",
+  ou: "Ou saisissez un autre montant",
 
   donner: "Donner",
   via: "avec PayPal",
@@ -64,7 +62,7 @@ const TXT = {
 },
 
 en: {
-  badge: "Tithes & Offerings — MIEDA Diaspora",
+  badge: "online donation",
   titre: "Support God’s Mission",
   para: "Your donations enable MIEDA to continue its work of evangelism, teaching, and deliverance throughout the world.",
 
@@ -75,15 +73,11 @@ en: {
   securSous: "Your banking information is never shared with us.",
 
   enLigne: "Make an online donation",
-  type: "Donation type",
-  offrande: "Offering",
-  dime: "Tithe",
+  designation: "Donation designation (optional)",
+  designationPh: "E.g.: Construction, missions, youth…",
 
   rapide: "Choose an amount",
   ou: "Or enter another amount",
-
-  designation: "Donation designation (optional)",
-  designationPh: "E.g.: Construction, missions, youth…",
 
   donner: "Donate",
   via: "with PayPal",
