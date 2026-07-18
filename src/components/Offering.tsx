@@ -62,34 +62,64 @@ const TXT = {
 
   benediction: "Que Dieu vous bénisse 🙏",
 },
-  en: {
-    badge: "Tithes & Offerings — MIEDA Diaspora",
-    titre: "Support God's Mission",
-    para: "Your gifts enable MIEDA to continue its work of evangelism, teaching and deliverance around the world.",
-    citation: "\u201cBring the whole tithe into the storehouse\u2026 and test me in this, says the LORD of hosts.\u201d",
-    citationRef: "— Malachi 3:10",
-    secur: "Secure payment via PayPal",
-    securSous: "Your banking details are never shared with us",
-    enLigne: "Give online — Offering or Tithe",
-    type: "Gift type", offrande: "Offering", dime: "Tithe",
-    rapide: "Quick amount", ou: "Or enter an amount",
-    designation: "Designation (optional)",
-    designationPh: "E.g.: Building, Missions, Youth...",
-    donner: "Give", via: "via PayPal",
-    scan: "Scan me",
-    scanSous: "Scan this code with your phone camera to give directly via PayPal.",
-    redirect: "You will be redirected to PayPal to complete your gift securely.",
-    autres: "Other ways to give",
-    virement: "Bank transfer", usa: "United States 🇺🇸",
-    wave: "Wave", waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
-    waveNote: "Send your tithe or offering directly through the Wave app.",
-    iban: "IBAN transfer", france: "France / International 🇫🇷",
-    ibanNote: "Please write \u201cOffering\u201d or \u201cTithe\u201d as the transfer reference.",
-    lBanque: "Bank", lAdresse: "Address", lBenef: "Beneficiary",
-    lCompte: "Account number", lChips: "CHIPS / ABA", lSwift: "SWIFT code",
-    lNom: "Name", lNumero: "Number", lIban: "IBAN", lBic: "B.I.C. code", lTitulaire: "Account holder",
-    benediction: "God bless you 🙏",
-  },
+
+en: {
+  badge: "Tithes & Offerings — MIEDA Diaspora",
+  titre: "Support God’s Mission",
+  para: "Your donations enable MIEDA to continue its work of evangelism, teaching, and deliverance throughout the world.",
+
+  citation: "“Bring the whole tithe into the storehouse, so that there may be food in my house. Test me in this,” says the LORD of hosts.",
+  citationRef: "— Malachi 3:10",
+
+  secur: "Secure payment with PayPal",
+  securSous: "Your banking information is never shared with us.",
+
+  enLigne: "Make an online donation",
+  type: "Donation type",
+  offrande: "Offering",
+  dime: "Tithe",
+
+  rapide: "Choose an amount",
+  ou: "Or enter another amount",
+
+  designation: "Donation designation (optional)",
+  designationPh: "E.g.: Construction, missions, youth…",
+
+  donner: "Donate",
+  via: "with PayPal",
+
+  scan: "Scan the code",
+  scanSous: "Scan this code with your phone’s camera to make a donation directly through PayPal.",
+  redirect: "You will be redirected to PayPal to complete your donation securely.",
+
+  autres: "Other ways to donate",
+
+  virement: "Bank transfer",
+  usa: "United States 🇺🇸",
+
+  wave: "Wave",
+  waveSous: "Mobile Money · Côte d’Ivoire 🇨🇮",
+  waveNote: "Send your tithe or offering directly using the Wave app.",
+
+  iban: "Bank transfer via IBAN",
+  france: "France / International 🇫🇷",
+  ibanNote: "Please enter “Offering” or “Tithe” as the payment reference.",
+
+  lBanque: "Bank",
+  lAdresse: "Address",
+  lBenef: "Beneficiary",
+  lCompte: "Account number",
+  lChips: "CHIPS / ABA",
+  lSwift: "SWIFT code",
+  lNom: "Name",
+  lNumero: "Number",
+  lIban: "IBAN",
+  lBic: "BIC code",
+  lTitulaire: "Account holder",
+
+  benediction: "May God bless you 🙏",
+},
+
 };
 
 // ══════════════════════════════════════════════
