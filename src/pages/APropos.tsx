@@ -80,11 +80,10 @@ const APropos = () => {
             {/* Biographie */}
             <div>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Serviteur de Dieu et fondateur de MIEDA, le Révérend Docteur Prophète
+                Serviteur de Dieu et fondateur de la MIEDA, le Révérend Docteur Prophète
                 DJEHA Kouadio consacre sa vie à l'annonce de l'Évangile, à
-                l'enseignement de la Parole et à la délivrance des âmes. Sous sa
-                direction, la Mission s'étend depuis Yamoussoukro, en Côte d'Ivoire,
-                vers de nombreuses nations.
+                l'enseignement de la Parole et à la délivrance des âmes. Sous sa direction, la Mission, née en Côte d’Ivoire, 
+                s’étend aujourd’hui vers d’autres nations.
               </p>
               <p className="text-muted-foreground leading-relaxed">
                 {/* ✏️ MIEDA : remplacez ce paragraphe par la biographie officielle du fondateur. */}
