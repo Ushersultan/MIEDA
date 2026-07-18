@@ -10,33 +10,58 @@ import { useLang } from "@/contexts/LanguageContext";
 // ── Textes bilingues ──
 const TXT = {
   fr: {
-    badge: "Don",
-    titre: "Soutenez la Mission de Dieu",
-    para: "Vos dons permettent à MIEDA de poursuivre son œuvre d'évangélisation, d'enseignement et de délivrance partout dans le monde.",
-    citation: "« Apportez toutes les dîmes dans la maison du trésor… et éprouvez-moi ainsi, dit l'Éternel des armées. »",
-    citationRef: "— Malachie 3:10",
-    secur: "Paiement sécurisé via PayPal",
-    securSous: "Vos informations bancaires ne nous sont jamais transmises",
-    enLigne: "Donner en ligne",
-    type: "Type de don", designationPh: "",
-    rapide: "Montant rapide", ou: "Ou entrez un montant",
-    designation: "Désignation (optionnel)",
-    designationPh: "Ex: Construction, Missions, Jeunes...",
-    donner: "Donner", via: "via PayPal",
-    scan: "Scannez-moi",
-    scanSous: "Scannez ce code avec l'appareil photo de votre téléphone pour donner directement via PayPal.",
-    redirect: "Vous serez redirigé vers PayPal pour finaliser votre don en toute sécurité.",
-    autres: "Autres moyens de donner",
-    virement: "Virement bancaire", usa: "États-Unis 🇺🇸",
-    wave: "Wave", waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
-    waveNote: "Envoyez votre dîme ou offrande directement via l'application Wave.",
-    iban: "Virement IBAN", france: "France / International 🇫🇷",
-    ibanNote: "Précisez « Offrande » ou « Dîme » en libellé de votre virement.",
-    lBanque: "Banque", lAdresse: "Adresse", lBenef: "Bénéficiaire",
-    lCompte: "Numéro de compte", lChips: "CHIPS / ABA", lSwift: "Code SWIFT",
-    lNom: "Nom", lNumero: "Numéro", lIban: "IBAN", lBic: "Code B.I.C.", lTitulaire: "Titulaire du compte",
-    benediction: "Dieu vous bénisse 🙏",
-  },
+  badge: "Don",
+  titre: "Soutenez la mission de Dieu",
+  para: "Vos dons permettent à la MIEDA de poursuivre son œuvre d’évangélisation, d’enseignement et de délivrance à travers le monde.",
+
+  citation: "« Apportez à la maison du trésor toutes les dîmes, afin qu’il y ait de la nourriture dans ma maison. Mettez-moi ainsi à l’épreuve, dit l’Éternel des armées. »",
+  citationRef: "— Malachie 3:10",
+
+  secur: "Paiement sécurisé avec PayPal",
+  securSous: "Vos informations bancaires ne nous sont jamais transmises.",
+
+  enLigne: "Faire un don en ligne",
+  type: "Type de don",
+  rapide: "Choisissez un montant",
+  ou: "Ou saisissez un autre montant",
+
+  designation: "Désignation du don (facultatif)",
+  designationPh: "Ex. : Construction, missions, jeunesse…",
+
+  donner: "Donner",
+  via: "avec PayPal",
+
+  scan: "Scannez le code",
+  scanSous: "Scannez ce code avec l’appareil photo de votre téléphone pour faire un don directement avec PayPal.",
+  redirect: "Vous serez redirigé vers PayPal afin de finaliser votre don en toute sécurité.",
+
+  autres: "Autres moyens de faire un don",
+
+  virement: "Virement bancaire",
+  usa: "États-Unis 🇺🇸",
+
+  wave: "Wave",
+  waveSous: "Mobile Money · Côte d’Ivoire 🇨🇮",
+  waveNote: "Envoyez directement votre dîme ou votre offrande à l’aide de l’application Wave.",
+
+  iban: "Virement bancaire par IBAN",
+  france: "France / International 🇫🇷",
+  ibanNote: "Veuillez préciser « Offrande » ou « Dîme » dans le libellé de votre virement.",
+
+  lBanque: "Banque",
+  lAdresse: "Adresse",
+  lBenef: "Bénéficiaire",
+  lCompte: "Numéro de compte",
+  lChips: "CHIPS / ABA",
+  lSwift: "Code SWIFT",
+  lNom: "Nom",
+  lNumero: "Numéro",
+  lIban: "IBAN",
+  lBic: "Code BIC",
+  lTitulaire: "Titulaire du compte",
+
+  benediction: "Que Dieu vous bénisse 🙏",
+},
   en: {
     badge: "Tithes & Offerings — MIEDA Diaspora",
     titre: "Support God's Mission",
