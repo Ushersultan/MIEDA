@@ -214,7 +214,7 @@ const Profile = () => {
   const donner = () => {
     const val = parseFloat(montant);
     if (!val || val <= 0) return;
-    const desc = `${typeDon === "dime" ? "Dîme" : "Offrande"} MIEDA — ${form.full_name || "Membre"}`;
+    const desc = `Don MIEDA — ${form.full_name || "Membre"}`;
     window.open(buildPayPalUrl(val.toFixed(2), desc), "_blank");
   };
 
@@ -582,12 +582,12 @@ const Profile = () => {
                   <h2 className="text-lg font-semibold text-foreground">Soutenir l'œuvre de Dieu</h2>
                 </div>
                 <p className="text-sm text-muted-foreground mb-6">
-                  « Apportez toutes les dîmes dans la maison du trésor… » — Malachie 3:10
+                  « Chacun donne ce qu'il a décidé en son cœur, sans tristesse ni contrainte. » — 2 Corinthiens 9:7
                 </p>
 
                 {/* Type */}
                 <div className="flex gap-2 mb-4">
-                  {([["offrande", "Offrande"], ["dime", "Dîme"]] as const).map(([val, lbl]) => (
+                  {([["ponctuel", "Ponctuel"], ["periodique", "Récurrent"]] as const).map(([val, lbl]) => (
                     <button key={val} onClick={() => setTypeDon(val)}
                       className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
                         typeDon === val ? "bg-primary text-primary-foreground border-primary"
