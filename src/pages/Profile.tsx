@@ -69,7 +69,6 @@ const Profile = () => {
 
   // Soutien
   const [montant, setMontant] = useState("");
-  const [typeDon, setTypeDon] = useState<"offrande" | "dime">("offrande");
 
   const isPasteur = profil?.role === "pasteur" || profil?.role === "admin";
   const egliseNom = nomEglise(form.eglise_id || null);
@@ -590,7 +589,7 @@ const Profile = () => {
                   {([["ponctuel", "Ponctuel"], ["periodique", "Récurrent"]] as const).map(([val, lbl]) => (
                     <button key={val} onClick={() => setTypeDon(val)}
                       className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                        typeDon === val ? "bg-primary text-primary-foreground border-primary"
+                        "don" === val ? "bg-primary text-primary-foreground border-primary"
                         : "border-border text-foreground hover:border-primary"
                       }`}>{lbl}</button>
                   ))}
