@@ -35,6 +35,29 @@ interface Profil {
   created_at?: string;
 }
 
+
+// ── Détection des serviteurs : comparaison de noms tolérante ──
+const MOTS_IGNORES = new Set([
+  "rev", "reverend", "dr", "docteur", "pasteur", "pasteure", "prophete",
+  "evangeliste", "apotre", "mme", "mr", "frere", "soeur", "ancien", "diacre",
+  "le", "la", "les", "de", "du", "des", "et",
+]);
+
+const tokensNom = (t: string): string[] =>
+  (t || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z ]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w.length > 1 && !MOTS_IGNORES.has(w));
+
+// Registre officiel : serviteur principal + équipe de chaque église
+const REGISTRE: { egliseId: string; nom: string; tokens: string[] }[] = eglises.flatMap((e) => [
+  { egliseId: e.id, nom: e.pasteur.nom, tokens: tokensNom(e.pasteur.nom) },
+  ...(e.equipe ?? []).map((m) => ({ egliseId: e.id, nom: m.nom, tokens: tokensNom(m.nom) })),
+]);
+
 const Admin = () => {
   const { user, loading: authLoading, profil } = useAuth();
   const navigate = useNavigate();
@@ -218,6 +241,27 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
       nouveaux: profils.filter((p) => p.created_at && new Date(p.created_at).getTime() > il_y_a_7j),
     };
   }, [codes, profils]);
+
+  // ── Membres dont le nom figure au registre des serviteurs ──
+  const serviteursDetectes = useMemo(() => {
+    const res: { profil: Profil; eglises: { id: string; nom: string }[] }[] = [];
+    for (const p of profils) {
+      if (p.role !== "membre" || !p.full_name) continue;
+      const tp = tokensNom(p.full_name);
+      if (tp.length < 2) continue;
+      const trouves = REGISTRE.filter(
+        (r) => r.tokens.filter((t) => tp.includes(t)).length >= 2
+      );
+      if (trouves.length === 0) continue;
+      const parEglise = new Map<string, string>();
+      for (const t of trouves) parEglise.set(t.egliseId, t.nom);
+      res.push({
+        profil: p,
+        eglises: [...parEglise].map(([id, nom]) => ({ id, nom })),
+      });
+    }
+    return res;
+  }, [profils]);
 
   // Options d'églises groupées par région pour le sélecteur
   const eglisesOptions = useMemo(() => {
@@ -464,6 +508,43 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
                           <span className="text-xs text-muted-foreground ml-auto flex-shrink-0">
                             {new Date(p.created_at!).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}
                           </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {serviteursDetectes.length > 0 && (
+                  <div className="mb-6 rounded-xl border border-primary/30 bg-primary/5 p-4">
+                    <p className="text-sm font-semibold text-foreground flex items-center gap-2 mb-1">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      {serviteursDetectes.length} serviteur{serviteursDetectes.length > 1 ? "s" : ""} inscrit{serviteursDetectes.length > 1 ? "s" : ""} comme membre
+                    </p>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Ces comptes portent le nom d'un serviteur du registre officiel.
+                      Activez leur Espace Pasteur en un clic — rien ne leur sera demandé.
+                    </p>
+                    <div className="space-y-2">
+                      {serviteursDetectes.map(({ profil: sp, eglises: opts }) => (
+                        <div key={sp.id}
+                          className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card flex-wrap">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">{sp.full_name}</p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {sp.eglise_id
+                                ? "A choisi : " + nomEglise(sp.eglise_id)
+                                : "Aucune église choisie"}
+                            </p>
+                          </div>
+                          <div className="flex gap-1.5 flex-wrap">
+                            {opts.map((o) => (
+                              <button key={o.id}
+                                onClick={() => promouvoir(sp.id, o.id)}
+                                className="text-xs font-medium px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
+                                Activer · {nomEglise(o.id) ?? o.id}
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
