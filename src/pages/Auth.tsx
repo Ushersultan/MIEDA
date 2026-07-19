@@ -66,21 +66,36 @@ const Auth = () => {
           email,
           password,
           options: {
-            data: { full_name: fullName, ville, pays },
+            // Lues par le déclencheur serveur qui crée le profil
+            // et active le code serviteur — sans dépendre du navigateur.
+            data: {
+              full_name: fullName,
+              ville,
+              pays,
+              eglise_id: egliseId || null,
+              code_serviteur: estServiteur && codeServiteur.trim()
+                ? codeServiteur.trim().toUpperCase()
+                : null,
+            },
           },
         });
         if (error) throw error;
 
         // Crée le profil dans la table profiles
         if (data.user) {
-          await supabase.from("profiles").insert({
-            id: data.user.id,
-            full_name: fullName,
-            ville,
-            pays,
-            eglise_id: egliseId || null,
-            role: "membre",
-          });
+          // Filet de sécurité : le profil est normalement déjà créé par le
+          // déclencheur serveur. ignoreDuplicates évite d'écraser un rôle pasteur.
+          await supabase.from("profiles").upsert(
+            {
+              id: data.user.id,
+              full_name: fullName,
+              ville,
+              pays,
+              eglise_id: egliseId || null,
+              role: "membre",
+            },
+            { onConflict: "id", ignoreDuplicates: true }
+          );
 
           // Activation du code serviteur — sauvegardé puis activé avec réessais
           if (estServiteur && codeServiteur.trim()) {
@@ -107,8 +122,8 @@ const Auth = () => {
             }
           } else if (estServiteur && codeServiteur.trim()) {
             toast({
-              title: "Code enregistré pour plus tard",
-              description: "Après confirmation de votre email, entrez votre code dans votre espace profil.",
+              title: "Espace Pasteur préparé ✓",
+              description: "Confirmez votre email, puis connectez-vous : votre espace sera déjà actif.",
             });
           }
         }

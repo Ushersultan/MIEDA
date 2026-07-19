@@ -9,8 +9,10 @@ import {
   User as UserIcon, Mail, MapPin, Phone, LogOut, ArrowLeft, Loader2, Save,
   Church, ShieldCheck, HeartHandshake, Send, Clock, CheckCircle2, Camera,
   Megaphone, Users, Heart, ExternalLink, Calendar, XCircle, Sparkles, KeyRound,
+  LayoutDashboard, Pencil, Briefcase, Home as HomeIcon, Cake, BookOpen, ChevronRight,
 } from "lucide-react";
-import { eglisesGroupees, nomEglise } from "@/lib/serviteurs";
+import { eglisesGroupees, nomEglise, lienServiteur } from "@/lib/serviteurs";
+import { eglises } from "@/data/eglises";
 import { departements } from "@/data/departements";
 
 // ── Types ──
@@ -18,7 +20,7 @@ interface PriereRow { id: string; demande: string; est_publique: boolean; traite
 interface AnnonceRow { id: string; titre: string; contenu: string; date_evenement: string | null; created_at: string; }
 interface DemandeDept { id: string; departement: string; statut: string; created_at: string; }
 
-type Tab = "profil" | "eglise" | "departements" | "prieres" | "soutenir";
+type Tab = "apercu" | "eglise" | "departements" | "prieres" | "soutenir" | "modifier";
 
 const PAYPAL_EMAIL = "mieda.diaspora@gmail.com";
 const buildPayPalUrl = (amount: string, description: string) => {
@@ -41,9 +43,10 @@ const Profile = () => {
   const { toast } = useToast();
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const [tab, setTab] = useState<Tab>("profil");
+  const [tab, setTab] = useState<Tab>("apercu");
   const [form, setForm] = useState({
     full_name: "", phone: "", ville: "", pays: "", eglise_id: "", photo_url: "",
+    profession: "", quartier: "", bio: "", date_naissance: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -115,6 +118,8 @@ const Profile = () => {
         full_name: profil.full_name, phone: profil.phone, ville: profil.ville,
         pays: profil.pays, eglise_id: profil.eglise_id ?? "",
         photo_url: profil.photo_url ?? "",
+        profession: profil.profession ?? "", quartier: profil.quartier ?? "",
+        bio: profil.bio ?? "", date_naissance: profil.date_naissance ?? "",
       });
       setLoading(false);
     }
@@ -185,6 +190,8 @@ const Profile = () => {
     const { error } = await supabase.from("profiles").upsert({
       id: user.id, full_name: form.full_name, phone: form.phone,
       ville: form.ville, pays: form.pays, eglise_id: form.eglise_id || null,
+      profession: form.profession || null, quartier: form.quartier || null,
+      bio: form.bio || null, date_naissance: form.date_naissance || null,
       role: profil?.role ?? "membre",
     });
     if (error) toast({ title: "Erreur", description: error.message, variant: "destructive" });
@@ -267,12 +274,24 @@ const Profile = () => {
     : { icon: Clock, cls: "text-muted-foreground", label: "En attente" };
 
   const tabs: { id: Tab; label: string; icon: any }[] = [
-    { id: "profil", label: "Profil", icon: UserIcon },
+    { id: "apercu", label: "Aperçu", icon: LayoutDashboard },
     { id: "eglise", label: "Mon église", icon: Church },
     { id: "departements", label: "Départements", icon: Users },
     { id: "prieres", label: "Prières", icon: HeartHandshake },
     { id: "soutenir", label: "Soutenir", icon: Heart },
+    { id: "modifier", label: "Modifier", icon: Pencil },
   ];
+
+  // ── Données dérivées pour l'aperçu ──
+  const monEglise = eglises.find((e) => e.id === form.eglise_id) ?? null;
+  const mesDepartements = mesDemandes
+    .filter((d) => d.statut === "approuvee")
+    .map((d) => departements.find((x) => x.id === d.departement))
+    .filter(Boolean);
+  const prochainEv = annonces
+    .filter((a) => a.date_evenement && new Date(a.date_evenement).getTime() > Date.now())
+    .sort((a, b) => new Date(a.date_evenement!).getTime() - new Date(b.date_evenement!).getTime())[0]
+    ?? annonces[0] ?? null;
 
   const field = (label: string, icon: React.ReactNode, value: string,
     onChange: (v: string) => void, placeholder: string, type = "text") => (
@@ -381,14 +400,199 @@ const Profile = () => {
           </div>
 
           <div className="p-6 md:p-8">
-            {/* ═══ PROFIL ═══ */}
-            {tab === "profil" && (
+            {/* ═══ APERÇU ═══ */}
+            {tab === "apercu" && (
+              <div className="space-y-6">
+                <p className="text-sm text-muted-foreground">
+                  Bienvenue {form.full_name ? form.full_name.split(" ")[0] : ""} — voici votre espace MIEDA.
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Mon église locale */}
+                  <div className="rounded-xl border border-border bg-card p-5">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <Church className="w-3.5 h-3.5" /> Mon église locale
+                    </p>
+                    {monEglise ? (
+                      <>
+                        <p className="font-semibold text-foreground flex items-center gap-2">
+                          <span className="text-xl">{monEglise.drapeau}</span>
+                          {monEglise.nom}
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {monEglise.ville}, {monEglise.pays}
+                          {monEglise.region ? " · " + monEglise.region : ""}
+                        </p>
+                        {monEglise.adresse && (
+                          <a href={"https://www.google.com/maps/search/" + encodeURIComponent(monEglise.adresse)}
+                            target="_blank" rel="noreferrer"
+                            className="text-xs text-primary hover:underline mt-2 inline-flex items-center gap-1">
+                            <MapPin className="w-3 h-3" /> {monEglise.adresse}
+                          </a>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Vous n'avez pas encore choisi votre église.
+                        </p>
+                        <button onClick={() => setTab("modifier")}
+                          className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1">
+                          Choisir mon église <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Mon pasteur */}
+                  <div className="rounded-xl border border-border bg-card p-5">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5" /> Mon serviteur
+                    </p>
+                    {monEglise ? (
+                      <>
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
+                            {getInitials(monEglise.pasteur.nom)}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-medium text-foreground truncate">{monEglise.pasteur.nom}</p>
+                            {monEglise.pasteur.titre && (
+                              <p className="text-xs text-muted-foreground">{monEglise.pasteur.titre}</p>
+                            )}
+                          </div>
+                        </div>
+                        <Link to={lienServiteur(monEglise, monEglise.pasteur)}
+                          className="text-sm text-primary font-medium hover:underline mt-3 inline-flex items-center gap-1">
+                          Voir sa fiche <ChevronRight className="w-3.5 h-3.5" />
+                        </Link>
+                        {monEglise.equipe && monEglise.equipe.length > 0 && (
+                          <p className="text-xs text-muted-foreground mt-2">
+                            + {monEglise.equipe.length} autre{monEglise.equipe.length > 1 ? "s" : ""} serviteur{monEglise.equipe.length > 1 ? "s" : ""}
+                          </p>
+                        )}
+                      </>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        Sélectionnez votre église pour voir votre serviteur.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Mes départements */}
+                <div className="rounded-xl border border-border bg-card p-5">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5" /> Mes départements
+                  </p>
+                  {mesDepartements.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {mesDepartements.map((d) => (
+                        <span key={d!.id}
+                          className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                          <CheckCircle2 className="w-3.5 h-3.5" /> {d!.titre}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Vous ne faites encore partie d'aucun département.
+                        Engagez-vous dans un ministère et servez avec vos dons.
+                      </p>
+                      <button onClick={() => setTab("departements")}
+                        className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1">
+                        Rejoindre un département <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </>
+                  )}
+                  {mesDemandes.some((d) => d.statut === "en_attente") && (
+                    <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
+                      <Clock className="w-3 h-3" />
+                      {mesDemandes.filter((d) => d.statut === "en_attente").length} demande(s) en attente de validation
+                    </p>
+                  )}
+                </div>
+
+                {/* Prochain rendez-vous / dernière annonce */}
+                <div className="rounded-xl border border-border bg-card p-5">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <Megaphone className="w-3.5 h-3.5" /> De la part de mon église
+                  </p>
+                  {prochainEv ? (
+                    <>
+                      <p className="font-semibold text-foreground">{prochainEv.titre}</p>
+                      {prochainEv.date_evenement && (
+                        <p className="text-sm text-primary font-medium mt-0.5 flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {new Date(prochainEv.date_evenement).toLocaleDateString("fr-FR",
+                            { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                        </p>
+                      )}
+                      <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{prochainEv.contenu}</p>
+                      <button onClick={() => setTab("eglise")}
+                        className="text-sm text-primary font-medium hover:underline mt-3 inline-flex items-center gap-1">
+                        Toutes les annonces <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic">
+                      Aucune annonce pour le moment.
+                    </p>
+                  )}
+                </div>
+
+                {/* Raccourcis */}
+                <div className="grid grid-cols-2 gap-3">
+                  <button onClick={() => setTab("prieres")}
+                    className="p-4 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors text-left">
+                    <HeartHandshake className="w-5 h-5 text-primary mb-2" />
+                    <p className="text-sm font-medium text-foreground">Demander une prière</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {mesPrieres.length > 0
+                        ? mesPrieres.length + " envoyée(s)"
+                        : "Confiez votre requête"}
+                    </p>
+                  </button>
+                  <button onClick={() => setTab("soutenir")}
+                    className="p-4 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors text-left">
+                    <Heart className="w-5 h-5 text-primary mb-2" />
+                    <p className="text-sm font-medium text-foreground">Faire un don</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Soutenir la mission</p>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ═══ MODIFIER MON PROFIL ═══ */}
+            {tab === "modifier" && (
               <div className="space-y-4">
                 {field("Nom complet", <UserIcon className="w-4 h-4" />, form.full_name, (v) => setForm({ ...form, full_name: v }), "Votre nom")}
                 {field("Téléphone", <Phone className="w-4 h-4" />, form.phone, (v) => setForm({ ...form, phone: v }), "+1 ...", "tel")}
                 <div className="grid grid-cols-2 gap-4">
                   {field("Ville", <MapPin className="w-4 h-4" />, form.ville, (v) => setForm({ ...form, ville: v }), "Ville")}
                   {field("Pays", <MapPin className="w-4 h-4" />, form.pays, (v) => setForm({ ...form, pays: v }), "Pays")}
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {field("Quartier / commune", <HomeIcon className="w-4 h-4" />, form.quartier, (v) => setForm({ ...form, quartier: v }), "Facultatif")}
+                  {field("Profession", <Briefcase className="w-4 h-4" />, form.profession, (v) => setForm({ ...form, profession: v }), "Facultatif")}
+                </div>
+                {field("Date de naissance", <Cake className="w-4 h-4" />, form.date_naissance, (v) => setForm({ ...form, date_naissance: v }), "", "date")}
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">
+                    Quelques mots sur moi
+                  </label>
+                  <textarea
+                    value={form.bio}
+                    onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                    placeholder="Mon témoignage, mon service, ce qui me tient à cœur… (facultatif)"
+                    rows={3}
+                    maxLength={500}
+                    className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  />
+                  <p className="text-[11px] text-muted-foreground mt-1 text-right">
+                    {form.bio.length} / 500
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Mon église MIEDA</label>

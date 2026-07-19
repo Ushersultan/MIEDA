@@ -74,6 +74,17 @@ const Admin = () => {
 
   useEffect(() => { charger(); }, [charger]);
 
+  // Rafraîchit automatiquement au retour sur l'onglet (nouveaux inscrits visibles sans F5)
+  useEffect(() => {
+    const onFocus = () => { if (document.visibilityState === "visible") charger(); };
+    document.addEventListener("visibilitychange", onFocus);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      document.removeEventListener("visibilitychange", onFocus);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, [charger]);
+
   // ── Actions ──
   const copier = async (code: string) => {
     try {
@@ -198,11 +209,13 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
       .filter((c) => c.used_at)
       .sort((a, b) => new Date(b.used_at!).getTime() - new Date(a.used_at!).getTime())
       .slice(0, 5);
+    const il_y_a_7j = Date.now() - 7 * 86400000;
     return {
       total, actives, attente, pourcent, derniers,
       membres: profils.filter((p) => p.role === "membre").length,
       pasteurs: profils.filter((p) => p.role === "pasteur").length,
       admins: profils.filter((p) => p.role === "admin").length,
+      nouveaux: profils.filter((p) => p.created_at && new Date(p.created_at).getTime() > il_y_a_7j),
     };
   }, [codes, profils]);
 
@@ -434,6 +447,29 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
                     placeholder="Rechercher par nom, ville, rôle, église..."
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
                 </div>
+                {stats.nouveaux.length > 0 && (
+                  <div className="mb-6 rounded-xl border border-green-500/30 bg-green-500/5 p-4">
+                    <p className="text-sm font-semibold text-foreground flex items-center gap-2 mb-3">
+                      <UserPlus className="w-4 h-4 text-green-600" />
+                      {stats.nouveaux.length} nouvelle{stats.nouveaux.length > 1 ? "s" : ""} inscription{stats.nouveaux.length > 1 ? "s" : ""} cette semaine
+                    </p>
+                    <div className="space-y-1.5">
+                      {stats.nouveaux.slice(0, 6).map((p) => (
+                        <div key={p.id} className="flex items-center gap-2 text-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-600 flex-shrink-0" />
+                          <span className="text-foreground truncate">{p.full_name || "(sans nom)"}</span>
+                          <span className="text-xs text-muted-foreground truncate">
+                            {p.eglise_id ? nomEglise(p.eglise_id) : "église non renseignée"}
+                          </span>
+                          <span className="text-xs text-muted-foreground ml-auto flex-shrink-0">
+                            {new Date(p.created_at!).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-3 gap-3 mb-6">
                   <div className="p-3 rounded-lg bg-muted/30 border border-border text-center">
                     <p className="text-2xl font-bold text-foreground">{stats.membres}</p>
@@ -471,6 +507,13 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
                           {p.ville && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{p.ville}</span>}
                         </p>
                       </div>
+                      {p.role === "membre" && p.eglise_id && (
+                        <button onClick={() => promouvoir(p.id, p.eglise_id!)}
+                          className="text-xs px-2 py-1 rounded bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                          title="Promouvoir pasteur">
+                          <UserPlus className="w-3 h-3 inline" />
+                        </button>
+                      )}
                       {p.role === "pasteur" && (
                         <button onClick={() => retrograder(p.id)}
                           className="text-xs px-2 py-1 rounded bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
