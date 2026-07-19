@@ -10,7 +10,11 @@ export interface ProfilData {
   pays: string;
   eglise_locale: string;
   eglise_id: string | null;
-  role: string; // 'membre' | 'pasteur' | 'admin'
+  role: string; // 'membre' | 'pasteur' | 'prophete' | 'admin'
+  profession: string;
+  quartier: string;
+  bio: string;
+  date_naissance: string;
 }
 
 interface AuthContextType {
@@ -44,6 +48,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         eglise_locale: data.eglise_locale ?? "",
         eglise_id: data.eglise_id ?? null,
         role: data.role ?? "membre",
+        profession: data.profession ?? "",
+        quartier: data.quartier ?? "",
+        bio: data.bio ?? "",
+        date_naissance: data.date_naissance ?? "",
       });
     } else {
       setProfil(null);
