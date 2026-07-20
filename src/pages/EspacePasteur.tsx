@@ -8,6 +8,8 @@ import {
   ArrowLeft, Loader2, Church, HeartHandshake, Megaphone, Users, ShieldAlert,
   CheckCircle2, Clock, Send, Trash2, Calendar, Phone, MapPin, Home, XCircle,
   Inbox, LayoutDashboard, TrendingUp, Sparkles, Mail, UserPlus, Activity,
+  Search, X, ChevronDown, ChevronRight, Cake, Briefcase, Home as HomeIcon,
+  MessageCircle, Download, FileText,
 } from "lucide-react";
 import { nomEglise } from "@/lib/serviteurs";
 import { departements } from "@/data/departements";
@@ -15,9 +17,14 @@ import { useLang } from "@/contexts/LanguageContext";
 
 type Tab = "tableau" | "prieres" | "annonces" | "membres" | "demandes";
 
-interface Priere { id: string; nom: string; demande: string; traitee: boolean; created_at: string; }
+interface Priere { id: string; nom: string; demande: string; traitee: boolean; created_at: string; auteur_id?: string | null; }
 interface Annonce { id: string; titre: string; contenu: string; date_evenement: string | null; created_at: string; }
-interface Membre { id: string; full_name: string; phone: string; ville: string; role: string; photo_url: string | null; created_at?: string; }
+interface Membre {
+  id: string; full_name: string; phone: string; ville: string; pays: string;
+  role: string; photo_url: string | null; created_at?: string;
+  profession: string | null; quartier: string | null; bio: string | null;
+  date_naissance: string | null;
+}
 interface DemandeDept { id: string; user_id: string; departement: string; message: string | null; statut: string; created_at: string; nom?: string; }
 
 // ── Textes bilingues ──
@@ -41,6 +48,13 @@ const TXT = {
     aucuneDem: "Aucune demande d'adhésion à un département.",
     aucunMem: "Aucun membre rattaché à votre église pour l'instant.",
     inscrit: "Inscrit", contact: "Contact",
+    rechercheMem: "Rechercher un membre, un quartier, une profession...",
+    anniv: "Anniversaires ce mois-ci",
+    quartier: "Quartier", profession: "Profession", naissance: "Naissance",
+    ans: "ans", departements: "Départements", aucunDept: "Aucun département",
+    prieresEnv: "Prières envoyées", apropos: "À propos",
+    appeler: "Appeler", whatsapp: "WhatsApp", exporter: "Exporter (CSV)",
+    aucunResultat: "Aucun membre correspondant.",
   },
   en: {
     retour: "My space", titre: "Pastor's Space", sansEglise: "No church assigned",
@@ -61,6 +75,13 @@ const TXT = {
     aucuneDem: "No department membership requests.",
     aucunMem: "No members linked to your church yet.",
     inscrit: "Joined", contact: "Contact",
+    rechercheMem: "Search a member, a neighbourhood, a profession...",
+    anniv: "Birthdays this month",
+    quartier: "Neighbourhood", profession: "Profession", naissance: "Birth date",
+    ans: "years old", departements: "Departments", aucunDept: "No department",
+    prieresEnv: "Prayers submitted", apropos: "About",
+    appeler: "Call", whatsapp: "WhatsApp", exporter: "Export (CSV)",
+    aucunResultat: "No matching member.",
   },
 };
 
@@ -86,6 +107,8 @@ const EspacePasteur = () => {
   const [membres, setMembres] = useState<Membre[]>([]);
   const [demandes, setDemandes] = useState<DemandeDept[]>([]);
   const [chargement, setChargement] = useState(true);
+  const [rechercheMembre, setRechercheMembre] = useState("");
+  const [membreOuvert, setMembreOuvert] = useState<string | null>(null);
 
   const [titre, setTitre] = useState("");
   const [contenu, setContenu] = useState("");
@@ -104,11 +127,11 @@ const EspacePasteur = () => {
     if (!egliseId) { setChargement(false); return; }
     setChargement(true);
     const [pr, an, me, de] = await Promise.all([
-      supabase.from("prieres").select("id, nom, demande, traitee, created_at")
+      supabase.from("prieres").select("id, nom, demande, traitee, created_at, auteur_id")
         .eq("eglise_id", egliseId).order("created_at", { ascending: false }),
       supabase.from("annonces").select("id, titre, contenu, date_evenement, created_at")
         .eq("eglise_id", egliseId).order("created_at", { ascending: false }),
-      supabase.from("profiles").select("id, full_name, phone, ville, role, photo_url, created_at")
+      supabase.from("profiles").select("id, full_name, phone, ville, pays, role, photo_url, created_at, profession, quartier, bio, date_naissance")
         .eq("eglise_id", egliseId),
       supabase.from("demandes_departement")
         .select("id, user_id, departement, message, statut, created_at")
@@ -171,6 +194,69 @@ const EspacePasteur = () => {
       prochainEv,
     };
   }, [prieres, annonces, membres, demandes]);
+
+  // ── Index : départements approuvés et prières par membre ──
+  const deptsParMembre = useMemo(() => {
+    const map = new Map<string, string[]>();
+    for (const d of demandes) {
+      if (d.statut !== "approuvee") continue;
+      const dept = departements.find((x) => x.id === d.departement);
+      const nom = dept ? (lang === "en" ? dept.titreEn : dept.titre) : d.departement;
+      map.set(d.user_id, [...(map.get(d.user_id) ?? []), nom]);
+    }
+    return map;
+  }, [demandes, lang]);
+
+  const prieresParMembre = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const p of prieres) {
+      if (!p.auteur_id) continue;
+      map.set(p.auteur_id, (map.get(p.auteur_id) ?? 0) + 1);
+    }
+    return map;
+  }, [prieres]);
+
+  // ── Anniversaires du mois en cours ──
+  const anniversaires = useMemo(() => {
+    const moisCourant = new Date().getMonth();
+    return membres
+      .filter((m) => m.date_naissance && new Date(m.date_naissance + "T12:00:00").getMonth() === moisCourant)
+      .sort((a, b) =>
+        new Date(a.date_naissance! + "T12:00:00").getDate() -
+        new Date(b.date_naissance! + "T12:00:00").getDate());
+  }, [membres]);
+
+  // ── Membres filtrés par la recherche ──
+  const membresFiltres = useMemo(() => {
+    const q = rechercheMembre.trim().toLowerCase();
+    if (!q) return membres;
+    return membres.filter((m) =>
+      [m.full_name, m.ville, m.pays, m.quartier, m.profession, m.phone]
+        .some((v) => (v ?? "").toLowerCase().includes(q)) ||
+      (deptsParMembre.get(m.id) ?? []).some((d) => d.toLowerCase().includes(q))
+    );
+  }, [membres, rechercheMembre, deptsParMembre]);
+
+  // ── Export CSV de la liste des membres ──
+  const exporterMembres = () => {
+    const lignes = ["Nom,Téléphone,Ville,Quartier,Pays,Profession,Naissance,Départements,Inscrit le"];
+    for (const m of membresFiltres) {
+      const champs = [
+        m.full_name ?? "", m.phone ?? "", m.ville ?? "", m.quartier ?? "",
+        m.pays ?? "", m.profession ?? "", m.date_naissance ?? "",
+        (deptsParMembre.get(m.id) ?? []).join(" / "),
+        m.created_at ? new Date(m.created_at).toLocaleDateString("fr-FR") : "",
+      ];
+      lignes.push(champs.map((c) => '"' + String(c).replace(/"/g, '""') + '"').join(","));
+    }
+    const blob = new Blob(["\uFEFF" + lignes.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "membres-" + (egliseId ?? "eglise") + "-" + new Date().toISOString().slice(0, 10) + ".csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   // ── Activité récente (les 5 derniers événements combinés) ──
   const activiteRecente = useMemo(() => {
@@ -493,36 +579,214 @@ const EspacePasteur = () => {
 
               {/* ═══════ MEMBRES ═══════ */}
               {tab === "membres" && (
-                <div className="space-y-2">
-                  {membres.length === 0 && <p className="text-center text-muted-foreground py-8">{L.aucunMem}</p>}
-                  {membres.map((m) => (
-                    <div key={m.id} className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:border-primary/40 transition-colors">
-                      {m.photo_url ? (
-                        <img src={m.photo_url} alt="" className="w-11 h-11 rounded-full object-cover flex-shrink-0" />
-                      ) : (
-                        <div className="w-11 h-11 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
-                          {initiales(m.full_name)}
-                        </div>
+                <div>
+                  {/* Recherche + export */}
+                  <div className="flex flex-col sm:flex-row gap-3 mb-5">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <input type="text" value={rechercheMembre}
+                        onChange={(e) => setRechercheMembre(e.target.value)}
+                        placeholder={L.rechercheMem}
+                        className="w-full pl-10 pr-9 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
+                      {rechercheMembre && (
+                        <button onClick={() => setRechercheMembre("")}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-muted flex items-center justify-center">
+                          <X className="w-3 h-3" />
+                        </button>
                       )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground truncate">{m.full_name || (lang === "en" ? "Member" : "Membre")}</p>
-                        <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap mt-0.5">
-                          {m.ville && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{m.ville}</span>}
-                          {m.role !== "membre" && <span className="text-primary font-medium">{m.role}</span>}
-                          {m.created_at && <span>· {L.inscrit} {ilYA(m.created_at, L)}</span>}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 flex-shrink-0">
-                        {m.phone && (
-                          <a href={`tel:${m.phone.replace(/[^+\d]/g, "")}`}
-                             className="w-8 h-8 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-colors"
-                             aria-label={L.contact}>
-                            <Phone className="w-4 h-4" />
-                          </a>
-                        )}
+                    </div>
+                    {membres.length > 0 && (
+                      <Button onClick={exporterMembres} variant="outline" size="sm" className="sm:w-auto">
+                        <Download className="w-4 h-4 mr-1.5" /> {L.exporter}
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Anniversaires du mois */}
+                  {anniversaires.length > 0 && (
+                    <div className="mb-5 rounded-xl border border-accent/30 bg-accent/5 p-4">
+                      <p className="text-sm font-semibold text-foreground flex items-center gap-2 mb-2">
+                        <Cake className="w-4 h-4 text-accent" /> {L.anniv}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {anniversaires.map((m) => (
+                          <span key={m.id}
+                            className="text-xs font-medium px-3 py-1.5 rounded-full bg-card border border-border">
+                            {m.full_name} ·{" "}
+                            {new Date(m.date_naissance! + "T12:00:00").toLocaleDateString(
+                              lang === "en" ? "en-US" : "fr-FR", { day: "numeric", month: "long" })}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                  ))}
+                  )}
+
+                  <p className="text-xs text-muted-foreground mb-2">
+                    {membresFiltres.length} / {membres.length}
+                  </p>
+
+                  <div className="space-y-2">
+                    {membres.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">{L.aucunMem}</p>
+                    )}
+                    {membres.length > 0 && membresFiltres.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">{L.aucunResultat}</p>
+                    )}
+
+                    {membresFiltres.map((m) => {
+                      const ouvert = membreOuvert === m.id;
+                      const depts = deptsParMembre.get(m.id) ?? [];
+                      const nbPrieres = prieresParMembre.get(m.id) ?? 0;
+                      const tel = (m.phone ?? "").replace(/[^+\d]/g, "");
+                      const age = m.date_naissance
+                        ? Math.floor((Date.now() - new Date(m.date_naissance + "T12:00:00").getTime()) / 31557600000)
+                        : null;
+                      return (
+                        <div key={m.id} className="rounded-xl border border-border bg-card overflow-hidden">
+                          {/* Ligne repliée */}
+                          <button onClick={() => setMembreOuvert(ouvert ? null : m.id)}
+                            className="w-full flex items-center gap-3 p-3 text-left hover:bg-muted/30 transition-colors">
+                            {m.photo_url ? (
+                              <img src={m.photo_url} alt="" className="w-11 h-11 rounded-full object-cover flex-shrink-0" />
+                            ) : (
+                              <div className="w-11 h-11 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
+                                {initiales(m.full_name)}
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {m.full_name || (lang === "en" ? "Member" : "Membre")}
+                              </p>
+                              <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap mt-0.5">
+                                {m.ville && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{m.ville}</span>}
+                                {m.role !== "membre" && <span className="text-primary font-medium">{m.role}</span>}
+                                {depts.length > 0 && <span className="text-accent">{depts.length} dép.</span>}
+                                {m.created_at && <span>· {L.inscrit} {ilYA(m.created_at, L)}</span>}
+                              </p>
+                            </div>
+                            {ouvert ? <ChevronDown className="w-4 h-4 flex-shrink-0 text-muted-foreground" />
+                                    : <ChevronRight className="w-4 h-4 flex-shrink-0 text-muted-foreground" />}
+                          </button>
+
+                          {/* Détails dépliés */}
+                          {ouvert && (
+                            <div className="border-t border-border p-4 space-y-4">
+                              {/* Coordonnées */}
+                              {tel && (
+                                <div className="flex gap-2 flex-wrap">
+                                  <a href={"tel:" + tel}
+                                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
+                                    <Phone className="w-3.5 h-3.5" /> {L.appeler}
+                                  </a>
+                                  <a href={"https://wa.me/" + tel.replace(/\+/g, "")}
+                                    target="_blank" rel="noreferrer"
+                                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-green-600 text-white hover:opacity-90 transition-opacity">
+                                    <MessageCircle className="w-3.5 h-3.5" /> {L.whatsapp}
+                                  </a>
+                                  <span className="inline-flex items-center text-xs text-muted-foreground px-2">
+                                    {m.phone}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Fiche d'informations */}
+                              <div className="grid sm:grid-cols-2 gap-3">
+                                {m.quartier && (
+                                  <div className="flex items-start gap-2">
+                                    <HomeIcon className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                                    <div>
+                                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{L.quartier}</p>
+                                      <p className="text-sm text-foreground">{m.quartier}</p>
+                                    </div>
+                                  </div>
+                                )}
+                                {m.profession && (
+                                  <div className="flex items-start gap-2">
+                                    <Briefcase className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                                    <div>
+                                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{L.profession}</p>
+                                      <p className="text-sm text-foreground">{m.profession}</p>
+                                    </div>
+                                  </div>
+                                )}
+                                {m.date_naissance && (
+                                  <div className="flex items-start gap-2">
+                                    <Cake className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                                    <div>
+                                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{L.naissance}</p>
+                                      <p className="text-sm text-foreground">
+                                        {new Date(m.date_naissance + "T12:00:00").toLocaleDateString(
+                                          lang === "en" ? "en-US" : "fr-FR",
+                                          { day: "numeric", month: "long", year: "numeric" })}
+                                        {age !== null && <span className="text-muted-foreground"> · {age} {L.ans}</span>}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+                                {(m.ville || m.pays) && (
+                                  <div className="flex items-start gap-2">
+                                    <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                                    <div>
+                                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                                        {lang === "en" ? "Location" : "Localisation"}
+                                      </p>
+                                      <p className="text-sm text-foreground">
+                                        {[m.ville, m.pays].filter(Boolean).join(", ")}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Départements */}
+                              <div>
+                                <p className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1.5">
+                                  {L.departements}
+                                </p>
+                                {depts.length > 0 ? (
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {depts.map((d) => (
+                                      <span key={d}
+                                        className="text-xs font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+                                        {d}
+                                      </span>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p className="text-sm text-muted-foreground italic">{L.aucunDept}</p>
+                                )}
+                              </div>
+
+                              {/* À propos */}
+                              {m.bio && (
+                                <div>
+                                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1 flex items-center gap-1.5">
+                                    <FileText className="w-3 h-3" /> {L.apropos}
+                                  </p>
+                                  <p className="text-sm text-foreground italic">« {m.bio} »</p>
+                                </div>
+                              )}
+
+                              {/* Engagement */}
+                              <div className="flex items-center gap-4 pt-1 text-xs text-muted-foreground">
+                                <span className="flex items-center gap-1.5">
+                                  <HeartHandshake className="w-3.5 h-3.5" /> {nbPrieres} {L.prieresEnv}
+                                </span>
+                                {m.created_at && (
+                                  <span className="flex items-center gap-1.5">
+                                    <Calendar className="w-3.5 h-3.5" />
+                                    {L.inscrit} {new Date(m.created_at).toLocaleDateString(
+                                      lang === "en" ? "en-US" : "fr-FR",
+                                      { day: "numeric", month: "long", year: "numeric" })}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
