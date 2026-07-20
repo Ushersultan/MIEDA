@@ -7,12 +7,12 @@ import { useToast } from "@/hooks/use-toast";
 import {
   ArrowLeft, Loader2, ShieldAlert, Home, Users, Church, KeyRound, Copy, Check,
   Send, Search, X, MapPin, Calendar, Clock, RefreshCw, TrendingUp, Mail,
-  UserPlus, UserMinus, Sparkles, Filter, Download,
+  UserPlus, UserMinus, Sparkles, Filter, Download, Cake, Send as SendIcon, Loader2 as Spin,
 } from "lucide-react";
 import { eglises, ordreRegions } from "@/data/eglises";
 import { nomEglise } from "@/lib/serviteurs";
 
-type Tab = "codes" | "membres" | "stats";
+type Tab = "codes" | "membres" | "anniversaires" | "stats";
 
 interface CodePasteur {
   code: string;
@@ -33,6 +33,7 @@ interface Profil {
   ville: string;
   photo_url: string | null;
   created_at?: string;
+  date_naissance?: string | null;
 }
 
 
@@ -71,6 +72,7 @@ const Admin = () => {
   const [recherche, setRecherche] = useState("");
   const [codeCopie, setCodeCopie] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [envoiVoeux, setEnvoiVoeux] = useState(false);
 
   // Génération de code
   const [gEglise, setGEglise] = useState("");
@@ -87,7 +89,7 @@ const Admin = () => {
     setChargement(true);
     const [c, p] = await Promise.all([
       supabase.from("codes_pasteur").select("*").order("eglise_id", { ascending: true }),
-      supabase.from("profiles").select("id, full_name, role, eglise_id, phone, ville, photo_url, created_at")
+      supabase.from("profiles").select("id, full_name, role, eglise_id, phone, ville, photo_url, created_at, date_naissance")
         .order("created_at", { ascending: false }),
     ]);
     if (c.data) setCodes(c.data as CodePasteur[]);
@@ -263,6 +265,70 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
     return res;
   }, [profils]);
 
+  // ── Anniversaires (tous les comptes, toutes les églises) ──
+  const anniversaires = useMemo(() => {
+    const now = new Date();
+    const jourAn = (d: Date) => d.getMonth() * 31 + d.getDate();
+    const aujourdhui = jourAn(now);
+
+    const avecDate = profils
+      .filter((p) => p.date_naissance)
+      .map((p) => {
+        const d = new Date(p.date_naissance + "T12:00:00");
+        const age = Math.floor((now.getTime() - d.getTime()) / 31557600000);
+        // Prochain anniversaire (cette année ou l'an prochain)
+        const prochain = new Date(now.getFullYear(), d.getMonth(), d.getDate(), 12);
+        if (prochain.getTime() < new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime())
+          prochain.setFullYear(now.getFullYear() + 1);
+        const joursRestants = Math.round(
+          (prochain.getTime() - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12).getTime()) / 86400000
+        );
+        return { profil: p, date: d, age, joursRestants, cleTri: jourAn(d) };
+      });
+
+    return {
+      aujourdhui: avecDate.filter((x) => x.joursRestants === 0),
+      semaine: avecDate.filter((x) => x.joursRestants > 0 && x.joursRestants <= 7)
+        .sort((a, b) => a.joursRestants - b.joursRestants),
+      mois: avecDate.filter((x) => x.date.getMonth() === now.getMonth())
+        .sort((a, b) => a.date.getDate() - b.date.getDate()),
+      total: avecDate.length,
+      sansDate: profils.length - avecDate.length,
+    };
+  }, [profils]);
+
+  const messageAnniversaire = (nom: string) => {
+    const prenom = (nom || "").trim().split(/\s+/)[0] || "cher frère/sœur";
+    return `Joyeux anniversaire ${prenom} ! 🎂\n\n` +
+      `Toute la famille MIEDA célèbre avec vous ce jour que le Seigneur a fait. ` +
+      `Nous rendons grâce à Dieu pour votre vie.\n\n` +
+      `« L'Éternel te bénisse et te garde ! L'Éternel fasse luire sa face sur toi ` +
+      `et t'accorde sa grâce ! » — Nombres 6:24-25\n\n` +
+      `Que cette nouvelle année soit remplie de paix, de santé et de Sa présence. 🙏`;
+  };
+
+  const envoyerVoeux = async () => {
+    setEnvoiVoeux(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const rep = await fetch("/api/anniversaires", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + (session?.access_token ?? "") },
+      });
+      const json = await rep.json();
+      if (!rep.ok) throw new Error(json.error ?? "Erreur");
+      toast({
+        title: json.envoyes > 0 ? json.envoyes + " vœu(x) envoyé(s) ✓" : "Rien à envoyer",
+        description: json.message ?? (json.deja_envoyes > 0
+          ? json.deja_envoyes + " déjà envoyé(s) aujourd'hui"
+          : undefined),
+      });
+    } catch (e: any) {
+      toast({ title: "Erreur", description: e.message, variant: "destructive" });
+    }
+    setEnvoiVoeux(false);
+  };
+
   // Options d'églises groupées par région pour le sélecteur
   const eglisesOptions = useMemo(() => {
     const civ = eglises.filter((e) => e.pays === "Côte d'Ivoire");
@@ -303,6 +369,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
   const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
     { id: "codes", label: "Codes serviteurs", icon: KeyRound, count: stats.attente },
     { id: "membres", label: "Utilisateurs", icon: Users, count: profils.length },
+    { id: "anniversaires", label: "Anniversaires", icon: Cake, count: anniversaires.aujourdhui.length },
     { id: "stats", label: "Statistiques", icon: TrendingUp },
   ];
 
@@ -608,6 +675,104 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
               </div>
             )}
 
+            {/* ═══════ ANNIVERSAIRES ═══════ */}
+            {tab === "anniversaires" && (
+              <div className="space-y-6">
+                {/* Envoi automatique */}
+                <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div>
+                      <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <SendIcon className="w-4 h-4 text-primary" /> Vœux automatiques
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1 max-w-lg">
+                        Chaque matin, un email de vœux MIEDA part automatiquement vers
+                        les membres qui fêtent leur anniversaire ce jour-là.
+                        Vous pouvez aussi déclencher l'envoi manuellement.
+                      </p>
+                    </div>
+                    <Button onClick={envoyerVoeux} disabled={envoiVoeux} size="sm">
+                      {envoiVoeux
+                        ? <Spin className="w-4 h-4 animate-spin" />
+                        : <><SendIcon className="w-4 h-4 mr-1.5" /> Envoyer maintenant</>}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Aujourd'hui */}
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <Cake className="w-3.5 h-3.5" /> Aujourd'hui
+                  </p>
+                  {anniversaires.aujourdhui.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic">
+                      Aucun anniversaire aujourd'hui.
+                    </p>
+                  ) : (
+                    <div className="space-y-2">
+                      {anniversaires.aujourdhui.map(({ profil: p, age }) => (
+                        <LigneAnniversaire key={p.id} p={p} age={age} libelle="aujourd'hui"
+                          messageAnniversaire={messageAnniversaire} accent />
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Cette semaine */}
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                    Dans les 7 prochains jours
+                  </p>
+                  {anniversaires.semaine.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic">Rien cette semaine.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {anniversaires.semaine.map(({ profil: p, age, joursRestants, date }) => (
+                        <LigneAnniversaire key={p.id} p={p} age={age + 1}
+                          libelle={"dans " + joursRestants + " jour" + (joursRestants > 1 ? "s" : "") +
+                            " · " + date.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
+                          messageAnniversaire={messageAnniversaire} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Tout le mois */}
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                    Tout le mois ({anniversaires.mois.length})
+                  </p>
+                  {anniversaires.mois.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic">Aucun ce mois-ci.</p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {anniversaires.mois.map(({ profil: p, date }) => (
+                        <span key={p.id}
+                          className="text-xs font-medium px-3 py-1.5 rounded-full bg-muted/50 border border-border">
+                          {date.getDate()} — {p.full_name || "(sans nom)"}
+                          {p.eglise_id && (
+                            <span className="text-muted-foreground"> · {nomEglise(p.eglise_id)}</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Couverture */}
+                <div className="rounded-xl border border-border bg-muted/30 p-4">
+                  <p className="text-sm text-foreground">
+                    <span className="font-semibold">{anniversaires.total}</span> compte(s) ont renseigné
+                    leur date de naissance ·{" "}
+                    <span className="text-muted-foreground">{anniversaires.sansDate} sans date</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Les membres remplissent ce champ dans l'onglet « Modifier » de leur profil.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* ═══════ STATISTIQUES ═══════ */}
             {tab === "stats" && (
               <div className="space-y-6">
@@ -675,6 +840,47 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+// ── Ligne d'anniversaire avec actions de contact ──
+const LigneAnniversaire = ({
+  p, age, libelle, messageAnniversaire, accent = false,
+}: {
+  p: Profil; age: number | null; libelle: string;
+  messageAnniversaire: (nom: string) => string; accent?: boolean;
+}) => {
+  const tel = (p.phone ?? "").replace(/[^+\d]/g, "");
+  return (
+    <div className={`flex items-center gap-3 p-3 rounded-lg border flex-wrap ${
+      accent ? "border-primary/40 bg-primary/5" : "border-border bg-card"
+    }`}>
+      {p.photo_url ? (
+        <img src={p.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+      ) : (
+        <div className="w-10 h-10 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
+          {(p.full_name || "?").slice(0, 1).toUpperCase()}
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-foreground truncate">
+          {p.full_name || "(sans nom)"}
+          {age !== null && <span className="text-muted-foreground font-normal"> · {age} ans</span>}
+        </p>
+        <p className="text-xs text-muted-foreground truncate">
+          {libelle}
+          {p.eglise_id && " · " + (nomEglise(p.eglise_id) ?? p.eglise_id)}
+        </p>
+      </div>
+      {tel && (
+        <a href={"https://wa.me/" + tel.replace(/\+/g, "") +
+             "?text=" + encodeURIComponent(messageAnniversaire(p.full_name))}
+          target="_blank" rel="noreferrer"
+          className="text-xs font-medium px-3 py-1.5 rounded-lg bg-green-600 text-white hover:opacity-90 transition-opacity flex-shrink-0">
+          WhatsApp
+        </a>
+      )}
     </div>
   );
 };
