@@ -1,6 +1,15 @@
 {
   "rewrites": [
-    { "source": "/((?!assets/|api/|.*\\..*).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!assets/|api/|.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/anniversaires",
+      "schedule": "0 8 * * *"
+    }
   ],
   "headers": [
     {
