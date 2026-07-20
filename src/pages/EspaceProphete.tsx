@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   ArrowLeft, Loader2, Crown, Home, Users, Church, Search, X, MapPin, Globe2,
   HeartHandshake, Megaphone, TrendingUp, ChevronDown, ChevronRight, Phone, Mail,
-  Clock, CheckCircle2, Filter, ShieldAlert,
+  Clock, CheckCircle2, Filter, ShieldAlert, Cake,
 } from "lucide-react";
 import { eglises, ordreRegions, type Eglise } from "@/data/eglises";
 import { nomEglise } from "@/lib/serviteurs";
@@ -23,6 +23,7 @@ interface Profil {
   pays: string;
   photo_url: string | null;
   created_at?: string;
+  date_naissance?: string | null;
 }
 
 interface Priere {
@@ -56,7 +57,7 @@ const EspaceProphete = () => {
     if (!isProphete) { setChargement(false); return; }
     setChargement(true);
     const [p, pr] = await Promise.all([
-      supabase.from("profiles").select("id, full_name, role, eglise_id, phone, ville, pays, photo_url, created_at"),
+      supabase.from("profiles").select("id, full_name, role, eglise_id, phone, ville, pays, photo_url, created_at, date_naissance"),
       supabase.from("prieres").select("id, nom, demande, traitee, eglise_id, created_at").order("created_at", { ascending: false }).limit(200),
     ]);
     if (p.data) setProfils(p.data as Profil[]);
@@ -119,6 +120,21 @@ const EspaceProphete = () => {
       nouveauxMembres,
     };
   }, [profils, prieres]);
+
+  // ── Anniversaires du mois, toutes églises confondues ──
+  const anniversaires = useMemo(() => {
+    const mois = new Date().getMonth();
+    const jour = new Date().getDate();
+    const liste = profils
+      .filter((p) => p.date_naissance)
+      .map((p) => ({ p, d: new Date(p.date_naissance + "T12:00:00") }))
+      .filter((x) => x.d.getMonth() === mois)
+      .sort((a, b) => a.d.getDate() - b.d.getDate());
+    return {
+      mois: liste,
+      aujourdhui: liste.filter((x) => x.d.getDate() === jour),
+    };
+  }, [profils]);
 
   // ── Prières filtrées ──
   const prieresFiltrees = useMemo(() => {
@@ -268,6 +284,47 @@ const EspaceProphete = () => {
                     </button>
                   </div>
                 )}
+
+                {/* Anniversaires du mois */}
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <Cake className="w-3.5 h-3.5" /> Anniversaires du mois
+                  </p>
+                  {anniversaires.aujourdhui.length > 0 && (
+                    <div className="mb-3 p-4 rounded-xl border border-yellow-500/40 bg-yellow-500/5">
+                      <p className="text-sm font-semibold text-foreground mb-2">
+                        🎂 Aujourd'hui
+                      </p>
+                      <div className="space-y-1.5">
+                        {anniversaires.aujourdhui.map(({ p }) => (
+                          <p key={p.id} className="text-sm text-foreground">
+                            {p.full_name}
+                            {p.eglise_id && (
+                              <span className="text-muted-foreground"> · {nomEglise(p.eglise_id)}</span>
+                            )}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {anniversaires.mois.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic">
+                      Aucun anniversaire renseigné ce mois-ci.
+                    </p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {anniversaires.mois.map(({ p, d }) => (
+                        <span key={p.id}
+                          className="text-xs font-medium px-3 py-1.5 rounded-full bg-muted/50 border border-border">
+                          {d.getDate()} — {p.full_name}
+                          {p.eglise_id && (
+                            <span className="text-muted-foreground"> · {nomEglise(p.eglise_id)}</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 {/* Répartition par région */}
                 <div>
