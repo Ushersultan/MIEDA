@@ -66,6 +66,9 @@ const Auth = () => {
           email,
           password,
           options: {
+            // Ramène l'utilisateur sur le site MIEDA après confirmation
+            // de son email (et non sur l'URL technique de l'hébergeur).
+            emailRedirectTo: window.location.origin + "/auth",
             // Lues par le déclencheur serveur qui crée le profil
             // et active le code serviteur — sans dépendre du navigateur.
             data: {
