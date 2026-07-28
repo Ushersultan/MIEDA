@@ -8,11 +8,13 @@ import {
   ArrowLeft, Loader2, ShieldAlert, Home, Users, Church, KeyRound, Copy, Check,
   Send, Search, X, MapPin, Calendar, Clock, RefreshCw, TrendingUp, Mail,
   UserPlus, UserMinus, Sparkles, Filter, Download, Cake, Send as SendIcon, Loader2 as Spin,
+  BookOpen,
 } from "lucide-react";
 import { eglises, ordreRegions } from "@/data/eglises";
+import AdminMessageProphetique from "@/components/AdminMessageProphetique";
 import { nomEglise } from "@/lib/serviteurs";
 
-type Tab = "codes" | "membres" | "anniversaires" | "stats";
+type Tab = "codes" | "membres" | "anniversaires" | "message" | "stats";
 
 interface CodePasteur {
   code: string;
@@ -370,6 +372,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
     { id: "codes", label: "Codes serviteurs", icon: KeyRound, count: stats.attente },
     { id: "membres", label: "Utilisateurs", icon: Users, count: profils.length },
     { id: "anniversaires", label: "Anniversaires", icon: Cake, count: anniversaires.aujourdhui.length },
+    { id: "message", label: "Message du Prophète", icon: BookOpen },
     { id: "stats", label: "Statistiques", icon: TrendingUp },
   ];
 
@@ -772,6 +775,9 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
                 </div>
               </div>
             )}
+
+            {/* ═══════ MESSAGE DU PROPHÈTE ═══════ */}
+            {tab === "message" && <AdminMessageProphetique />}
 
             {/* ═══════ STATISTIQUES ═══════ */}
             {tab === "stats" && (
