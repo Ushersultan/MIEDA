@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { messagesProphetiques, type MessageProphetique as TMessage } from "@/data/messages-prophetiques";
 import { useLang } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const messageActif = (): TMessage | null => {
   const now = new Date();
@@ -60,7 +61,8 @@ const MAX_BOUCLES = 3;      // la lecture audio s'arrête après 3 tours complet
 
 const MessageProphetique = () => {
   const { lang, t } = useLang();
-  const [message] = useState<TMessage | null>(() => messageActif());
+  // Message du fichier local = secours ; Supabase = source prioritaire
+  const [message, setMessage] = useState<TMessage | null>(() => messageActif());
 
   const [visible, setVisible] = useState(true);
   const [versetIdx, setVersetIdx] = useState(0);
@@ -75,6 +77,40 @@ const MessageProphetique = () => {
   const toursRef = useRef(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const barRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Source prioritaire : message publié depuis l'Espace Admin
+  useEffect(() => {
+    let annule = false;
+    supabase
+      .from("messages_prophetiques")
+      .select("reference, reference_en, auteur, instruction, instruction_en, versets, versets_en, couleur, date_debut, date_fin")
+      .eq("actif", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (annule || !data?.length) return;
+        const m: any = data[0];
+        const auj = new Date().toISOString().slice(0, 10);
+        if (m.date_debut && m.date_debut > auj) return;
+        if (m.date_fin && m.date_fin < auj) return;
+        if (!Array.isArray(m.versets) || m.versets.length === 0) return;
+        setMessage({
+          id: "supabase",
+          titre: "Message du Prophète",
+          reference: m.reference,
+          referenceEn: m.reference_en ?? undefined,
+          auteur: m.auteur,
+          instruction: m.instruction,
+          instructionEn: m.instruction_en ?? undefined,
+          versets: m.versets,
+          versetsEn: (m.versets_en ?? []).length ? m.versets_en : undefined,
+          couleur: (m.couleur ?? "gold") as TMessage["couleur"],
+          actif: true,
+        });
+        setVersetIdx(0);
+      });
+    return () => { annule = true; };
+  }, []);
 
   // Versets selon la langue (repli sur le français si pas de version EN)
   const versets = (lang === "en" && message?.versetsEn?.length ? message.versetsEn : message?.versets) ?? [];
