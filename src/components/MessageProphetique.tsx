@@ -7,6 +7,15 @@ import { messagesProphetiques, type MessageProphetique as TMessage } from "@/dat
 import { useLang } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 
+// Sépare un verset « 12 — texte », « 12 texte », « 12. texte » ou « texte »
+// en { num, corps } de façon robuste (évite le doublage d'affichage).
+const decouperVerset = (v: string): { num: string; corps: string } => {
+  const m = (v ?? "").match(/^\s*(\d+)\s*[—–\-.:)]*\s*([\s\S]*)$/);
+  if (m && m[1]) return { num: m[1], corps: m[2].trim() };
+  return { num: "", corps: (v ?? "").trim() };
+};
+
+
 const messageActif = (): TMessage | null => {
   const now = new Date();
   return messagesProphetiques.find((m) => {
@@ -123,8 +132,7 @@ const MessageProphetique = () => {
     if (!message || !("speechSynthesis" in window)) return;
     const liste = (lang === "en" && message.versetsEn?.length ? message.versetsEn : message.versets);
     const texte = liste[idx];
-    const num = texte.split("—")[0].trim();
-    const corps = texte.split("—").slice(1).join("—").trim() || texte;
+    const { num, corps } = decouperVerset(texte);
     const utter = new SpeechSynthesisUtterance(
       lang === "en" ? `Verse ${num}. ${corps}` : `Verset ${num}. ${corps}`
     );
@@ -288,9 +296,9 @@ const MessageProphetique = () => {
             className={`${pal.verset} text-base md:text-lg leading-relaxed font-medium`}
             style={{ animation: "fadeSlideIn 0.5s ease-out" }}>
             <span className={`${pal.ref} font-bold mr-2`}>
-              {reference} : {verset.split("—")[0].trim()}
+              {reference}{decouperVerset(verset).num ? " : " + decouperVerset(verset).num : ""}
             </span>
-            {verset.includes("—") ? "— " + verset.split("—").slice(1).join("—").trim() : verset}
+            {decouperVerset(verset).corps}
           </p>
         </div>
 
