@@ -18,7 +18,7 @@ import { createClient } from "@supabase/supabase-js";
 // ════════════════════════════════════════════════════════════════
 
 const SOURCE = "https://api.getbible.net/v2";
-const TRADUCTION = { fr: "segond", en: "kjv" } as const;
+const TRADUCTION = { fr: "ls1910", en: "kjv" } as const;
 
 // ── Numéros des livres (canon protestant, 1 à 66) ──
 const LIVRES: Record<string, number> = {};
@@ -177,8 +177,13 @@ export default async function handler(req: any, res: any) {
     const versets = brut.map((v: any) => {
       const num = v.verse ?? v.number ?? "";
       const texte = String(v.text ?? "")
+        .replace(/<[^>]*>/g, " ")          // balises éventuelles
+        .replace(/\{[^}]*\}/g, " ")        // numéros de Strong { ... }
+        .replace(/\[[^\]]*\]/g, " ")       // annotations [ ... ]
+        .replace(/[Hh]\d{2,5}|[Gg]\d{2,5}/g, " ") // codes Strong Hxxxx / Gxxxx
+        .replace(/\s+([,;.:!?])/g, "$1")    // espace avant ponctuation
         .replace(/\s+/g, " ")
-        .replace(/^\s*\d+\s*/, "")
+        .replace(/^\s*\d+\s*/, "")         // numéro de verset en tête
         .trim();
       return `${num} — ${texte}`;
     });
