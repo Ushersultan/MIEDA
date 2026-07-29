@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
-import { Session, User } from "@supabase/supabase-js";
+import { createContext, useContext, useEffect, useState, useCallback, useRef, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { User, Session } from "@supabase/supabase-js";
 
-export interface ProfilData {
+interface ProfilData {
   photo_url: string;
   full_name: string;
   phone: string;
@@ -34,49 +34,66 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profil, setProfil] = useState<ProfilData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Mémorise l'utilisateur déjà chargé : évite de recharger le profil
+  // (et de le passer à null) à chaque rafraîchissement de jeton ou
+  // retour de focus sur l'onglet — cause du « je perds ma session admin ».
+  const idCharge = useRef<string | null>(null);
+
   const loadProfil = useCallback(async (u: User | null) => {
     if (!u) { setProfil(null); return; }
-    const { data } = await supabase
-      .from("profiles").select("*").eq("id", u.id).single();
-    if (data) {
-      setProfil({
-        photo_url: data.photo_url ?? "",
-        full_name: data.full_name ?? "",
-        phone: data.phone ?? "",
-        ville: data.ville ?? "",
-        pays: data.pays ?? "",
-        eglise_locale: data.eglise_locale ?? "",
-        eglise_id: data.eglise_id ?? null,
-        role: data.role ?? "membre",
-        profession: data.profession ?? "",
-        quartier: data.quartier ?? "",
-        bio: data.bio ?? "",
-        date_naissance: data.date_naissance ?? "",
-      });
-    } else {
-      setProfil(null);
+    try {
+      const { data } = await supabase
+        .from("profiles").select("*").eq("id", u.id).maybeSingle();
+      if (data) {
+        setProfil({
+          photo_url: data.photo_url ?? "",
+          full_name: data.full_name ?? "",
+          phone: data.phone ?? "",
+          ville: data.ville ?? "",
+          pays: data.pays ?? "",
+          eglise_locale: data.eglise_locale ?? "",
+          eglise_id: data.eglise_id ?? null,
+          role: data.role ?? "membre",
+          profession: data.profession ?? "",
+          quartier: data.quartier ?? "",
+          bio: data.bio ?? "",
+          date_naissance: data.date_naissance ?? "",
+        });
+      }
+      // Si data est absent (souci transitoire), on garde le profil
+      // précédent au lieu de le vider — pas de perte d'accès.
+    } catch {
+      /* erreur réseau transitoire : conserver le profil courant */
     }
   }, []);
 
   useEffect(() => {
+    let monte = true;
+
+    const traiter = async (s: Session | null) => {
+      if (!monte) return;
+      setSession(s);
+      const u = s?.user ?? null;
+      setUser(u);
+      const nouvelId = u?.id ?? null;
+      // Ne recharge le profil QUE si l'utilisateur a réellement changé
+      if (nouvelId !== idCharge.current) {
+        idCharge.current = nouvelId;
+        await loadProfil(u);
+      }
+      if (monte) setLoading(false);
+    };
+
+    supabase.auth.getSession().then(({ data: { session } }) => traiter(session));
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        // Ne pas faire d'appel Supabase directement dans le callback (deadlock)
-        setTimeout(() => loadProfil(session?.user ?? null), 0);
-        setLoading(false);
+        // Différé pour éviter tout blocage dans le callback Supabase
+        setTimeout(() => traiter(session), 0);
       }
     );
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      loadProfil(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    return () => { monte = false; subscription.unsubscribe(); };
   }, [loadProfil]);
 
   const refreshProfil = useCallback(async () => {
@@ -85,6 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    idCharge.current = null;
     setProfil(null);
   };
 
@@ -96,9 +114,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth doit être utilisé dans un AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth doit être utilisé dans AuthProvider");
+  return ctx;
 };
