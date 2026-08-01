@@ -126,3 +126,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Zones sûres pour l'app mobile (encoches, indicateur d'accueil) ──
+   env(safe-area-inset-*) vaut 0 sur le web : aucun impact sur le site. */
+@layer base {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Le header fixe descend sous l'encoche */
+header.fixed {
+  padding-top: env(safe-area-inset-top);
+}
