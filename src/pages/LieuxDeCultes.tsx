@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import {
   MapPin, Phone, Mail, Youtube, Facebook, Instagram, Video,
   ChevronDown, ExternalLink, Globe2, Users, Church, Search, X,
@@ -59,6 +59,25 @@ const TikTokIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   </svg>
 );
 
+
+// ── Association photo ⇄ serviteur par correspondance de nom ──
+const normaliserNomPhoto = (x: string): string[] =>
+  (x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/^(reverend|rev\.?|docteur|dr\.?|pasteure?|prophete|evangeliste|apotre|mme|m\.)\s*/gi, "")
+    .split(/\s+/).filter((t) => t.length > 1);
+
+const trouverPhoto = (
+  liste: { nom: string; url: string }[],
+  nom: string
+): string | undefined => {
+  const tks = new Set(normaliserNomPhoto(nom));
+  if (tks.size < 2) return undefined;
+  const m = liste.find(
+    (ph) => normaliserNomPhoto(ph.nom).filter((t) => tks.has(t)).length >= 2
+  );
+  return m?.url;
+};
+
 // ── Avatar : photo ou initiales ──
 const getInitials = (nom: string) => {
   const clean = nom.replace(/^(Révérend|Rév\.|Docteur|Dr\.?|Pasteure?|Prophète|Évangéliste|Evangéliste|Apôtre|Mme|M\.)\s*/gi, "").trim();
@@ -106,12 +125,17 @@ const SocialLinks = ({ eglise }: { eglise: Eglise }) => {
 };
 
 // ── Ligne serviteur (équipe) ──
-const ServiteurRow = ({ p, eglise }: { p: Pasteur; eglise: Eglise }) => (
+const ServiteurRow = ({ p, eglise, photo }: { p: Pasteur; eglise: Eglise; photo?: string }) => (
   <div className="flex items-center gap-3 py-2">
     <Link to={lienServiteur(eglise, p)} className="flex items-center gap-3 min-w-0 flex-1 group">
-      <div className="w-9 h-9 rounded-full bg-muted text-muted-foreground font-semibold text-xs flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-        {getInitials(p.nom)}
-      </div>
+      {(p.photo ?? photo) ? (
+        <img src={p.photo ?? photo} alt={p.nom}
+          className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
+      ) : (
+        <div className="w-9 h-9 rounded-full bg-muted text-muted-foreground font-semibold text-xs flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+          {getInitials(p.nom)}
+        </div>
+      )}
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-foreground leading-tight group-hover:text-primary transition-colors">{p.nom}</p>
         {p.titre && <p className="text-xs text-muted-foreground">{p.titre}</p>}
@@ -128,7 +152,7 @@ const ServiteurRow = ({ p, eglise }: { p: Pasteur; eglise: Eglise }) => (
 );
 
 // ── Carte d'une église (dépliable) ──
-const EgliseCard = ({ eglise, L, photo }: { eglise: Eglise; L: typeof TXT.fr; photo?: string }) => {
+const EgliseCard = ({ eglise, L, photoParNom }: { eglise: Eglise; L: typeof TXT.fr; photoParNom: (nom: string) => string | undefined }) => {
   const [open, setOpen] = useState(false);
   const hasDetails = Boolean(
     eglise.adresse || (AFFICHER_CONTACTS && (eglise.pasteur.telephone || eglise.pasteur.email)) ||
@@ -147,7 +171,7 @@ const EgliseCard = ({ eglise, L, photo }: { eglise: Eglise; L: typeof TXT.fr; ph
         onClick={() => hasDetails && setOpen(!open)}
         className={`w-full text-left p-5 flex items-start gap-4 ${hasDetails ? "cursor-pointer hover:bg-muted/40" : "cursor-default"} transition-colors`}
       >
-        <Avatar nom={eglise.pasteur.nom} photo={eglise.pasteur.photo ?? photo} />
+        <Avatar nom={eglise.pasteur.nom} photo={eglise.pasteur.photo ?? photoParNom(eglise.pasteur.nom)} />
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <h3 className="font-semibold text-foreground text-base leading-tight">{eglise.nom}</h3>
@@ -230,7 +254,7 @@ const EgliseCard = ({ eglise, L, photo }: { eglise: Eglise; L: typeof TXT.fr; ph
               </p>
               <div className="divide-y divide-border">
                 {eglise.equipe.map((p) => (
-                  <ServiteurRow key={p.nom} p={p} eglise={eglise} />
+                  <ServiteurRow key={p.nom} p={p} eglise={eglise} photo={photoParNom(p.nom)} />
                 ))}
               </div>
             </div>
@@ -264,13 +288,18 @@ const LieuxDeCultes = () => {
   const { lang } = useLang();
   const L = TXT[lang];
   const [query, setQuery] = useState("");
-  const [photos, setPhotos] = useState<Map<string, string>>(new Map());
+  const [photosServiteurs, setPhotosServiteurs] = useState<{ nom: string; url: string }[]>([]);
 
   useEffect(() => {
     supabase.rpc("photos_pasteurs").then(({ data }) => {
-      if (data) setPhotos(new Map(data.map((r: any) => [r.eglise_id, r.photo_url])));
+      if (data) setPhotosServiteurs(data.map((r: any) => ({ nom: r.full_name, url: r.photo_url })));
     });
   }, []);
+
+  const photoParNom = useCallback(
+    (nom: string) => trouverPhoto(photosServiteurs, nom),
+    [photosServiteurs]
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -388,7 +417,7 @@ const LieuxDeCultes = () => {
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {liste.map((eglise) => (
-                      <EgliseCard key={eglise.id} eglise={eglise} L={L} photo={photos.get(eglise.id)} />
+                      <EgliseCard key={eglise.id} eglise={eglise} L={L} photoParNom={photoParNom} />
                     ))}
                   </div>
                 </div>
@@ -406,7 +435,7 @@ const LieuxDeCultes = () => {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {international.map((eglise) => (
-                  <EgliseCard key={eglise.id} eglise={eglise} L={L} photo={photos.get(eglise.id)} />
+                  <EgliseCard key={eglise.id} eglise={eglise} L={L} photoParNom={photoParNom} />
                 ))}
               </div>
             </div>

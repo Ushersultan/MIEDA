@@ -8,13 +8,13 @@ import {
   ArrowLeft, Loader2, ShieldAlert, Home, Users, Church, KeyRound, Copy, Check,
   Send, Search, X, MapPin, Calendar, Clock, RefreshCw, TrendingUp, Mail,
   UserPlus, UserMinus, Sparkles, Filter, Download, Cake, Send as SendIcon, Loader2 as Spin,
-  BookOpen,
+  BookOpen, Church, ChevronDown, ChevronRight, MapPin, Phone,
 } from "lucide-react";
 import { eglises, ordreRegions } from "@/data/eglises";
 import AdminMessageProphetique from "@/components/AdminMessageProphetique";
 import { nomEglise } from "@/lib/serviteurs";
 
-type Tab = "codes" | "membres" | "anniversaires" | "message" | "stats";
+type Tab = "codes" | "membres" | "fideles" | "anniversaires" | "message" | "stats";
 
 interface CodePasteur {
   code: string;
@@ -267,6 +267,42 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
     return res;
   }, [profils]);
 
+  // ── Fidèles regroupés par église (pasteurs + membres) ──
+  const [egliseOuverte, setEgliseOuverte] = useState<string | null>(null);
+  const [rechercheEglise, setRechercheEglise] = useState("");
+
+  const parEglise = useMemo(() => {
+    const map = new Map<string, { pasteurs: Profil[]; membres: Profil[] }>();
+    for (const p of profils) {
+      if (!p.eglise_id) continue;
+      if (!map.has(p.eglise_id)) map.set(p.eglise_id, { pasteurs: [], membres: [] });
+      const g = map.get(p.eglise_id)!;
+      if (p.role === "membre") g.membres.push(p);
+      else g.pasteurs.push(p);
+    }
+    return map;
+  }, [profils]);
+
+  const eglisesAvecComptes = useMemo(() => {
+    const q = rechercheEglise.trim().toLowerCase();
+    return eglises
+      .map((e) => ({ eglise: e, groupe: parEglise.get(e.id) }))
+      .filter(({ eglise, groupe }) => {
+        if (!groupe || (groupe.pasteurs.length === 0 && groupe.membres.length === 0)) return false;
+        if (!q) return true;
+        return (eglise.nom + " " + eglise.ville + " " + eglise.pays + " " + (eglise.region ?? ""))
+          .toLowerCase().includes(q);
+      })
+      .sort((a, b) =>
+        (b.groupe!.pasteurs.length + b.groupe!.membres.length) -
+        (a.groupe!.pasteurs.length + a.groupe!.membres.length));
+  }, [parEglise, rechercheEglise]);
+
+  const totalFideles = useMemo(
+    () => profils.filter((p) => p.role === "membre" && p.eglise_id).length,
+    [profils]
+  );
+
   // ── Anniversaires (tous les comptes, toutes les églises) ──
   const anniversaires = useMemo(() => {
     const now = new Date();
@@ -371,6 +407,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
   const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
     { id: "codes", label: "Codes serviteurs", icon: KeyRound, count: stats.attente },
     { id: "membres", label: "Utilisateurs", icon: Users, count: profils.length },
+    { id: "fideles", label: "Fidèles par église", icon: Church, count: totalFideles },
     { id: "anniversaires", label: "Anniversaires", icon: Cake, count: anniversaires.aujourdhui.length },
     { id: "message", label: "Message du Prophète", icon: BookOpen },
     { id: "stats", label: "Statistiques", icon: TrendingUp },
@@ -776,6 +813,86 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
               </div>
             )}
 
+            {/* ═══════ FIDÈLES PAR ÉGLISE ═══════ */}
+            {tab === "fideles" && (
+              <div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Chaque église avec ses serviteurs et ses fidèles inscrits.
+                  Cliquez pour déplier.
+                </p>
+                <div className="relative mb-5">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input type="text" value={rechercheEglise}
+                    onChange={(e) => setRechercheEglise(e.target.value)}
+                    placeholder="Rechercher une église, une ville, un pays..."
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
+                </div>
+
+                {eglisesAvecComptes.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">
+                    Aucune église avec des comptes pour cette recherche.
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {eglisesAvecComptes.map(({ eglise: e, groupe }) => {
+                      const ouvert = egliseOuverte === e.id;
+                      const nbP = groupe!.pasteurs.length;
+                      const nbM = groupe!.membres.length;
+                      return (
+                        <div key={e.id} className="rounded-xl border border-border bg-card">
+                          <button onClick={() => setEgliseOuverte(ouvert ? null : e.id)}
+                            className="w-full p-4 flex items-center gap-3 text-left hover:bg-muted/30 transition-colors">
+                            <span className="text-2xl flex-shrink-0">{e.drapeau}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold text-foreground truncate">{e.nom}</p>
+                              <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
+                                <span className="truncate">{e.ville}, {e.pays}</span>
+                                <span className="ml-auto flex items-center gap-2 flex-shrink-0">
+                                  {nbP > 0 && <span className="text-primary font-medium">{nbP} 👨‍🏫</span>}
+                                  {nbM > 0 && <span className="text-green-600 font-medium">{nbM} 🙏</span>}
+                                </span>
+                              </p>
+                            </div>
+                            {ouvert ? <ChevronDown className="w-4 h-4 flex-shrink-0 text-muted-foreground" />
+                                    : <ChevronRight className="w-4 h-4 flex-shrink-0 text-muted-foreground" />}
+                          </button>
+
+                          {ouvert && (
+                            <div className="border-t border-border p-4 space-y-3">
+                              {groupe!.pasteurs.length > 0 && (
+                                <div>
+                                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                                    Serviteurs ({nbP})
+                                  </p>
+                                  <div className="space-y-1.5">
+                                    {groupe!.pasteurs.map((p) => (
+                                      <FideleRow key={p.id} p={p} accent />
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              {groupe!.membres.length > 0 && (
+                                <div>
+                                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                                    Fidèles ({nbM})
+                                  </p>
+                                  <div className="space-y-1.5">
+                                    {groupe!.membres.map((p) => (
+                                      <FideleRow key={p.id} p={p} />
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* ═══════ MESSAGE DU PROPHÈTE ═══════ */}
             {tab === "message" && <AdminMessageProphetique />}
 
@@ -886,6 +1003,47 @@ const LigneAnniversaire = ({
           className="text-xs font-medium px-3 py-1.5 rounded-lg bg-green-600 text-white hover:opacity-90 transition-opacity flex-shrink-0">
           WhatsApp
         </a>
+      )}
+    </div>
+  );
+};
+
+// ── Ligne d'un fidèle / serviteur (vue Admin par église) ──
+const FideleRow = ({ p, accent = false }: { p: Profil; accent?: boolean }) => {
+  const tel = (p.phone ?? "").replace(/[^+\d]/g, "");
+  return (
+    <div className={`flex items-center gap-3 p-2.5 rounded-lg ${accent ? "bg-primary/5" : "bg-muted/30"}`}>
+      {p.photo_url ? (
+        <img src={p.photo_url} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+      ) : (
+        <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground text-xs font-semibold flex items-center justify-center flex-shrink-0">
+          {(p.full_name || "?").slice(0, 1).toUpperCase()}
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-foreground truncate">
+          {p.full_name || "(sans nom)"}
+          {p.role !== "membre" && (
+            <span className="text-[10px] font-semibold text-primary ml-2 uppercase">{p.role}</span>
+          )}
+        </p>
+        <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
+          {p.ville && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{p.ville}</span>}
+          {p.pays && p.pays !== p.ville && <span>· {p.pays}</span>}
+        </p>
+      </div>
+      {tel && (
+        <>
+          <a href={"tel:" + tel}
+            className="w-7 h-7 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground flex items-center justify-center transition-colors flex-shrink-0"
+            aria-label="Appeler">
+            <Phone className="w-3.5 h-3.5" />
+          </a>
+          <a href={"https://wa.me/" + tel.replace(/\+/g, "")} target="_blank" rel="noreferrer"
+            className="text-xs font-medium px-2 py-1.5 rounded-lg bg-green-600 text-white hover:opacity-90 transition-opacity flex-shrink-0">
+            WhatsApp
+          </a>
+        </>
       )}
     </div>
   );
