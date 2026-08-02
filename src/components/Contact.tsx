@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
+import { horairesServices } from "@/data/horaires";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -230,16 +231,13 @@ const Contact = () => {
                   Horaires des Services
                 </h3>
 
-                <div className="space-y-3 text-primary-foreground/90">
-                  <div>
-                    <p className="font-semibold">Dimanche</p>
-                    <p>10:30 - 12:30</p>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold">Mercredi</p>
-                    <p>09:00 - 12:00</p>
-                  </div>
+                <div className="space-y-4 text-primary-foreground/90">
+                  {horairesServices.map((c) => (
+                    <div key={c.jour}>
+                      <p className="font-semibold">{c.jour}</p>
+                      <p className="text-sm">{c.horaire}</p>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>

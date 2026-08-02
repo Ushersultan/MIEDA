@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { horairesServices } from "@/data/horaires";
 import {
   Play, Radio, Youtube, MapPin, Baby, Globe, Clock, Video,
   ExternalLink, Calendar, Copy, Check,
@@ -343,36 +344,20 @@ const CulteYamoussoukro = () => (
         </p>
 
         <div className="space-y-3 mb-8">
-          {/* Dimanche */}
-          <div className="flex items-start gap-3 text-foreground">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="font-medium">Dimanche — Louange &amp; Adoration</p>
-              <p className="text-sm text-muted-foreground">1er culte 06h00–08h20 · 2e culte 08h30–11h00</p>
-            </div>
-          </div>
-          {/* Mercredi */}
-          <div className="flex items-start gap-3 text-foreground">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="font-medium">Mercredi — Culte de délivrance</p>
-              <p className="text-sm text-muted-foreground">09h00–13h00 · dernier mercredi 18h00–21h00</p>
-            </div>
-          </div>
-          {/* Ouverture quotidienne */}
-          <div className="flex items-start gap-3 text-foreground">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Clock className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="font-medium">Tous les jours 9h00–11h00</p>
-              <p className="text-sm text-muted-foreground">Église ouverte pour assistance et prière</p>
-            </div>
-          </div>
+          {horairesServices.map((c) => {
+            const Icone = c.icone === "clock" ? Clock : Calendar;
+            return (
+              <div key={c.jour} className="flex items-start gap-3 text-foreground">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Icone className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium">{c.jour}</p>
+                  <p className="text-sm text-muted-foreground">{c.horaire}</p>
+                </div>
+              </div>
+            );
+          })}
           {/* Lieu */}
           <div className="flex items-start gap-3 text-foreground">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
