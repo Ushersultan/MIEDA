@@ -46,7 +46,7 @@ const Confidentialite = () => {
               <h2>1. Responsable du traitement</h2>
               <p>
                 MIEDA — Mission Internationale d'Évangélisation et de Délivrance des Âmes.
-                Contact : communication@eglisesmieda.org.
+                Contact : com@eglisesmieda.org.
               </p>
 
               <h2>2. Données que nous collectons</h2>
@@ -99,7 +99,7 @@ const Confidentialite = () => {
               <p>
                 Vos données sont conservées tant que votre compte est actif. Vous pouvez à tout
                 moment demander la modification ou la suppression de votre compte et de vos
-                données en écrivant à communication@eglisesmieda.org. La suppression est
+                données en écrivant à com@eglisesmieda.org. La suppression est
                 définitive.
               </p>
 
@@ -119,7 +119,7 @@ const Confidentialite = () => {
               <h2>9. Vos droits</h2>
               <p>
                 Vous disposez d'un droit d'accès, de rectification et de suppression de vos
-                données. Pour l'exercer, contactez-nous à communication@eglisesmieda.org.
+                données. Pour l'exercer, contactez-nous à com@eglisesmieda.org.
               </p>
 
               <h2>10. Modifications</h2>
@@ -130,7 +130,7 @@ const Confidentialite = () => {
 
               <h2>Contact</h2>
               <p>
-                Pour toute question relative à vos données : communication@eglisesmieda.org.
+                Pour toute question relative à vos données : com@eglisesmieda.org.
               </p>
             </>
           ) : (
@@ -145,7 +145,7 @@ const Confidentialite = () => {
               <h2>1. Data Controller</h2>
               <p>
                 MIEDA — International Mission of Evangelism and Deliverance of Souls.
-                Contact: communication@eglisesmieda.org.
+                Contact: com@eglisesmieda.org.
               </p>
 
               <h2>2. Data We Collect</h2>
@@ -193,7 +193,7 @@ const Confidentialite = () => {
               <p>
                 Your data is kept as long as your account is active. You can request modification
                 or deletion of your account and data at any time by writing to
-                communication@eglisesmieda.org. Deletion is permanent.
+                com@eglisesmieda.org. Deletion is permanent.
               </p>
 
               <h2>7. Security</h2>
@@ -211,7 +211,7 @@ const Confidentialite = () => {
               <h2>9. Your Rights</h2>
               <p>
                 You have the right to access, correct and delete your data. To exercise it,
-                contact us at communication@eglisesmieda.org.
+                contact us at com@eglisesmieda.org.
               </p>
 
               <h2>10. Changes</h2>
@@ -220,7 +220,7 @@ const Confidentialite = () => {
               </p>
 
               <h2>Contact</h2>
-              <p>For any question about your data: communication@eglisesmieda.org.</p>
+              <p>For any question about your data: com@eglisesmieda.org.</p>
             </>
           )}
         </article>
