@@ -140,27 +140,3 @@
 header.fixed {
   padding-top: env(safe-area-inset-top);
 }
-
-/* ── Mouvement global : défilement fluide + effets au survol ── */
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Zoom doux des images de carte au survol (à combiner avec .group) */
-@media (hover: hover) {
-  .group:hover .zoom-hover { transform: scale(1.06); }
-}
-.zoom-hover { transition: transform 0.5s ease; }
-
-/* Léger soulèvement générique des cartes interactives */
-@media (hover: hover) {
-  a.rounded-2xl, a.rounded-xl { transition: transform .25s ease, box-shadow .25s ease; }
-}
