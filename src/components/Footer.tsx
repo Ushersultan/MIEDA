@@ -4,7 +4,7 @@ import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 import logo from "@/assets/mieda-logo.png";
 
 const Footer = () => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -67,6 +67,7 @@ const Footer = () => {
               <li><Link to="/evenements" className="hover:text-primary-foreground transition-colors">{t("footer.evenements")}</Link></li>
               <li><Link to="/projets" className="hover:text-primary-foreground transition-colors">{t("footer.projets")}</Link></li>
               <li><Link to="/contact" className="hover:text-primary-foreground transition-colors">{t("footer.contact")}</Link></li>
+              <li><Link to="/noms-de-dieu" className="hover:text-primary-foreground transition-colors">{lang === "en" ? "The Names of God" : "Les Noms de Dieu"}</Link></li>
             </ul>
           </div>
 
@@ -84,7 +85,13 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-primary-foreground/20 pt-8 text-center text-primary-foreground/80">
-          <p>&copy; {currentYear} MIEDA. Tous droits réservés.</p>
+          <p className="flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-1 flex-wrap">
+            <span>&copy; {currentYear} MIEDA. {lang === "en" ? "All rights reserved." : "Tous droits réservés."}</span>
+            <span className="hidden sm:inline">·</span>
+            <Link to="/confidentialite" className="hover:text-primary-foreground underline underline-offset-2 transition-colors">
+              {lang === "en" ? "Privacy Policy" : "Politique de confidentialité"}
+            </Link>
+          </p>
         </div>
       </div>
     </footer>
