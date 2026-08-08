@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Menu, X, ChevronDown, MapPin, Baby, Globe, User as UserIcon,
-  Info, Building2, Lightbulb, MapPinned, Languages,
+  Info, Building2, Lightbulb, MapPinned, Languages, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,6 +21,7 @@ const buildCulteItems = (t: (k: string) => string) => [
   { label: t("nav.culte.yakro"), to: "/cultes#culte-yamoussoukro", icon: MapPin, desc: t("nav.culte.yakro.desc") },
   { label: t("nav.culte.ecole"), to: "/cultes#ecole-de-dimanche", icon: Baby, desc: t("nav.culte.ecole.desc") },
   { label: t("nav.culte.ligne"), to: "/cultes#culte-en-ligne", icon: Globe, desc: t("nav.culte.ligne.desc") },
+  { label: t("nav.noms"), to: "/noms-de-dieu", icon: Sparkles, desc: t("nav.noms.desc") },
 ];
 
 type DropItem = { label: string; to: string; icon: any; desc: string };
