@@ -21,6 +21,7 @@ const Projets = lazy(() => import("./pages/Projets"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const Serviteur = lazy(() => import("./pages/Serviteur"));
 const Confidentialite = lazy(() => import("./pages/Confidentialite"));
+const NomsDeDieu = lazy(() => import("./pages/NomsDeDieu"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Profile = lazy(() => import("./pages/Profile"));
 const EspacePasteur = lazy(() => import("./pages/EspacePasteur"));
@@ -58,6 +59,7 @@ const App = () => (
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/serviteur/:egliseId/:slug" element={<Serviteur />} />
                 <Route path="/confidentialite" element={<Confidentialite />} />
+                <Route path="/noms-de-dieu" element={<NomsDeDieu />} />
               </Route>
 
               {/* Pages plein écran (sans Header/Footer) */}
