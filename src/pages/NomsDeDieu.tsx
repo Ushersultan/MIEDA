@@ -1,4 +1,5 @@
 import { useLang } from "@/contexts/LanguageContext";
+import Reveal from "@/components/Reveal";
 
 // ════════════════════════════════════════════════════════════════
 //  Les Noms de Dieu — page dévotionnelle permanente
@@ -75,8 +76,9 @@ const NomsDeDieu = () => {
       <div className="container mx-auto px-4 max-w-5xl py-16">
         <div className="grid md:grid-cols-2 gap-5">
           {NOMS.map((n, i) => (
-            <div key={n.nom}
-              className="group relative rounded-2xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-lg transition-all">
+            <Reveal key={n.nom} direction="up" delay={(i % 2) * 80}>
+            <div
+              className="group relative rounded-2xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-lg hover:-translate-y-1 transition-all h-full">
               {/* Numéro discret */}
               <span className="absolute top-5 right-6 text-5xl font-bold text-primary/5 group-hover:text-primary/10 transition-colors select-none">
                 {String(i + 1).padStart(2, "0")}
@@ -96,11 +98,12 @@ const NomsDeDieu = () => {
                 </span>
               </div>
             </div>
+            </Reveal>
           ))}
         </div>
 
         {/* ── Clôture ── */}
-        <div className="mt-16 text-center">
+        <Reveal direction="scale" className="mt-16 text-center">
           <p className="text-2xl font-bold text-primary mb-2">
             {fr ? "Que son nom soit glorifié 🙏" : "May His name be glorified 🙏"}
           </p>
@@ -112,7 +115,7 @@ const NomsDeDieu = () => {
           <p className="text-sm text-muted-foreground mt-1">
             {fr ? "Proverbes 18:10" : "Proverbs 18:10"}
           </p>
-        </div>
+        </Reveal>
       </div>
     </div>
   );

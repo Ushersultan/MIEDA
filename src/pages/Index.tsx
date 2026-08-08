@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import { useLang } from "@/contexts/LanguageContext";
 import Experience from "@/components/Experience";
 import Offering from "@/components/Offering";
+import Reveal from "@/components/Reveal";
 
 const buildExplorer = (t: (k: string) => string) => [
   { icon: Radio, title: t("accueil.explorer.cultes"), desc: t("accueil.explorer.cultes.desc"), to: "/cultes", color: "text-primary", bg: "bg-primary/10" },
@@ -18,24 +19,26 @@ const Index = () => {
   return (
     <>
       <Hero />
-      <Experience />
+      <Reveal>
+        <Experience />
+      </Reveal>
 
       {/* Explorer le site */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-14">
+          <Reveal className="text-center mb-14">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               {t("accueil.explorer.titre")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {t("accueil.explorer.sous")}
             </p>
-          </div>
+          </Reveal>
 
           <div className="grid sm:grid-cols-2 gap-6">
-            {explorer.map((item) => (
+            {explorer.map((item, i) => (
+              <Reveal key={item.title} direction="up" delay={i * 90}>
               <Link
-                key={item.title}
                 to={item.to}
                 className="group flex items-center gap-5 bg-card border border-border rounded-2xl p-6 hover:border-primary/50 hover:shadow-lg transition-all hover:-translate-y-1"
               >
@@ -48,13 +51,16 @@ const Index = () => {
                 </div>
                 <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0" />
               </Link>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
       {/* Dons / Offrandes */}
-      <Offering />
+      <Reveal>
+        <Offering />
+      </Reveal>
     </>
   );
 };

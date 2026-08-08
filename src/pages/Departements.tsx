@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { departements as departementsData, titreDept, descDept } from "@/data/departements";
 import { useLang } from "@/contexts/LanguageContext";
+import Reveal from "@/components/Reveal";
 
 const icones: Record<string, any> = {
   "louange": Music, "intercession": HandHelping, "evangelisation": Megaphone,
@@ -70,14 +71,16 @@ const Departements = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">{L.h2a}</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {departements.map((d) => (
-              <div key={d.title} className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
+            {departements.map((d, i) => (
+              <Reveal key={d.title} direction="up" delay={(i % 3) * 80}>
+              <div className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all h-full">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <d.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="font-semibold text-foreground text-lg mb-2">{d.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{d.desc}</p>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>
