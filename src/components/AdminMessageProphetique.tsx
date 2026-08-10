@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { apiUrl } from "@/lib/api";
 import {
   BookOpen, Download, Loader2, Send, Archive, Trash2, Eye, Sparkles,
   Calendar, CheckCircle2, AlertCircle,
@@ -93,7 +94,7 @@ const AdminMessageProphetique = () => {
 
       const appel = async (langue: "fr" | "en") => {
         const rep = await fetch(
-          `/api/bible?livre=${encodeURIComponent(parse.livre)}&chapitre=${parse.chapitre}&langue=${langue}`,
+          apiUrl(`/api/bible?livre=${encodeURIComponent(parse.livre)}&chapitre=${parse.chapitre}&langue=${langue}`),
           { headers: entetes }
         );
         const json = await rep.json();

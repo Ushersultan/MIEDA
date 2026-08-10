@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { horairesServices } from "@/data/horaires";
+import { apiUrl } from "@/lib/api";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -22,7 +23,7 @@ const Contact = () => {
     setStatus("Envoi en cours...");
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(apiUrl("/api/contact"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

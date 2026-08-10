@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import QRCode from "qrcode";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { apiUrl } from "@/lib/api";
 import {
   Loader2, ShieldCheck, Smartphone, KeyRound, LogOut, RefreshCw, Mail, QrCode, ArrowLeft,
 } from "lucide-react";
@@ -178,7 +179,7 @@ const MfaGate = ({ children }: { children: ReactNode }) => {
   // ── Méthode Email ──
   const appelApi = async (body: object) => {
     const { data: { session } } = await supabase.auth.getSession();
-    const rep = await fetch("/api/mfa-email", {
+    const rep = await fetch(apiUrl("/api/mfa-email"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
