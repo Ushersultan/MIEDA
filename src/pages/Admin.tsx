@@ -13,6 +13,7 @@ import {
 import { eglises, ordreRegions } from "@/data/eglises";
 import AdminMessageProphetique from "@/components/AdminMessageProphetique";
 import { nomEglise } from "@/lib/serviteurs";
+import { apiUrl } from "@/lib/api";
 
 type Tab = "codes" | "membres" | "fideles" | "anniversaires" | "message" | "stats";
 
@@ -349,7 +350,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
     setEnvoiVoeux(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const rep = await fetch("/api/anniversaires", {
+      const rep = await fetch(apiUrl("/api/anniversaires"), {
         method: "POST",
         headers: { Authorization: "Bearer " + (session?.access_token ?? "") },
       });
