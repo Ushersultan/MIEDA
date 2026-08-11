@@ -62,6 +62,14 @@ const messageHtml = (prenom: string) => `
 `;
 
 export default async function handler(req: any, res: any) {
+  // Pré-vol CORS (l'app mobile envoie un OPTIONS avant chaque POST)
+  if (req.method === "OPTIONS") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    return res.status(204).end();
+  }
+
   const url = process.env.VITE_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
