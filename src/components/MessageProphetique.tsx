@@ -129,7 +129,13 @@ const MessageProphetique = () => {
 
   // ── Lecture audio en boucle, arrêt auto après 3 tours ──
   const lireVerset = useCallback((idx: number) => {
-    if (!message || !("speechSynthesis" in window)) return;
+    if (!message) return;
+    // speechSynthesis peut exister mais ne pas fonctionner dans le WebView Capacitor
+    const synthDispo = "speechSynthesis" in window && typeof window.speechSynthesis?.speak === "function";
+    if (!synthDispo) {
+      console.warn("Synthèse vocale non disponible dans cet environnement");
+      return;
+    }
     const liste = (lang === "en" && message.versetsEn?.length ? message.versetsEn : message.versets);
     const texte = liste[idx];
     const { num, corps } = decouperVerset(texte);
@@ -163,7 +169,7 @@ const MessageProphetique = () => {
   }, [message, lang]);
 
   const demarrerLecture = useCallback((depuis: number) => {
-    window.speechSynthesis?.cancel();
+    try { window.speechSynthesis?.cancel(); } catch { /* WebView */ }
     boucleRef.current = true;
     toursRef.current = 0;      // nouveau cycle de 3
     setDecompte(0);
@@ -175,7 +181,7 @@ const MessageProphetique = () => {
 
   const arreterLecture = useCallback(() => {
     boucleRef.current = false;
-    window.speechSynthesis?.cancel();
+    try { window.speechSynthesis?.cancel(); } catch { /* WebView */ }
     setLectureSynth(false);
   }, []);
 
@@ -188,7 +194,7 @@ const MessageProphetique = () => {
     setVersetIdx(idx);
     setProgression(0);
     if (lectureSynth) {
-      window.speechSynthesis?.cancel();
+      try { window.speechSynthesis?.cancel(); } catch { /* WebView */ }
       lireVerset(idx);
     }
   };
@@ -196,7 +202,7 @@ const MessageProphetique = () => {
   // Si la langue change pendant la lecture → on relit dans la nouvelle langue
   useEffect(() => {
     if (lectureSynth) {
-      window.speechSynthesis?.cancel();
+      try { window.speechSynthesis?.cancel(); } catch { /* WebView */ }
       lireVerset(versetIdx);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -227,7 +233,7 @@ const MessageProphetique = () => {
   useEffect(() => {
     return () => {
       boucleRef.current = false;
-      window.speechSynthesis?.cancel();
+      try { window.speechSynthesis?.cancel(); } catch { /* WebView */ }
     };
   }, []);
 
