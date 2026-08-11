@@ -124,6 +124,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Fix zone vide sous le bandeau (Capacitor) */
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 }
 
