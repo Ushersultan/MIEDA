@@ -12,7 +12,7 @@ const icones: Record<string, any> = {
   "delivrance": Flame, "ecclesiastique": Church, "jeunesse": Sparkles,
   "hommes": Users, "femmes": UserRound, "ecole-de-dimanche": BookOpen,
   "priere-hopital": HeartPulse, "nettoyage": SprayCan, "service-ordre": ClipboardCheck,
-  "securite": ShieldCheck, "communication": Radio, "comptabilite": Calculator,
+  "securite": ShieldCheck, "communication": Radio, "protocolat": ClipboardCheck, "comptabilite": Calculator,
   "social": HeartHandshake,
 };
 
