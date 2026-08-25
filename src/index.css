@@ -143,3 +143,12 @@
 header.fixed {
   padding-top: env(safe-area-inset-top);
 }
+
+/* ── Police MIEDA (Baumans — Google Fonts, style Bauhaus) ──
+   Baumans est gratuite, open source, et fonctionne sur TOUS
+   les appareils. Elle reproduit le style géométrique Bauhaus
+   du logo MIEDA. */
+.font-mieda {
+  font-family: "Baumans", "Bauhaus 93", "Century Gothic", sans-serif;
+  letter-spacing: 0.05em;
+}
