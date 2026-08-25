@@ -40,8 +40,7 @@ export const departements: Departement[] = [
   { id: "comptabilite", titre: "Comptabilité", desc: "Gérer avec transparence les finances de l'Église.",
     titreEn: "Accounting", descEn: "Managing the Church's finances with transparency." },
   { id: "protocolat", titre: "Protocolat", desc: "Organiser le protocole et le cérémonial des événements de l'Église.",
-    titreEn: "Protocol", descEn: "Organize the protocol and ceremony of church events.",
-    icone: ClipboardCheck },
+    titreEn: "Protocol", descEn: "Organize the protocol and ceremony of church events." },
   { id: "social", titre: "Social", desc: "Servir la communauté par des actions de solidarité et d'entraide.",
     titreEn: "Social", descEn: "Serving the community through solidarity and mutual aid." },
 ];
