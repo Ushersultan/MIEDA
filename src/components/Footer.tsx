@@ -75,10 +75,10 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Contact</h3>
             <ul className="space-y-2 text-primary-foreground/80">
-              <li>MIEDA Yamoussoukro, </li>
+              <li>MIEDA Yamoussoukro</li>
               <li>Quartier Millionnaire, Côte d'Ivoire</li>
-              <li>Tél: +225 21 30 64 74 14 / 21 </li>
-              <li>Cél: +225 07 07 88 79 89</li>
+              <li>Tél Siège : +225 27 30 61 28 04</li>
+              <li>Prophète : +225 07 07 88 79 89</li>
               <li>com@eglisesmieda.org</li>
             </ul>
           </div>

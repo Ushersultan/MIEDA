@@ -201,7 +201,21 @@ const Contact = () => {
                       Téléphone
                     </h4>
                     <p className="text-muted-foreground">
-                      +225 07 07 88 79 89
+                      +225 07 58 93 25 62
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Communication</h3>
+                    <p className="text-muted-foreground">
+                      Ancien Ulrich : +225 05 55 35 85 69
+                      <br />
+                      Diacre Simplice Emar : +225 07 57 83 69 52
                     </p>
                   </div>
                 </div>

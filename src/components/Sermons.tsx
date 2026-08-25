@@ -338,7 +338,7 @@ const CulteYamoussoukro = () => (
           Culte Yamoussoukro
         </h3>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          Le culte principal de MIEDA, au cœur de Yamoussoukro en Côte d'Ivoire,
+          Le Temple mère de la MIEDA à Yamoussoukro en Côte d'Ivoire, sous la direction du Révérend Docteur Prophète Djeha Kouadio. Rejoignez-nous sur place chaque dimanche, ou suivez la retransmission en direct sur YouTube.
           sous la direction du Révérend Docteur Prophète Djeha Kouadio. Rejoignez-nous
           sur place chaque dimanche, ou suivez la retransmission en direct sur YouTube.
         </p>
@@ -364,7 +364,7 @@ const CulteYamoussoukro = () => (
               <MapPin className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <p className="font-medium">MIEDA Abla Pokou — Yamoussoukro au Millionaire</p>
+              <p className="font-medium">MIEDA — Quartier Millionnaire, Yamoussoukro</p>
               <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer"
                  className="text-sm text-primary hover:underline inline-flex items-center gap-1">
                 Voir l'itinéraire <ExternalLink className="w-3 h-3" />
