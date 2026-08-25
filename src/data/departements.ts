@@ -31,7 +31,7 @@ export const departements: Departement[] = [
     titreEn: "Hospital Prayer", descEn: "Visiting, praying for and comforting the sick in hospital." },
   { id: "nettoyage", titre: "Nettoyage", desc: "Entretenir la maison de Dieu dans la propreté et la dignité.",
     titreEn: "Cleaning", descEn: "Keeping the house of God clean and dignified." },
-  { id: "service-ordre", titre: "Service d'Ordre", desc: "Accueillir et veiller au bon déroulement des cultes.",
+  { id: "service-ordre", titre: "Service d'Ordre, d'Accueil et de Sécurité", desc: "Accueillir les fidèles et veiller au bon déroulement et à la sécurité des cultes.",
     titreEn: "Ushering", descEn: "Welcoming worshippers and ensuring services run smoothly." },
   { id: "securite", titre: "Sécurité", desc: "Assurer la sécurité des fidèles et des lieux de culte.",
     titreEn: "Security", descEn: "Ensuring the safety of the faithful and places of worship." },
@@ -39,6 +39,9 @@ export const departements: Departement[] = [
     titreEn: "Communication", descEn: "Spreading the Gospel through web, video and social media." },
   { id: "comptabilite", titre: "Comptabilité", desc: "Gérer avec transparence les finances de l'Église.",
     titreEn: "Accounting", descEn: "Managing the Church's finances with transparency." },
+  { id: "protocolat", titre: "Protocolat", desc: "Organiser le protocole et le cérémonial des événements de l'Église.",
+    titreEn: "Protocol", descEn: "Organize the protocol and ceremony of church events.",
+    icone: ClipboardCheck },
   { id: "social", titre: "Social", desc: "Servir la communauté par des actions de solidarité et d'entraide.",
     titreEn: "Social", descEn: "Serving the community through solidarity and mutual aid." },
 ];

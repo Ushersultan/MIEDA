@@ -1119,8 +1119,8 @@ export const eglises: Eglise[] = [
   },
   {
     id: "macao",
-    nom: "MIEDA Macao",
-    ville: "Macao",
+    nom: "MIEDA MICAO",
+    ville: "MICAO",
     pays: "Côte d'Ivoire",
     drapeau: "🇨🇮",
     continent: "Afrique",

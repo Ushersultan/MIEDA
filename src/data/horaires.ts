@@ -1,9 +1,6 @@
 // ════════════════════════════════════════════════════════════════
 //  MIEDA — Horaires des services (source unique)
-//
-//  Modifiez UNIQUEMENT ce fichier pour changer les horaires :
-//  ils se mettent à jour automatiquement partout sur le site
-//  (page Contact, page Cultes, etc.). Fini les incohérences.
+//  Modifiez UNIQUEMENT ce fichier pour changer les horaires.
 // ════════════════════════════════════════════════════════════════
 
 export interface CreneauHoraire {
@@ -25,13 +22,13 @@ export const horairesServices: CreneauHoraire[] = [
   {
     jour: "Mercredi — Culte de délivrance",
     jourEn: "Wednesday — Deliverance Service",
-    horaire: "09h00–13h00 · dernier mercredi 18h00–21h00",
-    horaireEn: "9:00 AM–1:00 PM · last Wednesday 6:00–9:00 PM",
+    horaire: "09h00–13h00 · dernier mercredi du mois 18h00–21h00",
+    horaireEn: "9:00 AM–1:00 PM · last Wednesday of the month 6:00–9:00 PM",
     icone: "calendar",
   },
   {
-    jour: "Tous les jours 9h00–11h00",
-    jourEn: "Every day 9:00–11:00 AM",
+    jour: "Tous les jours 24h/24",
+    jourEn: "Every day, 24/7",
     horaire: "Église ouverte pour assistance et prière",
     horaireEn: "Church open for assistance and prayer",
     icone: "clock",
