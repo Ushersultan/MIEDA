@@ -144,11 +144,12 @@ header.fixed {
   padding-top: env(safe-area-inset-top);
 }
 
-/* ── Police MIEDA (Bauhaus 93) ──
-   Bauhaus 93 n'est pas libre. On utilise une classe dédiée
-   avec une font-stack qui privilégie Bauhaus si elle est installée
-   sur l'appareil (Windows), puis tombe sur des alternatives proches. */
+/* ── Police MIEDA (Bauhaus 93 style) ──
+   Bauhaus 93 n'est pas libre. On privilégie Bauhaus si elle est
+   installée (Windows), puis des alternatives proches.
+   Le letter-spacing reproduit l'espacement du logo. */
 .font-mieda {
   font-family: "Bauhaus 93", "Bauhaus", "Century Gothic", "Avant Garde", Arial Black, sans-serif;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  font-weight: 900;
 }
