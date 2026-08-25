@@ -106,7 +106,6 @@ const SocialLinks = ({ eglise }: { eglise: Eglise }) => {
   const links = [
     { url: r.facebook, icon: Facebook, label: "Facebook", color: "hover:bg-blue-600" },
     { url: r.youtube, icon: Youtube, label: "YouTube", color: "hover:bg-red-600" },
-    { url: r.tiktok, icon: TikTokIcon, label: "TikTok", color: "hover:bg-black" },
     { url: r.instagram, icon: Instagram, label: "Instagram", color: "hover:bg-pink-600" },
   ].filter((l) => l.url);
   if (!links.length) return null;
