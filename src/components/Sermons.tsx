@@ -338,8 +338,8 @@ const CulteYamoussoukro = () => (
           Culte Yamoussoukro
         </h3>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          Le Temple mère de la MIEDA à Yamoussoukro en Côte d'Ivoire, sous la direction du Révérend Docteur Prophète Djeha Kouadio. Rejoignez-nous sur place chaque dimanche, ou suivez la retransmission en direct sur YouTube.
-          sous la direction du Révérend Docteur Prophète Djeha Kouadio. Rejoignez-nous
+          Le Temple mère de la MIEDA à Yamoussoukro en Côte d'Ivoire, sous la direction du Révérend Docteur Prophète DJEHA Kouadio. Rejoignez-nous sur place chaque dimanche, ou suivez la retransmission en direct sur YouTube.
+          sous la direction du Révérend Docteur Prophète DJEHA Kouadio. Rejoignez-nous
           sur place chaque dimanche, ou suivez la retransmission en direct sur YouTube.
         </p>
 
@@ -506,7 +506,7 @@ const Sermons = () => {
             Rejoignez le Culte
           </h2>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-            Révérend Docteur Prophète Djeha Kouadio — Sur place, en direct YouTube
+            Révérend Docteur Prophète DJEHA Kouadio — Sur place, en direct YouTube
             ou en ligne sur Zoom : adorons ensemble, où que vous soyez.
           </p>
         </div>

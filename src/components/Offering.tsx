@@ -11,7 +11,7 @@ import { useLang } from "@/contexts/LanguageContext";
 const TXT = {
   fr: {
     badge: "Faire un don",
-    titre: "Soutenez la mission de Dieu",
+    titre: "Soutenez la Mission de Dieu",
     para: "Vos dons permettent à la MIEDA de poursuivre son œuvre d'évangélisation, d'enseignement et de délivrance à travers le monde.",
 
     citation: "« Que chacun donne comme il l'a résolu en son cœur, sans tristesse ni contrainte ; car Dieu aime celui qui donne avec joie. »",

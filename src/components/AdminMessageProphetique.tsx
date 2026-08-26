@@ -53,7 +53,7 @@ const AdminMessageProphetique = () => {
   const [referenceEn, setReferenceEn] = useState("");
   const [instruction, setInstruction] = useState("À lire 3 fois par jour cette semaine");
   const [instructionEn, setInstructionEn] = useState("To be read 3 times a day this week");
-  const [auteur, setAuteur] = useState("Rév. Dr Prophète Djeha Kouadio");
+  const [auteur, setAuteur] = useState("Rév. Dr Prophète DJEHA Kouadio");
   const [versetsFr, setVersetsFr] = useState("");
   const [versetsEn, setVersetsEn] = useState("");
   const [couleur, setCouleur] = useState("gold");
