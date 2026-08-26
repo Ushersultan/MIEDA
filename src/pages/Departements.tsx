@@ -1,8 +1,7 @@
 import {
   Music, HandHelping, Megaphone, Flame, Church, Sparkles, Users, UserRound,
   BookOpen, HeartPulse, SprayCan, ClipboardCheck, ShieldCheck, Radio,
-  Calculator, HeartHandshake, GraduationCap,
-} from "lucide-react";
+  Calculator, HeartHandshake, GraduationCap, Phone } from "lucide-react";
 import { departements as departementsData, titreDept, descDept } from "@/data/departements";
 import { useLang } from "@/contexts/LanguageContext";
 import Reveal from "@/components/Reveal";
@@ -18,6 +17,7 @@ const icones: Record<string, any> = {
 
 const buildDepartements = (lang: "fr" | "en") => departementsData.map((d) => ({
   icon: icones[d.id] ?? Users, title: titreDept(d, lang), desc: descDept(d, lang),
+  contacts: d.contacts,
 }));
 
 const INSTITUTS = {
@@ -34,7 +34,7 @@ const INSTITUTS = {
 const TXT = {
   fr: {
     titre: "Départements & Instituts",
-    sous: "Les ministères et formations qui font vivre la mission MIEDA au quotidien.",
+    sous: "Les ministères et formations qui font vivre la Mission MIEDA au quotidien.",
     badge1: "Nos Départements", h2a: "Servir ensemble",
     badge2: "Nos Instituts", h2b: "Se former, grandir, servir",
   },
@@ -79,6 +79,18 @@ const Departements = () => {
                 </div>
                 <h3 className="font-semibold text-foreground text-lg mb-2">{d.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{d.desc}</p>
+                {d.contacts && d.contacts.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-border space-y-2">
+                    {d.contacts.map((c) => (
+                      <a key={c.tel} href={`tel:${c.tel.replace(/\s/g, "")}`}
+                        className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors">
+                        <Phone className="w-4 h-4 text-primary flex-shrink-0" />
+                        <span className="font-medium">{c.nom}</span>
+                        <span className="text-muted-foreground ml-auto">{c.tel}</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
               </Reveal>
             ))}

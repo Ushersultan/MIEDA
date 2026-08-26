@@ -25,7 +25,7 @@ const TXT = {
     equipe: "Équipe pastorale",
     chaine: "Voir les cultes en direct / la chaîne",
     implanter: "Vous souhaitez implanter une église MIEDA ?",
-    implanterSous: "Contactez-nous pour rejoindre la mission et ouvrir un lieu de culte dans votre ville.",
+    implanterSous: "Contactez-nous pour rejoindre la Mission et ouvrir un lieu de culte dans votre ville.",
     contacter: "Nous contacter",
     siege: "Siège",
   },

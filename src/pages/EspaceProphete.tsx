@@ -235,7 +235,7 @@ const EspaceProphete = () => {
             {tab === "monde" && (
               <div className="space-y-8">
                 <p className="text-sm text-muted-foreground">
-                  Vue d'ensemble de la mission MIEDA à travers le monde
+                  Vue d'ensemble de la Mission MIEDA à travers le monde
                 </p>
 
                 {/* Grands nombres */}

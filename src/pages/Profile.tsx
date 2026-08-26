@@ -558,7 +558,7 @@ const Profile = () => {
                     className="p-4 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors text-left">
                     <Heart className="w-5 h-5 text-primary mb-2" />
                     <p className="text-sm font-medium text-foreground">Faire un don</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">Soutenir la mission</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Soutenir la Mission</p>
                   </button>
                 </div>
               </div>

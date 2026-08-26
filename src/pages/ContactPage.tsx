@@ -8,7 +8,7 @@ const rendezVous = [
   {
     icon: Crown,
     nom: "Papa Prophète",
-    titre: "Rév. Dr Prophète Djeha Kouadio — Président Fondateur",
+    titre: "Rév. Dr Prophète DJEHA Kouadio — Président Fondateur",
     detail: "Les rendez-vous avec Papa Prophète ont lieu tous les lundis.",
     badge: "Tous les lundis",
     lien: "https://scheduler.zoom.us/mieda-usa/entretiensprives",

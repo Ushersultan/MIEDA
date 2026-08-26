@@ -92,7 +92,7 @@ const Evenements = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Programme Spirituel</h1>
           <p className="text-lg text-white/85 max-w-2xl mx-auto mb-8">
             Le calendrier des activités spirituelles de la MIEDA pour l'année 2026.
-            Vivons ensemble chaque temps fort de la mission.
+            Vivons ensemble chaque temps fort de la Mission.
           </p>
           <div className="flex justify-center gap-4">
             <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-4 min-w-[120px]">

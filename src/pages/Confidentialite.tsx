@@ -79,7 +79,7 @@ const Confidentialite = () => {
               <ul>
                 <li>Vous-même, dans votre espace personnel.</li>
                 <li>Le pasteur et les responsables de votre église, pour l'accompagnement spirituel.</li>
-                <li>L'administration de MIEDA, pour la gestion de la mission.</li>
+                <li>L'administration de MIEDA, pour la gestion de la Mission.</li>
               </ul>
               <p>
                 Votre nom et votre photo de profil peuvent apparaître publiquement uniquement

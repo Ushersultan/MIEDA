@@ -72,7 +72,7 @@ const APropos = () => {
               <div className="absolute -inset-3 rounded-3xl opacity-20 blur-2xl" style={{ background: "var(--hero-gradient)" }} />
               <img
                 src={papa}
-                alt="Révérend Docteur Prophète Djeha Kouadio"
+                alt="Révérend Docteur Prophète DJEHA Kouadio"
                 className="relative w-full max-w-[280px] rounded-2xl object-cover shadow-lg ring-1 ring-border"
               />
             </div>
