@@ -213,9 +213,9 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Communication</h3>
                     <p className="text-muted-foreground">
-                      Ancien Ulrich : +225 05 55 35 85 69
+                      +225 05 55 35 85 69
                       <br />
-                      Diacre Simplice Emar : +225 07 57 83 69 52
+                      +225 07 57 83 69 52
                     </p>
                   </div>
                 </div>
