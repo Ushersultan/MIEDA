@@ -6,12 +6,13 @@ export interface Departement {
   desc: string;
   titreEn: string;
   descEn: string;
+  contacts?: { nom: string; tel: string }[];
 }
 
 export const departements: Departement[] = [
   { id: "louange", titre: "Louange", desc: "Conduire l'assemblée dans l'adoration par le chant et la musique.",
     titreEn: "Worship", descEn: "Leading the assembly in adoration through song and music." },
-  { id: "intercession", titre: "Intercession", desc: "Soutenir la mission et les fidèles par une prière fervente et constante.",
+  { id: "intercession", titre: "Intercession", desc: "Soutenir la Mission et les fidèles par une prière fervente et constante.",
     titreEn: "Intercession", descEn: "Supporting the mission and the faithful through fervent, constant prayer." },
   { id: "evangelisation", titre: "Évangélisation", desc: "Annoncer la Bonne Nouvelle de Jésus-Christ et gagner des âmes.",
     titreEn: "Evangelism", descEn: "Proclaiming the Good News of Jesus Christ and winning souls." },
@@ -36,7 +37,11 @@ export const departements: Departement[] = [
   { id: "securite", titre: "Sécurité", desc: "Assurer la sécurité des fidèles et des lieux de culte.",
     titreEn: "Security", descEn: "Ensuring the safety of the faithful and places of worship." },
   { id: "communication", titre: "Communication", desc: "Diffuser l'Évangile via le web, la vidéo et les réseaux sociaux.",
-    titreEn: "Communication", descEn: "Spreading the Gospel through web, video and social media." },
+    titreEn: "Communication", descEn: "Spreading the Gospel through web, video and social media.",
+    contacts: [
+      { nom: "Ancien Ulrich", tel: "+225 05 55 35 85 69" },
+      { nom: "Diacre Simplice Emar", tel: "+225 07 57 83 69 52" },
+    ] },
   { id: "comptabilite", titre: "Comptabilité", desc: "Gérer avec transparence les finances de l'Église.",
     titreEn: "Accounting", descEn: "Managing the Church's finances with transparency." },
   { id: "protocolat", titre: "Protocolat", desc: "Organiser le protocole et le cérémonial des événements de l'Église.",
