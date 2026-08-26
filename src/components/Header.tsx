@@ -100,8 +100,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Logo MIEDA" className="h-12 w-auto" />
-            <span className="text-2xl font-bold font-mieda" style={{ color: "#1a7a2e" }}>MIEDA</span>
+            <img src={logo} alt="MIEDA" className="h-14 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
