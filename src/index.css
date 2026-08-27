@@ -153,3 +153,79 @@ header.fixed {
   font-weight: 700;
   letter-spacing: 0.04em;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   TOUCHES MODERNES — MIEDA
+   ═══════════════════════════════════════════════════════════ */
+
+/* Animation de pulsation lente (halos décoratifs) */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
+/* Texte en dégradé (titres accrocheurs) */
+.text-gradient {
+  background: linear-gradient(120deg, hsl(var(--primary)), hsl(var(--accent)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.text-gradient-gold {
+  background: linear-gradient(120deg, hsl(var(--secondary)), hsl(var(--highlight)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Effet verre dépoli (glassmorphism) */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Ombre douce et moderne pour les cartes */
+.shadow-soft {
+  box-shadow: 0 4px 24px -8px hsl(var(--primary) / 0.15);
+}
+.shadow-glow {
+  box-shadow: 0 8px 32px -8px hsl(var(--primary) / 0.35);
+}
+
+/* Carte moderne avec survol élégant */
+.card-modern {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-modern:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px -12px hsl(var(--primary) / 0.3);
+}
+
+/* Bordure en dégradé animée */
+.border-gradient {
+  position: relative;
+  background: hsl(var(--card));
+  border-radius: var(--radius);
+}
+.border-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(120deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.border-gradient:hover::before {
+  opacity: 1;
+}
