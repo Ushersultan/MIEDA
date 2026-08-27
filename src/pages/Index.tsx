@@ -27,7 +27,7 @@ const Index = () => {
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4 max-w-6xl">
           <Reveal className="text-center mb-14">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
               {t("accueil.explorer.titre")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -40,7 +40,7 @@ const Index = () => {
               <Reveal key={item.title} direction="up" delay={i * 90}>
               <Link
                 to={item.to}
-                className="group flex items-center gap-5 bg-card border border-border rounded-2xl p-6 hover:border-primary/50 hover:shadow-lg transition-all hover:-translate-y-1"
+                className="group flex items-center gap-5 bg-card border border-border rounded-3xl p-6 shadow-soft card-modern hover:border-primary/40"
               >
                 <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                   <item.icon className={`w-7 h-7 ${item.color}`} />
