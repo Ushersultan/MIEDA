@@ -5,6 +5,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import paypalQr from "@/assets/paypal-qr.png";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLang } from "@/contexts/LanguageContext";
 
 // ── Textes bilingues — 100 % « don » ──
@@ -299,143 +301,184 @@ const PayPalForm = ({ L }: { L: typeof TXT.fr }) => {
 const Offering = () => {
   const { lang } = useLang();
   const L = TXT[lang];
+  const [montant, setMontant] = useState("");
+  const [affectation, setAffectation] = useState("");
+  const [ouvert, setOuvert] = useState(false);
+  const MONTANTS = ["5", "10", "25", "50", "100"];
+
+  const donnerPaypal = () => {
+    const somme = montant && Number(montant) > 0 ? montant : "";
+    const desc = affectation ? `Don MIEDA — ${affectation}` : "Don MIEDA";
+    window.open(buildPayPalUrl(somme, desc), "_blank");
+  };
+
   return (
-    <section id="offrandes" className="py-24 bg-muted/30">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-12 items-start mb-14">
+    <section id="offrandes" className="py-24 bg-gradient-to-b from-muted/30 to-background">
+      <div className="container mx-auto px-4 max-w-3xl text-center">
 
-          {/* ── Côté gauche — Texte ── */}
-          <div className="lg:sticky lg:top-24">
-            <div className="inline-block px-4 py-2 bg-secondary/20 rounded-full mb-6">
-              <span className="text-sm font-semibold text-secondary-foreground flex items-center gap-2">
-                <HandHeart className="w-4 h-4" />
-                {L.badge}
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              {L.titre}
-            </h2>
-            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              {L.para}
-            </p>
-            <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground mb-8">
-              {L.citation}
-              <br />
-              <span className="text-sm not-italic font-medium text-foreground mt-2 block">
-                {L.citationRef}
-              </span>
-            </blockquote>
-
-            {/* Sécurité */}
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-background border border-border">
-              <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                <svg viewBox="0 0 24 24" className="w-5 h-5 text-blue-500" fill="currentColor">
-                  <path d="M20.067 8.478c.492.88.556 2.014.3 3.327-.74 3.806-3.276 5.12-6.514 5.12h-.5a.805.805 0 0 0-.794.68l-.04.22-.63 3.993-.032.17a.804.804 0 0 1-.794.679H8.717a.483.483 0 0 1-.477-.558L9.416 12h1.92l-.272 1.718h.005c.17-1.044 1.062-1.818 2.123-1.818h.444c3.071 0 5.476-1.248 6.18-4.854.293-1.504.142-2.757-.749-3.568z"/>
-                  <path d="M17.86 5.665c-.174-.05-.356-.096-.546-.136a6.78 6.78 0 0 0-1.353-.133H11.44a.804.804 0 0 0-.794.68L9.416 12h1.92l.395-2.5.013-.083a.804.804 0 0 1 .794-.68h1.664c3.237 0 5.773-1.314 6.514-5.12.022-.113.042-.223.059-.33a4.052 4.052 0 0 0-2.915-1.622z"/>
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">{L.secur}</p>
-                <p className="text-xs text-muted-foreground">{L.securSous}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Côté droit — Formulaire PayPal ── */}
-          <div className="bg-background rounded-2xl border border-border shadow-lg overflow-hidden">
-            <div className="border-b border-border px-6 py-4">
-              <p className="font-semibold text-foreground flex items-center gap-2">
-                <Heart className="w-4 h-4 text-primary" />
-                {L.enLigne}
-              </p>
-            </div>
-            <div className="p-6">
-              <PayPalForm L={L} />
-            </div>
-          </div>
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/20 rounded-full mb-6">
+          <HandHeart className="w-4 h-4 text-secondary-foreground" />
+          <span className="text-sm font-semibold text-secondary-foreground">{L.badge}</span>
         </div>
 
-        {/* ── Autres moyens de faire un don ── */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="flex-1 h-px bg-border" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            {L.autres}
-          </h3>
-          <div className="flex-1 h-px bg-border" />
-        </div>
+        {/* Titre + texte */}
+        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">{L.titre}</h2>
+        <p className="text-lg text-muted-foreground mb-6 leading-relaxed max-w-2xl mx-auto">{L.para}</p>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Virement bancaire USA */}
-          <div className="bg-background rounded-2xl border border-border shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Landmark className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p className="font-semibold text-foreground">{L.virement}</p>
-                <p className="text-xs text-muted-foreground">{L.usa}</p>
-              </div>
-            </div>
-            <div className="divide-y divide-border">
-              <CopyRow label={L.lBanque} value={BANQUE_US.banque} />
-              <CopyRow label={L.lAdresse} value={BANQUE_US.adresse} />
-              <CopyRow label={L.lBenef} value={BANQUE_US.beneficiaire} />
-              <CopyRow label={L.lCompte} value={BANQUE_US.compte} />
-              <CopyRow label={L.lChips} value={BANQUE_US.chipsAba} />
-              <CopyRow label={L.lSwift} value={BANQUE_US.swift} />
-            </div>
-          </div>
+        <blockquote className="italic text-muted-foreground mb-10 max-w-2xl mx-auto">
+          {L.citation}
+          <span className="text-sm not-italic font-medium text-foreground mt-2 block">{L.citationRef}</span>
+        </blockquote>
 
-          {/* Wave */}
-          <div className="bg-background rounded-2xl border border-border shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center">
-                <Smartphone className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <p className="font-semibold text-foreground">Wave</p>
-                <p className="text-xs text-muted-foreground">{L.waveSous}</p>
-              </div>
-            </div>
-            <div className="divide-y divide-border">
-              <CopyRow label={L.lNom} value={WAVE.nom} />
-              <CopyRow label={L.lNumero} value={WAVE.tel} copyValue={WAVE.tel.replace(/\s/g, "")} />
-            </div>
-            <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
-              {L.waveNote}
-            </p>
-          </div>
-
-          {/* IBAN France / International */}
-          <div className="bg-background rounded-2xl border border-border shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-xl bg-secondary/20 flex items-center justify-center">
-                <Globe2 className="w-5 h-5 text-secondary-foreground" />
-              </div>
-              <div>
-                <p className="font-semibold text-foreground">{L.iban}</p>
-                <p className="text-xs text-muted-foreground">{L.france}</p>
-              </div>
-            </div>
-            <div className="divide-y divide-border">
-              <CopyRow label={L.lIban} value={IBAN_FR.iban} copyValue={IBAN_FR.iban.replace(/\s/g, "")} />
-              <CopyRow label={L.lBic} value={IBAN_FR.bic} />
-              <CopyRow label={L.lTitulaire} value={IBAN_FR.titulaire} />
-              <CopyRow label={L.lAdresse} value={IBAN_FR.adresse} />
-            </div>
-            <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
-              {L.ibanNote}
-            </p>
-          </div>
-        </div>
-
-        <p className="text-center text-sm text-muted-foreground mt-10">
-          {L.merci}
+        {/* ── GRAND BOUTON PRINCIPAL ── */}
+        <button
+          onClick={() => setOuvert(true)}
+          className="group inline-flex items-center gap-3 px-10 py-6 rounded-full bg-gradient-to-r from-secondary to-highlight text-primary-foreground text-xl md:text-2xl font-bold shadow-glow hover:scale-105 transition-all"
+          style={{ color: "#3a2a00" }}
+        >
+          <Heart className="w-7 h-7 fill-current group-hover:scale-110 transition-transform" />
+          {lang === "en" ? "DONATE NOW" : "FAIRE UN DON MAINTENANT"}
+        </button>
+        <p className="text-sm text-muted-foreground mt-4">
+          {lang === "en"
+            ? "Choose the payment method that suits you."
+            : "Choisissez le moyen de paiement qui vous convient."}
         </p>
-        <p className="text-center text-sm font-medium text-foreground mt-2">
-          {L.benediction}
-        </p>
+
+        <p className="text-xs text-muted-foreground mt-10 max-w-md mx-auto">{L.merci}</p>
       </div>
+
+      {/* ── FENÊTRE MODALE — moyens de paiement ── */}
+      <Dialog open={ouvert} onOpenChange={setOuvert}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-2xl">
+              <Heart className="w-6 h-6 text-highlight fill-highlight" />
+              {L.enLigne}
+            </DialogTitle>
+          </DialogHeader>
+
+          <Tabs defaultValue="paypal" className="mt-2">
+            <TabsList className="grid grid-cols-4 w-full">
+              <TabsTrigger value="paypal">PayPal</TabsTrigger>
+              <TabsTrigger value="usa">🇺🇸 USA</TabsTrigger>
+              <TabsTrigger value="wave">Wave</TabsTrigger>
+              <TabsTrigger value="iban">IBAN</TabsTrigger>
+            </TabsList>
+
+            {/* ── PayPal (en premier) ── */}
+            <TabsContent value="paypal" className="space-y-4 pt-4">
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">{L.rapide}</p>
+                <div className="grid grid-cols-5 gap-2">
+                  {MONTANTS.map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setMontant(m)}
+                      className={`py-2 rounded-lg border text-sm font-semibold transition-colors ${
+                        montant === m
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-background border-input hover:border-primary"
+                      }`}
+                    >
+                      ${m}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">{L.ou}</p>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <input
+                    type="number" min="0" placeholder="0.00" value={montant}
+                    onChange={(e) => setMontant(e.target.value)}
+                    className="w-full pl-7 pr-4 py-2.5 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">{L.designation}</p>
+                <input
+                  type="text" placeholder={L.designationPh} value={affectation}
+                  onChange={(e) => setAffectation(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <Button onClick={donnerPaypal} className="w-full py-6 text-base rounded-xl" size="lg">
+                <Heart className="w-5 h-5 mr-1 fill-current" />
+                {L.donner} {montant && Number(montant) > 0 ? `$${montant} ` : ""}{L.via}
+              </Button>
+
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/40 border border-border">
+                <img src={paypalQr} alt="QR PayPal" className="w-24 h-24 rounded-lg flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground mb-1">{L.scan}</p>
+                  <p className="text-xs text-muted-foreground">{L.scanSous}</p>
+                </div>
+              </div>
+              <p className="text-xs text-center text-muted-foreground">{L.redirect}</p>
+            </TabsContent>
+
+            {/* ── Virement USA ── */}
+            <TabsContent value="usa" className="pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Landmark className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-semibold text-foreground">{L.virement}</p>
+                  <p className="text-xs text-muted-foreground">{L.usa}</p>
+                </div>
+              </div>
+              <div className="divide-y divide-border">
+                <CopyRow label={L.lBanque} value={BANQUE_US.banque} />
+                <CopyRow label={L.lAdresse} value={BANQUE_US.adresse} />
+                <CopyRow label={L.lBenef} value={BANQUE_US.beneficiaire} />
+                <CopyRow label={L.lCompte} value={BANQUE_US.compte} />
+                <CopyRow label={L.lChips} value={BANQUE_US.chipsAba} />
+                <CopyRow label={L.lSwift} value={BANQUE_US.swift} />
+              </div>
+            </TabsContent>
+
+            {/* ── Wave ── */}
+            <TabsContent value="wave" className="pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Smartphone className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-semibold text-foreground">Wave</p>
+                  <p className="text-xs text-muted-foreground">{L.waveSous}</p>
+                </div>
+              </div>
+              <div className="divide-y divide-border">
+                <CopyRow label={L.lNom} value={WAVE.nom} />
+                <CopyRow label={L.lNumero} value={WAVE.tel} copyValue={WAVE.tel.replace(/\s/g, "")} />
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">{L.waveNote}</p>
+            </TabsContent>
+
+            {/* ── IBAN ── */}
+            <TabsContent value="iban" className="pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Landmark className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-semibold text-foreground">{L.iban}</p>
+                  <p className="text-xs text-muted-foreground">{L.france}</p>
+                </div>
+              </div>
+              <div className="divide-y divide-border">
+                <CopyRow label={L.lIban} value={IBAN_FR.iban} copyValue={IBAN_FR.iban.replace(/\s/g, "")} />
+                <CopyRow label={L.lBic} value={IBAN_FR.bic} />
+                <CopyRow label={L.lTitulaire} value={IBAN_FR.titulaire} />
+                <CopyRow label={L.lAdresse} value={IBAN_FR.adresse} />
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">{L.ibanNote}</p>
+            </TabsContent>
+          </Tabs>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
