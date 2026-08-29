@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Lock, User as UserIcon, MapPin, ArrowLeft, Loader2, Church, KeyRound, ShieldCheck } from "lucide-react";
+import { Mail, Lock, User as UserIcon, MapPin, ArrowLeft, Loader2, Church, KeyRound, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import { eglisesGroupees } from "@/lib/serviteurs";
 import logo from "@/assets/mieda-logo.png";
 
@@ -26,6 +26,8 @@ const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [fullName, setFullName] = useState("");
   const [ville, setVille] = useState("");
   const [pays, setPays] = useState("");
@@ -43,6 +45,37 @@ const Auth = () => {
   useEffect(() => {
     if (user) navigate("/profil");
   }, [user, navigate]);
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Email requis",
+        description: "Entrez votre adresse email puis cliquez sur « Mot de passe oublié ».",
+        variant: "destructive",
+      });
+      return;
+    }
+    setResetLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://www.eglisesmieda.org/auth?reset=1",
+      });
+      if (error) throw error;
+      toast({
+        title: "Email envoyé 📧",
+        description:
+          "Si un compte existe pour cette adresse, un lien de réinitialisation vient d'être envoyé. Vérifiez votre boîte (et les spams).",
+      });
+    } catch (err: any) {
+      toast({
+        title: "Erreur",
+        description: err.message || "Impossible d'envoyer l'email de réinitialisation.",
+        variant: "destructive",
+      });
+    } finally {
+      setResetLoading(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -199,13 +232,34 @@ const Auth = () => {
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full pl-10 pr-11 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
+
+            {mode === "login" && (
+              <div className="text-right -mt-1">
+                <button
+                  type="button"
+                  onClick={handleResetPassword}
+                  disabled={resetLoading}
+                  className="text-sm text-primary hover:underline disabled:opacity-50"
+                >
+                  {resetLoading ? "Envoi..." : "Mot de passe oublié ?"}
+                </button>
+              </div>
+            )}
 
             {mode === "signup" && (
               <div className="grid grid-cols-2 gap-3">
