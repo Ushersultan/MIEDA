@@ -272,6 +272,27 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
   const [egliseOuverte, setEgliseOuverte] = useState<string | null>(null);
   const [rechercheEglise, setRechercheEglise] = useState("");
 
+  const changerRole = async (cibleId: string, nouveauRole: string, nom: string) => {
+    const libelle: Record<string, string> = {
+      membre: "Membre", pasteur: "Pasteur", prophete: "Prophète", admin: "Administrateur",
+    };
+    if (!window.confirm(`Confirmer : donner le rôle « ${libelle[nouveauRole]} » à ${nom} ?`)) return;
+    try {
+      const { error } = await supabase.rpc("changer_role", {
+        cible_id: cibleId, nouveau_role: nouveauRole,
+      });
+      if (error) throw error;
+      setProfils((prev) => prev.map((p) => (p.id === cibleId ? { ...p, role: nouveauRole } : p)));
+      toast({ title: "Rôle mis à jour ✓", description: `${nom} est maintenant ${libelle[nouveauRole]}.` });
+    } catch (err: any) {
+      toast({
+        title: "Erreur",
+        description: err.message || "Impossible de changer le rôle.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const parEglise = useMemo(() => {
     const map = new Map<string, { pasteurs: Profil[]; membres: Profil[] }>();
     for (const p of profils) {
@@ -867,7 +888,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
                                   </p>
                                   <div className="space-y-1.5">
                                     {groupe!.pasteurs.map((p) => (
-                                      <FideleRow key={p.id} p={p} accent />
+                                      <FideleRow key={p.id} p={p} accent onChangeRole={changerRole} />
                                     ))}
                                   </div>
                                 </div>
@@ -879,7 +900,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
                                   </p>
                                   <div className="space-y-1.5">
                                     {groupe!.membres.map((p) => (
-                                      <FideleRow key={p.id} p={p} />
+                                      <FideleRow key={p.id} p={p} onChangeRole={changerRole} />
                                     ))}
                                   </div>
                                 </div>
@@ -1010,7 +1031,11 @@ const LigneAnniversaire = ({
 };
 
 // ── Ligne d'un fidèle / serviteur (vue Admin par église) ──
-const FideleRow = ({ p, accent = false }: { p: Profil; accent?: boolean }) => {
+const FideleRow = ({ p, accent = false, onChangeRole }: {
+  p: Profil;
+  accent?: boolean;
+  onChangeRole?: (cibleId: string, nouveauRole: string, nom: string) => void;
+}) => {
   const tel = (p.phone ?? "").replace(/[^+\d]/g, "");
   return (
     <div className={`flex items-center gap-3 p-2.5 rounded-lg ${accent ? "bg-primary/5" : "bg-muted/30"}`}>
@@ -1024,15 +1049,25 @@ const FideleRow = ({ p, accent = false }: { p: Profil; accent?: boolean }) => {
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-foreground truncate">
           {p.full_name || "(sans nom)"}
-          {p.role !== "membre" && (
-            <span className="text-[10px] font-semibold text-primary ml-2 uppercase">{p.role}</span>
-          )}
         </p>
         <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
           {p.ville && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{p.ville}</span>}
           {p.pays && p.pays !== p.ville && <span>· {p.pays}</span>}
         </p>
       </div>
+      {onChangeRole && (
+        <select
+          value={p.role}
+          onChange={(e) => onChangeRole(p.id, e.target.value, p.full_name || "ce compte")}
+          className="text-xs rounded-lg border border-input bg-background px-2 py-1.5 text-foreground focus:outline-none focus:ring-2 focus:ring-primary flex-shrink-0 cursor-pointer"
+          title="Changer le rôle"
+        >
+          <option value="membre">Membre</option>
+          <option value="pasteur">Pasteur</option>
+          <option value="prophete">Prophète</option>
+          <option value="admin">Admin</option>
+        </select>
+      )}
       {tel && (
         <>
           <a href={"tel:" + tel}
