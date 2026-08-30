@@ -1,6 +1,7 @@
 import { Target, Eye, Heart, BookOpen, Globe2, Users } from "lucide-react";
 import logo from "@/assets/mieda-logo.png";
 import papa from "@/assets/Papa.jpeg";
+import ZoomableImage from "@/components/ZoomableImage";
 
 const valeurs = [
   { icon: BookOpen, title: "La Parole de Dieu", desc: "Un enseignement biblique solide qui transforme les vies et édifie la foi." },
@@ -70,10 +71,11 @@ const APropos = () => {
             {/* Photo du fondateur */}
             <div className="relative mx-auto md:mx-0">
               <div className="absolute -inset-3 rounded-3xl opacity-20 blur-2xl" style={{ background: "var(--hero-gradient)" }} />
-              <img
+              <ZoomableImage
                 src={papa}
                 alt="Révérend Docteur Prophète DJEHA Kouadio"
                 className="relative w-full max-w-[280px] rounded-2xl object-cover shadow-lg ring-1 ring-border"
+                buttonClassName="relative max-w-[280px]"
               />
             </div>
 
