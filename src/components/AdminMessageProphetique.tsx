@@ -49,6 +49,7 @@ const dansNJours = (n: number) => {
 const AdminMessageProphetique = () => {
   const { toast } = useToast();
 
+  const [typeContenu, setTypeContenu] = useState<"biblique" | "libre">("biblique");
   const [reference, setReference] = useState("");
   const [referenceEn, setReferenceEn] = useState("");
   const [instruction, setInstruction] = useState("À lire 3 fois par jour cette semaine");
@@ -64,6 +65,21 @@ const AdminMessageProphetique = () => {
   const [publication, setPublication] = useState(false);
   const [apercu, setApercu] = useState(false);
   const [historique, setHistorique] = useState<MessageDb[]>([]);
+
+  const changerType = (type: "biblique" | "libre") => {
+    setTypeContenu(type);
+    setReference("");
+    setReferenceEn("");
+    setVersetsFr("");
+    setVersetsEn("");
+    if (type === "libre") {
+      setInstruction("");
+      setInstructionEn("");
+    } else {
+      setInstruction("À lire 3 fois par jour cette semaine");
+      setInstructionEn("To be read 3 times a day this week");
+    }
+  };
 
   const chargerHistorique = useCallback(async () => {
     const { data } = await supabase
@@ -128,10 +144,13 @@ const AdminMessageProphetique = () => {
   // ── Publier : archive les anciens, active le nouveau ──
   const publier = async () => {
     const lignesFr = versetsFr.split("\n").map((l) => l.trim()).filter(Boolean);
-    if (!reference.trim() || lignesFr.length === 0) {
+    const referenceFinale = reference.trim() || (typeContenu === "libre" ? "Parole du Prophète" : "");
+    if (!referenceFinale || lignesFr.length === 0) {
       toast({
         title: "Message incomplet",
-        description: "Une référence et au moins un verset sont nécessaires.",
+        description: typeContenu === "libre"
+          ? "Écrivez au moins le message en français. Le titre peut rester vide."
+          : "Une référence et au moins un verset sont nécessaires.",
         variant: "destructive",
       });
       return;
@@ -145,7 +164,7 @@ const AdminMessageProphetique = () => {
         .update({ actif: false }).eq("actif", true);
 
       const { error } = await supabase.from("messages_prophetiques").insert({
-        reference: reference.trim(),
+        reference: referenceFinale,
         reference_en: referenceEn.trim() || null,
         auteur: auteur.trim(),
         instruction: instruction.trim(),
@@ -205,32 +224,74 @@ const AdminMessageProphetique = () => {
 
   return (
     <div className="space-y-6">
+      {/* ── Nature de la publication ── */}
+      <div className="grid sm:grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => changerType("biblique")}
+          className={`rounded-xl border p-4 text-left transition-colors ${
+            typeContenu === "biblique"
+              ? "border-primary bg-primary/10 ring-1 ring-primary"
+              : "border-border bg-card hover:border-primary/50"
+          }`}
+        >
+          <p className="font-semibold text-foreground flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-primary" /> Passage biblique
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Charger automatiquement un chapitre de la Bible.
+          </p>
+        </button>
+        <button
+          type="button"
+          onClick={() => changerType("libre")}
+          className={`rounded-xl border p-4 text-left transition-colors ${
+            typeContenu === "libre"
+              ? "border-primary bg-primary/10 ring-1 ring-primary"
+              : "border-border bg-card hover:border-primary/50"
+          }`}
+        >
+          <p className="font-semibold text-foreground flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary" /> Message personnel du Prophète
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Écrire librement une exhortation, une déclaration ou une pensée.
+          </p>
+        </button>
+      </div>
+
       {/* ── Référence + chargement automatique ── */}
       <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
         <p className="text-sm font-semibold text-foreground flex items-center gap-2 mb-1">
-          <BookOpen className="w-4 h-4 text-primary" /> Message de la semaine
+          {typeContenu === "biblique"
+            ? <><BookOpen className="w-4 h-4 text-primary" /> Passage de la semaine</>
+            : <><Sparkles className="w-4 h-4 text-primary" /> Message personnel de la semaine</>}
         </p>
         <p className="text-xs text-muted-foreground mb-4">
-          Saisissez le livre et le chapitre — les versets se chargent automatiquement
-          en français (Louis Segond) et en anglais (King James).
+          {typeContenu === "biblique"
+            ? "Saisissez le livre et le chapitre — les versets se chargent automatiquement en français (Louis Segond) et en anglais (King James)."
+            : "Donnez un titre à votre message, puis écrivez librement son contenu plus bas."}
         </p>
         <div className="flex gap-2 flex-wrap">
           <input type="text" value={reference}
             onChange={(e) => setReference(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && chargerVersets()}
-            placeholder="Psaume 91"
+            onKeyDown={(e) => typeContenu === "biblique" && e.key === "Enter" && chargerVersets()}
+            placeholder={typeContenu === "biblique" ? "Psaume 91" : "Ex. Une parole d'espérance"}
             className="flex-1 min-w-[200px] px-3 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" />
-          <Button onClick={chargerVersets} disabled={chargement || !reference.trim()}>
-            {chargement
-              ? <Loader2 className="w-4 h-4 animate-spin" />
-              : <><Download className="w-4 h-4 mr-1.5" /> Charger les versets</>}
-          </Button>
+          {typeContenu === "biblique" && (
+            <Button onClick={chargerVersets} disabled={chargement || !reference.trim()}>
+              {chargement
+                ? <Loader2 className="w-4 h-4 animate-spin" />
+                : <><Download className="w-4 h-4 mr-1.5" /> Charger les versets</>}
+            </Button>
+          )}
         </div>
       </div>
 
       {/* ── Détails ── */}
       <div className="grid md:grid-cols-2 gap-4">
-        {champ("Référence anglaise", referenceEn, setReferenceEn, "Psalm 91")}
+        {champ(typeContenu === "biblique" ? "Référence anglaise" : "Titre anglais", referenceEn, setReferenceEn,
+          typeContenu === "biblique" ? "Psalm 91" : "A word of hope")}
         {champ("Auteur", auteur, setAuteur)}
         {champ("Instruction (français)", instruction, setInstruction)}
         {champ("Instruction (anglais)", instructionEn, setInstructionEn)}
@@ -273,21 +334,27 @@ const AdminMessageProphetique = () => {
       <div className="grid md:grid-cols-2 gap-4">
         <div>
           <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center justify-between">
-            <span>Versets — français</span>
-            <span className={nbFr > 0 ? "text-primary" : ""}>{nbFr} verset(s)</span>
+            <span>{typeContenu === "biblique" ? "Versets — français" : "Message — français"}</span>
+            <span className={nbFr > 0 ? "text-primary" : ""}>{nbFr} {typeContenu === "biblique" ? "verset(s)" : "paragraphe(s)"}</span>
           </label>
           <textarea value={versetsFr} onChange={(e) => setVersetsFr(e.target.value)}
-            rows={12} placeholder={"1 — Celui qui demeure sous l'abri du Très-Haut...\n2 — Je dis à l'Éternel : Mon refuge..."}
+            rows={12} placeholder={typeContenu === "biblique"
+              ? "1 — Celui qui demeure sous l'abri du Très-Haut...\n2 — Je dis à l'Éternel : Mon refuge..."
+              : "Bien-aimés dans le Seigneur, je voudrais vous encourager aujourd'hui..."}
             className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-foreground text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary resize-y" />
-          <p className="text-[11px] text-muted-foreground mt-1">Un verset par ligne.</p>
+          <p className="text-[11px] text-muted-foreground mt-1">
+            {typeContenu === "biblique" ? "Un verset par ligne." : "Un paragraphe par ligne. Le français est obligatoire."}
+          </p>
         </div>
         <div>
           <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center justify-between">
-            <span>Versets — anglais</span>
-            <span className={nbEn > 0 ? "text-primary" : ""}>{nbEn} verse(s)</span>
+            <span>{typeContenu === "biblique" ? "Versets — anglais" : "Message — anglais"}</span>
+            <span className={nbEn > 0 ? "text-primary" : ""}>{nbEn} {typeContenu === "biblique" ? "verse(s)" : "paragraph(s)"}</span>
           </label>
           <textarea value={versetsEn} onChange={(e) => setVersetsEn(e.target.value)}
-            rows={12} placeholder={"1 — He that dwelleth in the secret place..."}
+            rows={12} placeholder={typeContenu === "biblique"
+              ? "1 — He that dwelleth in the secret place..."
+              : "Beloved in the Lord, I would like to encourage you today..."}
             className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-foreground text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary resize-y" />
           <p className="text-[11px] text-muted-foreground mt-1">Facultatif — le site retombe sur le français.</p>
         </div>
