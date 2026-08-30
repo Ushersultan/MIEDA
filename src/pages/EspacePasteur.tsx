@@ -14,6 +14,7 @@ import {
 import { nomEglise } from "@/lib/serviteurs";
 import { departements } from "@/data/departements";
 import { useLang } from "@/contexts/LanguageContext";
+import ZoomableImage from "@/components/ZoomableImage";
 
 type Tab = "tableau" | "prieres" | "annonces" | "membres" | "demandes";
 
@@ -644,15 +645,24 @@ const EspacePasteur = () => {
                       return (
                         <div key={m.id} className="rounded-xl border border-border bg-card overflow-hidden">
                           {/* Ligne repliée */}
-                          <button onClick={() => setMembreOuvert(ouvert ? null : m.id)}
-                            className="w-full flex items-center gap-3 p-3 text-left hover:bg-muted/30 transition-colors">
+                          <div className="flex items-center gap-3 p-3 hover:bg-muted/30 transition-colors">
                             {m.photo_url ? (
-                              <img src={m.photo_url} alt="" className="w-11 h-11 rounded-full object-cover flex-shrink-0" />
+                              <ZoomableImage
+                                src={m.photo_url}
+                                alt={m.full_name || (lang === "en" ? "Member" : "Membre")}
+                                className="w-11 h-11 rounded-full object-cover flex-shrink-0"
+                                buttonClassName="rounded-full flex-shrink-0"
+                              />
                             ) : (
                               <div className="w-11 h-11 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
                                 {initiales(m.full_name)}
                               </div>
                             )}
+                            <button
+                              type="button"
+                              onClick={() => setMembreOuvert(ouvert ? null : m.id)}
+                              className="flex flex-1 min-w-0 items-center gap-3 text-left"
+                            >
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-foreground truncate">
                                 {m.full_name || (lang === "en" ? "Member" : "Membre")}
@@ -666,7 +676,8 @@ const EspacePasteur = () => {
                             </div>
                             {ouvert ? <ChevronDown className="w-4 h-4 flex-shrink-0 text-muted-foreground" />
                                     : <ChevronRight className="w-4 h-4 flex-shrink-0 text-muted-foreground" />}
-                          </button>
+                            </button>
+                          </div>
 
                           {/* Détails dépliés */}
                           {ouvert && (

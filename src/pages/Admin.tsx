@@ -14,6 +14,7 @@ import { eglises, ordreRegions } from "@/data/eglises";
 import AdminMessageProphetique from "@/components/AdminMessageProphetique";
 import { nomEglise } from "@/lib/serviteurs";
 import { apiUrl } from "@/lib/api";
+import ZoomableImage from "@/components/ZoomableImage";
 
 type Tab = "codes" | "membres" | "fideles" | "anniversaires" | "message" | "stats";
 
@@ -699,7 +700,9 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
                   {profilsFiltres.map((p) => (
                     <div key={p.id} className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card">
                       {p.photo_url ? (
-                        <img src={p.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                        <ZoomableImage src={p.photo_url} alt={p.full_name || "Membre"}
+                          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                          buttonClassName="rounded-full flex-shrink-0" />
                       ) : (
                         <div className="w-10 h-10 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
                           {(p.full_name || "?").slice(0, 1).toUpperCase()}
@@ -1002,7 +1005,9 @@ const LigneAnniversaire = ({
       accent ? "border-primary/40 bg-primary/5" : "border-border bg-card"
     }`}>
       {p.photo_url ? (
-        <img src={p.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+        <ZoomableImage src={p.photo_url} alt={p.full_name || "Membre"}
+          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+          buttonClassName="rounded-full flex-shrink-0" />
       ) : (
         <div className="w-10 h-10 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center flex-shrink-0">
           {(p.full_name || "?").slice(0, 1).toUpperCase()}
@@ -1040,7 +1045,9 @@ const FideleRow = ({ p, accent = false, onChangeRole }: {
   return (
     <div className={`flex items-center gap-3 p-2.5 rounded-lg ${accent ? "bg-primary/5" : "bg-muted/30"}`}>
       {p.photo_url ? (
-        <img src={p.photo_url} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+        <ZoomableImage src={p.photo_url} alt={p.full_name || "Membre"}
+          className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+          buttonClassName="rounded-full flex-shrink-0" />
       ) : (
         <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground text-xs font-semibold flex items-center justify-center flex-shrink-0">
           {(p.full_name || "?").slice(0, 1).toUpperCase()}

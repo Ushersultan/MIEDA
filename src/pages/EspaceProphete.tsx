@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { eglises, ordreRegions, type Eglise } from "@/data/eglises";
 import { nomEglise } from "@/lib/serviteurs";
+import ZoomableImage from "@/components/ZoomableImage";
 
 type Tab = "monde" | "eglises" | "prieres";
 
@@ -513,7 +514,12 @@ const EspaceProphete = () => {
 const PersonneRow = ({ p, accent = false }: { p: Profil; accent?: boolean }) => (
   <div className={`flex items-center gap-3 p-2.5 rounded-lg ${accent ? "bg-primary/5" : "bg-muted/30"}`}>
     {p.photo_url ? (
-      <img src={p.photo_url} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+      <ZoomableImage
+        src={p.photo_url}
+        alt={p.full_name || "Membre"}
+        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+        buttonClassName="rounded-full flex-shrink-0"
+      />
     ) : (
       <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground text-xs font-semibold flex items-center justify-center flex-shrink-0">
         {(p.full_name || "?").slice(0, 1).toUpperCase()}
