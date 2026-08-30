@@ -54,7 +54,7 @@ const AdminMessageProphetique = () => {
   const [referenceEn, setReferenceEn] = useState("");
   const [instruction, setInstruction] = useState("À lire 3 fois par jour cette semaine");
   const [instructionEn, setInstructionEn] = useState("To be read 3 times a day this week");
-  const [auteur, setAuteur] = useState("Rév. Dr Prophète DJEHA Kouadio");
+  const [auteur, setAuteur] = useState("La Sainte Bible");
   const [versetsFr, setVersetsFr] = useState("");
   const [versetsEn, setVersetsEn] = useState("");
   const [couleur, setCouleur] = useState("gold");
@@ -73,9 +73,11 @@ const AdminMessageProphetique = () => {
     setVersetsFr("");
     setVersetsEn("");
     if (type === "libre") {
+      setAuteur("Rév. Dr Prophète DJEHA Kouadio");
       setInstruction("");
       setInstructionEn("");
     } else {
+      setAuteur("La Sainte Bible");
       setInstruction("À lire 3 fois par jour cette semaine");
       setInstructionEn("To be read 3 times a day this week");
     }
