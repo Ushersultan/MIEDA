@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { trouverServiteur, lienServiteur } from "@/lib/serviteurs";
+import ZoomableImage from "@/components/ZoomableImage";
 
 const getInitials = (nom: string) => {
   const clean = nom.replace(/^(Révérend|Rév\.|Docteur|Dr\.?|Pasteure?|Prophète|Évangéliste|Evangéliste|Apôtre|Mme|M\.)\s*/gi, "").trim();
@@ -64,8 +65,12 @@ const Serviteur = () => {
 
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6">
             {(pasteur.photo ?? photoCompte) ? (
-              <img src={pasteur.photo ?? photoCompte!} alt={pasteur.nom}
-                className="w-32 h-32 rounded-2xl object-cover ring-4 ring-white/30 shadow-xl" />
+              <ZoomableImage
+                src={pasteur.photo ?? photoCompte!}
+                alt={pasteur.nom}
+                className="w-32 h-32 rounded-2xl object-cover ring-4 ring-white/30 shadow-xl"
+                buttonClassName="flex-shrink-0"
+              />
             ) : (
               <div className="w-32 h-32 rounded-2xl bg-white/15 backdrop-blur-sm ring-4 ring-white/30 flex items-center justify-center text-4xl font-bold shadow-xl">
                 {getInitials(pasteur.nom)}
