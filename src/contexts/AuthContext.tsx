@@ -76,8 +76,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const u = s?.user ?? null;
       setUser(u);
       const nouvelId = u?.id ?? null;
-      // Ne recharge le profil QUE si l'utilisateur a réellement changé
+      // Ne jamais conserver le profil (et donc les droits) du compte précédent
+      // pendant le chargement d'une nouvelle session.
       if (nouvelId !== idCharge.current) {
+        setLoading(true);
+        setProfil(null);
         idCharge.current = nouvelId;
         await loadProfil(u);
       }
@@ -95,6 +98,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return () => { monte = false; subscription.unsubscribe(); };
   }, [loadProfil]);
+
+  // Récupère aussi les changements de rôle effectués par un administrateur
+  // lorsque l'utilisateur revient sur l'application.
+  useEffect(() => {
+    if (!user) return;
+    const rafraichir = () => {
+      if (document.visibilityState === "visible") loadProfil(user);
+    };
+    document.addEventListener("visibilitychange", rafraichir);
+    window.addEventListener("focus", rafraichir);
+    return () => {
+      document.removeEventListener("visibilitychange", rafraichir);
+      window.removeEventListener("focus", rafraichir);
+    };
+  }, [user, loadProfil]);
 
   const refreshProfil = useCallback(async () => {
     await loadProfil(user);
