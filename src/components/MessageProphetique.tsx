@@ -72,6 +72,7 @@ const MessageProphetique = () => {
   const { lang, t } = useLang();
   // Message du fichier local = secours ; Supabase = source prioritaire
   const [message, setMessage] = useState<TMessage | null>(() => messageActif());
+  const [photoProphete, setPhotoProphete] = useState<string | null>(null);
 
   const [visible, setVisible] = useState(true);
   const [versetIdx, setVersetIdx] = useState(0);
@@ -118,6 +119,20 @@ const MessageProphetique = () => {
         });
         setVersetIdx(0);
       });
+    return () => { annule = true; };
+  }, []);
+
+  // Photo publique du compte Prophète enregistrée dans Supabase.
+  useEffect(() => {
+    let annule = false;
+    supabase.rpc("photos_pasteurs").then(({ data }) => {
+      if (annule || !data?.length) return;
+      const lignes = data as Array<{ full_name?: string; photo_url?: string }>;
+      const prophete = lignes.find((p) =>
+        Boolean(p.photo_url) && /proph[eè]te.*djeha|djeha.*proph[eè]te/i.test(p.full_name ?? "")
+      );
+      if (prophete?.photo_url) setPhotoProphete(prophete.photo_url);
+    });
     return () => { annule = true; };
   }, []);
 
@@ -268,7 +283,31 @@ const MessageProphetique = () => {
         </div>
       )}
 
-      <div className="container mx-auto px-4 max-w-5xl py-4 md:py-5">
+      <div className="container mx-auto px-4 max-w-6xl py-5 md:py-8">
+        <div className={`grid md:grid-cols-[minmax(240px,36%)_1fr] overflow-hidden rounded-3xl border ${pal.border} bg-black/10 shadow-2xl`}>
+          {/* Portrait du Prophète — chargé automatiquement depuis Supabase */}
+          <div className="relative min-h-[230px] md:min-h-[410px] overflow-hidden bg-black/20">
+            {photoProphete ? (
+              <img
+                src={photoProphete}
+                alt={message.auteur}
+                className="absolute inset-0 h-full w-full object-cover object-top"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <BookOpen className="h-20 w-20 text-white/25" />
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
+                {lang === "en" ? "A word from the Prophet" : "Une parole du Prophète"}
+              </p>
+              <p className="mt-1 text-sm font-semibold leading-snug">{message.auteur}</p>
+            </div>
+          </div>
+
+          <div className="p-5 md:p-8 flex flex-col">
         {/* En-tête */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-2.5 flex-wrap">
@@ -297,10 +336,11 @@ const MessageProphetique = () => {
         </p>
 
         {/* Verset */}
-        <div className="relative min-h-[3.5rem] flex items-center mb-4">
+        <div className="relative min-h-[8rem] flex items-center my-auto py-5">
           <p key={`${lang}-${versetIdx}`}
-            className={`${pal.verset} text-base md:text-lg leading-relaxed font-medium`}
+            className={`${pal.verset} text-lg md:text-2xl leading-relaxed font-medium`}
             style={{ animation: "fadeSlideIn 0.5s ease-out" }}>
+            <span className="block text-6xl leading-[0.55] font-serif opacity-35" aria-hidden="true">“</span>
             <span className={`${pal.ref} font-bold mr-2`}>
               {reference}{decouperVerset(verset).num ? " : " + decouperVerset(verset).num : ""}
             </span>
@@ -374,7 +414,9 @@ const MessageProphetique = () => {
           ))}
         </div>
 
-        <p className={`text-[10px] ${pal.sous} mt-2 opacity-60`}>— {message.auteur}</p>
+        <p className={`text-xs ${pal.sous} mt-4 opacity-80`}>— {message.auteur}</p>
+          </div>
+        </div>
       </div>
 
       <style>{`
