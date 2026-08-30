@@ -11,8 +11,9 @@ import {
 import { eglises, ordreRegions, type Eglise } from "@/data/eglises";
 import { nomEglise } from "@/lib/serviteurs";
 import ZoomableImage from "@/components/ZoomableImage";
+import AdminMessageProphetique from "@/components/AdminMessageProphetique";
 
-type Tab = "monde" | "eglises" | "prieres";
+type Tab = "monde" | "eglises" | "prieres" | "message";
 
 interface Profil {
   id: string;
@@ -182,6 +183,7 @@ const EspaceProphete = () => {
     { id: "monde", label: "Vue mondiale", icon: Globe2 },
     { id: "eglises", label: "Églises & Pasteurs", icon: Church, count: eglises.length },
     { id: "prieres", label: "Prières", icon: HeartHandshake, count: stats.prieresEnAttente },
+    { id: "message", label: "Message du Prophète", icon: Megaphone },
   ];
 
   const regions = ["toutes", ...ordreRegions, "international"];
@@ -503,6 +505,9 @@ const EspaceProphete = () => {
                 </div>
               </div>
             )}
+
+            {/* ═══════ PUBLICATION DU MESSAGE PROPHÉTIQUE ═══════ */}
+            {tab === "message" && <AdminMessageProphetique />}
           </div>
         </div>
       </div>
