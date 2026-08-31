@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
   Play, Pause, Volume2, VolumeX, X, ChevronLeft, ChevronRight,
-  BookOpen, Repeat, Sparkles, CheckCircle2,
+  BookOpen, Repeat, Sparkles, CheckCircle2, Quote,
 } from "lucide-react";
 import { messagesProphetiques, type MessageProphetique as TMessage } from "@/data/messages-prophetiques";
 import { useLang } from "@/contexts/LanguageContext";
@@ -263,7 +263,7 @@ const MessageProphetique = () => {
   };
 
   return (
-    <div className={`relative w-full bg-gradient-to-r ${pal.bg} border-b ${pal.border} shadow-xl ${pal.glow}`}>
+    <div className={`relative mt-20 w-full bg-gradient-to-r ${pal.bg} border-b ${pal.border} shadow-xl ${pal.glow}`}>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(6)].map((_, i) => (
           <div key={i}
@@ -283,33 +283,35 @@ const MessageProphetique = () => {
         </div>
       )}
 
-      <div className="container mx-auto px-4 max-w-6xl py-5 md:py-8">
-        <div className={`grid md:grid-cols-[minmax(240px,36%)_1fr] overflow-hidden rounded-3xl border ${pal.border} bg-black/10 shadow-2xl`}>
+      <div className="container mx-auto max-w-7xl px-4 py-6 lg:py-10">
+        <div className={`grid overflow-hidden rounded-[2rem] border ${pal.border} bg-black/15 shadow-2xl lg:grid-cols-[minmax(360px,42%)_1fr]`}>
           {/* Portrait du Prophète — chargé automatiquement depuis Supabase */}
-          <div className="relative min-h-[230px] md:min-h-[410px] overflow-hidden bg-black/20">
+          <div className="relative min-h-[290px] overflow-hidden bg-black/20 sm:min-h-[380px] lg:min-h-[510px]">
             {photoProphete ? (
               <img
                 src={photoProphete}
                 alt={message.auteur}
-                className="absolute inset-0 h-full w-full object-cover object-top"
+                className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <BookOpen className="h-20 w-20 text-white/25" />
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/5 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-6 text-white lg:p-8">
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-yellow-200/90">
                 {lang === "en" ? "A word from the Prophet" : "Une parole du Prophète"}
               </p>
-              <p className="mt-1 text-sm font-semibold leading-snug">{message.auteur}</p>
+              <p className="mt-2 text-base font-semibold leading-snug lg:text-lg">{message.auteur}</p>
             </div>
           </div>
 
-          <div className="p-5 md:p-8 flex flex-col">
+          <div className="relative flex min-h-[460px] flex-col overflow-hidden p-6 sm:p-8 lg:min-h-[510px] lg:p-10 xl:p-12">
+        <Quote className="pointer-events-none absolute -right-8 top-14 h-52 w-52 rotate-6 text-white/[0.045]" />
+        <div className={`pointer-events-none absolute right-0 top-0 h-full w-1 ${pal.progress} opacity-70`} />
         {/* En-tête */}
-        <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="relative z-10 mb-5 flex items-start justify-between gap-3">
           <div className="flex items-center gap-2.5 flex-wrap">
             <span className={`inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${pal.badge}`}>
               <Sparkles className="w-3 h-3" />
@@ -330,21 +332,22 @@ const MessageProphetique = () => {
           </button>
         </div>
 
-        <p className={`text-xs font-medium ${pal.sous} mb-3 flex items-center gap-1.5`}>
-          <BookOpen className="w-3.5 h-3.5 flex-shrink-0" />
+        <p className={`relative z-10 mb-5 flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-medium ${pal.sous}`}>
+          <BookOpen className="h-3.5 w-3.5 flex-shrink-0" />
           {instruction}
         </p>
 
         {/* Verset */}
-        <div className="relative min-h-[8rem] flex items-center my-auto py-5">
+        <div className="relative z-10 my-auto flex min-h-[12rem] items-center rounded-3xl border border-white/10 bg-black/10 p-5 shadow-inner sm:p-7 lg:p-8">
           <p key={`${lang}-${versetIdx}`}
-            className={`${pal.verset} text-lg md:text-2xl leading-relaxed font-medium`}
+            className={`${pal.verset} text-xl font-medium leading-relaxed sm:text-2xl xl:text-[1.75rem]`}
             style={{ animation: "fadeSlideIn 0.5s ease-out" }}>
-            <span className="block text-6xl leading-[0.55] font-serif opacity-35" aria-hidden="true">“</span>
-            <span className={`${pal.ref} font-bold mr-2`}>
-              {reference}{decouperVerset(verset).num ? " : " + decouperVerset(verset).num : ""}
+            <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10" aria-hidden="true">
+              <Quote className={`h-6 w-6 ${pal.ref}`} />
             </span>
-            {decouperVerset(verset).corps}
+            <span className={`${pal.ref} mr-2 font-extrabold`}>
+              {reference}{decouperVerset(verset).num ? " : " + decouperVerset(verset).num : ""}
+            </span>{decouperVerset(verset).corps}
           </p>
         </div>
 
@@ -357,7 +360,7 @@ const MessageProphetique = () => {
         )}
 
         {/* Contrôles */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="relative z-10 mt-6 flex flex-wrap items-center gap-2">
           <button onClick={() => aller((versetIdx - 1 + total) % total)}
             className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${pal.btn}`}
             aria-label={t("msg.precedent")}>
@@ -402,7 +405,7 @@ const MessageProphetique = () => {
         </div>
 
         {/* Minimap */}
-        <div className="flex items-center gap-1 mt-3 flex-wrap">
+        <div className="relative z-10 mt-4 flex flex-wrap items-center gap-1">
           {versets.map((_, i) => (
             <button key={i} onClick={() => aller(i)}
               className={`rounded-full transition-all ${
@@ -414,7 +417,11 @@ const MessageProphetique = () => {
           ))}
         </div>
 
-        <p className={`text-xs ${pal.sous} mt-4 opacity-80`}>— {message.auteur}</p>
+        <div className={`relative z-10 mt-5 border-t border-white/10 pt-4 text-xs ${pal.sous}`}>
+          <span className="font-semibold">— {message.auteur}</span>
+          <span className="mx-2 opacity-50">•</span>
+          <span>{lang === "en" ? "A word of faith and hope" : "Une parole de foi et d’espérance"}</span>
+        </div>
           </div>
         </div>
       </div>
