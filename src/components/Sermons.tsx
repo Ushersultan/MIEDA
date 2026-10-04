@@ -13,12 +13,38 @@ const YT_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY ?? "";
 const CHANNEL_HANDLE = "VsdCommunicationMIEDA";
 const MAX_VIDEOS = 9;
 
+interface YTSearchItem {
+  id: { videoId: string };
+  snippet: {
+    title: string;
+    publishedAt: string;
+    thumbnails?: {
+      medium?: { url?: string };
+      default?: { url?: string };
+    };
+  };
+}
+
 // ── Liens des cultes ──
 const YOUTUBE_LIVE_URL = "https://www.youtube.com/@VsdCommunicationMIEDA/live";
 const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@VsdCommunicationMIEDA";
 const ZOOM_URL =
   "https://us06web.zoom.us/j/83515225605?pwd=dWJFK0hjalJsbFljV3lNb0pLOFM1dz09";
 const ZOOM_MEETING_ID = "835 1522 5605";
+
+async function openExternal(url: string) {
+  try {
+    const { Capacitor } = await import("@capacitor/core");
+    if (Capacitor.isNativePlatform()) {
+      const { Browser } = await import("@capacitor/browser");
+      await Browser.open({ url, presentationStyle: "popover" });
+      return;
+    }
+  } catch (error) {
+    console.warn("Ouverture native indisponible", error);
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 
 // ── Lieu Culte Yamoussoukro (Google Maps) ──
 // Pour une localisation exacte : Google Maps → Partager → Intégrer une carte,
@@ -374,12 +400,15 @@ const CulteYamoussoukro = () => (
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <a href={YOUTUBE_LIVE_URL} target="_blank" rel="noopener noreferrer">
-            <Button size="lg" className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white">
+          <Button
+            type="button"
+            size="lg"
+            onClick={() => void openExternal(YOUTUBE_LIVE_URL)}
+            className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white"
+          >
               <Youtube className="w-5 h-5 mr-2" />
               Direct YouTube du dimanche
-            </Button>
-          </a>
+          </Button>
           <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer">
             <Button size="lg" variant="outline" className="w-full sm:w-auto">
               <MapPin className="w-5 h-5 mr-2" />
@@ -451,7 +480,7 @@ const Sermons = () => {
           }),
         ]);
 
-        const toVideo = (item: any): YTVideo => ({
+        const toVideo = (item: YTSearchItem): YTVideo => ({
           id: item.id.videoId,
           title: item.snippet.title,
           publishedAt: item.snippet.publishedAt,
@@ -560,7 +589,16 @@ const Sermons = () => {
                 allowFullScreen allow="autoplay; encrypted-media" title={liveVideo.title}
               />
             </div>
-            <p className="mt-3 font-medium text-foreground">{liveVideo.title}</p>
+            <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="font-medium text-foreground">{liveVideo.title}</p>
+              <Button
+                type="button"
+                onClick={() => void openExternal(`https://www.youtube.com/watch?v=${liveVideo.id}`)}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                <Youtube className="w-4 h-4 mr-2" /> Ouvrir le direct YouTube
+              </Button>
+            </div>
           </div>
         )}
 
@@ -586,10 +624,15 @@ const Sermons = () => {
         {noApiKey && (
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative group">
-              <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black">
-                <iframe className="w-full h-full"
-                  src="https://www.youtube.com/embed?listType=user_uploads&list=VsdCommunicationMIEDA"
-                  title="MIEDA Cultes" allow="autoplay; encrypted-media" allowFullScreen />
+              <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-red-700 via-red-600 to-slate-950 flex items-center justify-center">
+                <div className="text-center text-white p-8">
+                  <div className="relative mx-auto mb-5 w-20 h-20 rounded-full bg-white/15 flex items-center justify-center backdrop-blur-sm">
+                    <span className="absolute inset-0 rounded-full bg-white/15 animate-ping" />
+                    <Youtube className="relative w-11 h-11" />
+                  </div>
+                  <p className="text-2xl font-bold">MIEDA en direct</p>
+                  <p className="mt-2 text-white/80">Regardez le culte sur la chaîne officielle</p>
+                </div>
               </div>
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-secondary rounded-full blur-3xl opacity-50" />
               <div className="absolute -top-6 -left-6 w-32 h-32 bg-accent rounded-full blur-3xl opacity-50" />
@@ -602,20 +645,16 @@ const Sermons = () => {
               </div>
               <p className="text-muted-foreground mb-8 leading-relaxed">
                 Suivez nos cultes en direct et retrouvez tous nos messages sur notre
-                chaîne YouTube. Ajoutez votre clé API YouTube pour activer le
-                chargement automatique des vidéos.
+                chaîne YouTube officielle. Dans l'application, le direct s'ouvre
+                dans un lecteur sécurisé compatible Android.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href={`${YOUTUBE_CHANNEL_URL}/streams`} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="text-lg px-8">
+                <Button type="button" size="lg" onClick={() => void openExternal(YOUTUBE_LIVE_URL)} className="text-lg px-8 bg-red-600 hover:bg-red-700 text-white">
                     <Play className="w-5 h-5 mr-2" /> Regarder le Message
-                  </Button>
-                </a>
-                <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="outline" className="text-lg px-8">
+                </Button>
+                <Button type="button" size="lg" variant="outline" onClick={() => void openExternal(YOUTUBE_CHANNEL_URL)} className="text-lg px-8">
                     Voir Tous les Messages
-                  </Button>
-                </a>
+                </Button>
               </div>
             </div>
           </div>
@@ -637,11 +676,9 @@ const Sermons = () => {
         {error && (
           <div className="text-center py-12 text-muted-foreground">
             <p className="mb-4">Impossible de charger les vidéos YouTube.</p>
-            <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline">
+              <Button type="button" variant="outline" onClick={() => void openExternal(YOUTUBE_CHANNEL_URL)}>
                 <Youtube className="w-4 h-4 mr-2" /> Voir la chaîne directement
               </Button>
-            </a>
           </div>
         )}
 
@@ -691,11 +728,9 @@ const Sermons = () => {
         {/* Lien chaîne */}
         {!noApiKey && !loading && (
           <div className="text-center mt-10">
-            <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="lg">
+              <Button type="button" variant="outline" size="lg" onClick={() => void openExternal(YOUTUBE_CHANNEL_URL)}>
                 <Youtube className="w-5 h-5 mr-2" /> Voir toute la chaîne MIEDA
               </Button>
-            </a>
           </div>
         )}
       </div>
