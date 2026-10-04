@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes experience-card-pan {
+  0% { transform: scale(1.04) translate3d(-1%, -1%, 0); }
+  50% { transform: scale(1.11) translate3d(1.5%, 0, 0); }
+  100% { transform: scale(1.06) translate3d(0, 1%, 0); }
+}
+
+.experience-card-media {
+  animation: experience-card-pan 13s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.group:nth-child(2) .experience-card-media { animation-delay: -4s; }
+.group:nth-child(3) .experience-card-media { animation-delay: -8s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .experience-card-media { animation: none; }
+}
+
 /* MIEDA Design System — Bleu globe dominant, vert/jaune/orange en accents */
 @layer base {
   :root {
