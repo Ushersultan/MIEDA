@@ -5,6 +5,7 @@ import { useLang } from "@/contexts/LanguageContext";
 import Experience from "@/components/Experience";
 import Offering from "@/components/Offering";
 import Reveal from "@/components/Reveal";
+import FeaturedClip from "@/components/FeaturedClip";
 
 const buildExplorer = (t: (k: string) => string) => [
   { icon: Radio, title: t("accueil.explorer.cultes"), desc: t("accueil.explorer.cultes.desc"), to: "/cultes", color: "text-primary", bg: "bg-primary/10" },
@@ -21,6 +22,10 @@ const Index = () => {
       <Hero />
       <Reveal>
         <Experience />
+      </Reveal>
+
+      <Reveal>
+        <FeaturedClip />
       </Reveal>
 
       {/* Explorer le site */}
