@@ -45,6 +45,10 @@ export default defineConfig(({ mode }) => ({
         // On ne met JAMAIS en cache l'authentification ni les données Supabase
         runtimeCaching: [
           {
+            urlPattern: ({ url }) => url.pathname === "/media/featured-clip.json",
+            handler: "NetworkOnly",
+          },
+          {
             urlPattern: ({ url }) =>
               url.origin === self.location.origin && url.pathname.startsWith("/api"),
             handler: "NetworkOnly",

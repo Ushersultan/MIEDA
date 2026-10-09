@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { Capacitor } from "@capacitor/core";
+import defaultClip from "../../public/media/featured-clip.json";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,6 +8,41 @@ import { useLang } from "@/contexts/LanguageContext";
 
 const FeaturedClip = () => {
   const { lang } = useLang();
+  const [clip, setClip] = useState(defaultClip);
+  const [failed, setFailed] = useState(false);
+  const origin = Capacitor.isNativePlatform() ? "https://www.eglisesmieda.org" : "";
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const refresh = async () => {
+      if (document.visibilityState === "hidden") return;
+      try {
+        const response = await fetch(`${origin}/media/featured-clip.json`, {
+          cache: "no-store", signal: controller.signal,
+        });
+        if (!response.ok) return;
+        const next = await response.json();
+        // Only church-hosted media paths are accepted.
+        const validPath = (value: unknown) => typeof value === "string" &&
+          /^\/media\/[a-zA-Z0-9._-]+$/.test(value);
+        if (typeof next.id !== "string" || typeof next.available !== "boolean" ||
+            !validPath(next.video) || !validPath(next.poster) ||
+            typeof next.date !== "string" ||
+            ![next.fr?.title, next.fr?.body, next.en?.title, next.en?.body].every(v => typeof v === "string")) return;
+        setClip(current => JSON.stringify(current) === JSON.stringify(next) ? current : next);
+      } catch { /* Keep the bundled content when offline. */ }
+    };
+    void refresh();
+    const timer = window.setInterval(() => void refresh(), 60000);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      controller.abort();
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, [origin]);
+
+  useEffect(() => setFailed(false), [clip.id, clip.video]);
   const copy = lang === "en"
     ? {
         badge: "A moment of faith",
@@ -32,11 +70,11 @@ const FeaturedClip = () => {
             <Sparkles className="h-4 w-4" /> {copy.badge}
           </span>
           <h2 className="text-4xl font-bold leading-tight md:text-5xl">
-            {copy.title}
+            {clip[lang === "en" ? "en" : "fr"].title}
           </h2>
           <div className="my-7 h-1 w-24 rounded-full bg-gradient-to-r from-yellow-300 to-yellow-500" />
           <p className="max-w-xl text-lg leading-relaxed text-slate-200">
-            {copy.body}
+            {clip[lang === "en" ? "en" : "fr"].body}
           </p>
           <Button asChild size="lg" className="mt-8 rounded-full bg-white text-slate-950 hover:bg-yellow-100">
             <Link to="/cultes">
@@ -50,21 +88,25 @@ const FeaturedClip = () => {
         <div className="relative mx-auto w-full max-w-[390px]">
           <div className="absolute -inset-3 rotate-2 rounded-[2.25rem] bg-gradient-to-br from-yellow-300/35 via-primary/30 to-transparent blur-sm" />
           <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-black shadow-2xl shadow-black/40">
-            <video
+            {clip.available && !failed ? <video
+              key={`${clip.id}:${clip.video}`}
               className="aspect-[9/16] w-full object-cover"
-              src="/media/mieda-perseverance-oct4.mp4"
-              poster="/media/mieda-perseverance-oct4-poster.jpg"
+              src={`${origin}${clip.video}`}
+              poster={`${origin}${clip.poster}`}
               aria-label={copy.video}
-              autoPlay
-              muted
-              loop
               playsInline
               controls
               preload="metadata"
-            />
+              onError={() => setFailed(true)}
+            /> : <div className="relative">
+              <img src={`${origin}${clip.poster}`} alt={copy.video} className="aspect-[9/16] w-full object-cover" />
+              <p role="status" className="absolute bottom-0 w-full bg-black/80 p-4 text-center text-sm">
+                {lang === "en" ? "This clip is temporarily unavailable. Watch our services below." : "Cet extrait est temporairement indisponible. Retrouvez nos cultes ci-dessous."}
+              </p>
+            </div>}
           </div>
           <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-slate-900/90 px-4 py-2 text-xs font-medium text-white shadow-xl backdrop-blur">
-            MIEDA · 4 octobre 2026
+            MIEDA · {new Date(`${clip.date}T12:00:00`).toLocaleDateString(lang === "en" ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
           </div>
         </div>
       </div>

@@ -59,3 +59,27 @@ This project is built with:
 Yes, you can!
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+
+
+## Vidéo d’accueil et publications Android
+
+Le clip d’accueil est défini dans `public/media/featured-clip.json`. L’application
+Android télécharge ce fichier sur `https://www.eglisesmieda.org` au démarrage,
+au retour au premier plan et toutes les minutes pendant que la page est visible.
+Une connexion est nécessaire pour recevoir les nouveaux clips ; hors ligne,
+le contenu inclus dans l’application sert de secours.
+
+Pour publier un nouvel extrait :
+1. Ajouter un MP4 H.264/AAC vérifié et son affiche dans `public/media/`, avec de nouveaux noms.
+2. Modifier `id`, `video`, `poster`, `date`, `fr` et `en` dans le JSON.
+3. Mettre `available` à `true` après avoir vérifié le fichier avec `ffmpeg -v error -xerror -i VIDEO.mp4 -f null -`.
+4. Publier sur GitHub/Vercel. Aucun nouveau AAB n’est nécessaire pour ces clips après installation de la version contenant ce mécanisme.
+
+Le clip actuel reste temporairement indisponible : le MP4 publié est corrompu,
+il faut remplacer ce fichier depuis l’original Zoom avant de le réactiver.
+
+Pour livrer ce mécanisme aux utilisateurs existants, une mise à jour Android
+est nécessaire : `npm install`, `npm run android:prepare`, puis générer un AAB
+signé dans Android Studio et le publier dans Play Console. Le script augmente
+le `versionCode` local et utilise le nom de version 1.3.3. Vérifier que ce code
+dépasse également celui déjà publié dans Play Console.
