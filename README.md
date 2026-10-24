@@ -75,8 +75,7 @@ Pour publier un nouvel extrait :
 3. Mettre `available` à `true` après avoir vérifié le fichier avec `ffmpeg -v error -xerror -i VIDEO.mp4 -f null -`.
 4. Publier sur GitHub/Vercel. Aucun nouveau AAB n’est nécessaire pour ces clips après installation de la version contenant ce mécanisme.
 
-Le clip actuel reste temporairement indisponible : le MP4 publié est corrompu,
-il faut remplacer ce fichier depuis l’original Zoom avant de le réactiver.
+L’extrait du culte en ligne du 11 octobre 2026 remplace celui du 4 octobre. Le fichier vidéo est vérifié et disponible dans `public/media/`.
 
 Pour livrer ce mécanisme aux utilisateurs existants, une mise à jour Android
 est nécessaire : `npm install`, `npm run android:prepare`, puis générer un AAB

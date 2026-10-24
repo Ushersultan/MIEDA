@@ -68,7 +68,7 @@ const PALETTES = {
 const DELAI_MS = 7000;      // défilement visuel : 7 s / verset
 const MAX_BOUCLES = 3;      // la lecture audio s'arrête après 3 tours complets
 
-const MessageProphetique = () => {
+const MessageProphetique = ({ embedded = false }: { embedded?: boolean }) => {
   const { lang, t } = useLang();
   // Message du fichier local = secours ; Supabase = source prioritaire
   const [message, setMessage] = useState<TMessage | null>(() => messageActif());
@@ -263,7 +263,7 @@ const MessageProphetique = () => {
   };
 
   return (
-    <div className={`relative mt-20 w-full bg-gradient-to-r ${pal.bg} border-b ${pal.border} shadow-xl ${pal.glow}`}>
+    <div className={`relative ${embedded ? "" : "mt-20"} w-full bg-gradient-to-r ${pal.bg} border-b ${pal.border} shadow-xl ${pal.glow}`}>
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(6)].map((_, i) => (
           <div key={i}

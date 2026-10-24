@@ -247,3 +247,12 @@ header.fixed {
 .border-gradient:hover::before {
   opacity: 1;
 }
+
+/* Editorial presentation scoped to the homepage. */
+.mieda-home { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.home-editorial-title { font-family: Georgia, "Times New Roman", serif; font-weight: 400; white-space: pre-line; }
+.home-eyebrow { color: #35756c; font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+.home-primary-link { display: inline-flex; align-items: center; justify-content: center; gap: .75rem; border-radius: 9999px; background: #173e47; color: #fff; padding: .95rem 1.5rem; font-size: .875rem; font-weight: 600; transition: background .2s, transform .2s; }
+.home-primary-link:hover { background: #275f63; transform: translateY(-2px); }
+.home-primary-link:focus-visible { outline: 2px solid #35756c; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .mieda-home *, .mieda-home *::before, .mieda-home *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

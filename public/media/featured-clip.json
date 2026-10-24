@@ -1,15 +1,15 @@
 {
-  "id": "perseverance-2026-10-04",
-  "available": false,
-  "video": "/media/mieda-perseverance-oct4.mp4",
-  "poster": "/media/mieda-perseverance-oct4-poster.jpg",
-  "date": "2026-10-04",
+  "id": "culte-en-ligne-2026-10-11",
+  "available": true,
+  "video": "/media/culte-en-ligne-2026-10-11.mp4",
+  "poster": null,
+  "date": "2026-10-11",
   "fr": {
-    "title": "Au bout de la persévérance se trouve la victoire",
-    "body": "Une courte exhortation tirée du culte du 4 octobre : continuez d’avancer, demeurez fidèles et souvenez-vous de ce que Dieu a dit."
+    "title": "Unis dans la foi, partout dans le monde",
+    "body": "Revivez un moment de notre culte en ligne du 11 octobre 2026 et découvrez la communauté MIEDA réunie sur Zoom."
   },
   "en": {
-    "title": "At the end of perseverance lies victory",
-    "body": "A short encouragement from the October 4 service: keep going, remain faithful, and remember what God has said."
+    "title": "United in faith, wherever we are",
+    "body": "Watch a moment from our online service on October 11, 2026 and meet the MIEDA community gathered on Zoom."
   }
 }

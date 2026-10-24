@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Calendar, Building2, Lightbulb, Radio, ArrowRight } from "lucide-react";
+import MessageProphetique from "@/components/MessageProphetique";
 import Hero from "@/components/Hero";
 import { useLang } from "@/contexts/LanguageContext";
 import Experience from "@/components/Experience";
@@ -15,11 +16,12 @@ const buildExplorer = (t: (k: string) => string) => [
 ];
 
 const Index = () => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const explorer = buildExplorer(t);
   return (
-    <>
+    <div className="mieda-home">
       <Hero />
+      <MessageProphetique embedded />
       <Reveal>
         <Experience />
       </Reveal>
@@ -29,30 +31,30 @@ const Index = () => {
       </Reveal>
 
       {/* Explorer le site */}
-      <section className="py-24 bg-background">
+      <section className="bg-[#f8f6f0] py-20 text-[#142c43] sm:py-28">
         <div className="container mx-auto px-4 max-w-6xl">
-          <Reveal className="text-center mb-14">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
+          <Reveal className="mb-12">
+            <h2 className="home-editorial-title mb-4 text-4xl sm:text-5xl">
               {t("accueil.explorer.titre")}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="max-w-xl text-base leading-7 text-[#657580]">
               {t("accueil.explorer.sous")}
             </p>
           </Reveal>
 
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="grid gap-px overflow-hidden rounded-3xl border border-[#dde3da] bg-[#dde3da] sm:grid-cols-2">
             {explorer.map((item, i) => (
               <Reveal key={item.title} direction="up" delay={i * 90}>
               <Link
                 to={item.to}
-                className="group flex items-center gap-5 bg-card border border-border rounded-3xl p-6 shadow-soft card-modern hover:border-primary/40"
+                className="group flex h-full items-start gap-5 bg-[#f8f6f0] p-7 transition-colors hover:bg-white sm:p-9"
               >
                 <div className={`w-14 h-14 rounded-2xl ${item.bg} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                   <item.icon className={`w-7 h-7 ${item.color}`} />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground text-lg mb-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  <h3 className="mb-2 text-lg font-semibold text-[#142c43]">{item.title}</h3>
+                  <p className="text-sm leading-7 text-[#657580]">{item.desc}</p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0" />
               </Link>
@@ -62,11 +64,17 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="bg-[#eaf0e8] py-16 text-[#142c43]">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-5 sm:flex-row sm:items-center sm:px-8">
+          <div><p className="home-eyebrow mb-3">{lang === "en" ? "Every gesture matters" : "Chaque geste compte"}</p><h2 className="home-editorial-title text-3xl sm:text-4xl">{lang === "en" ? "Together, let us share hope." : "Ensemble, faisons grandir l’espérance."}</h2></div>
+          <a href="#offrandes" className="home-primary-link shrink-0">{lang === "en" ? "Make a donation" : "Faire un don"}<ArrowRight className="h-4 w-4" /></a>
+        </div>
+      </section>
       {/* Dons / Offrandes */}
       <Reveal>
         <Offering />
       </Reveal>
-    </>
+    </div>
   );
 };
 
