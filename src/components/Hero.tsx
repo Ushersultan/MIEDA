@@ -11,10 +11,11 @@ const Hero = () => {
       <div className="mx-auto grid max-w-7xl gap-12 px-5 pb-16 pt-32 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:pb-24 lg:pt-40">
         <div className="relative z-10">
           <p className="mb-7 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#305f75]"><span className="h-px w-9 bg-[#305f75]" />{en ? "Welcome to MIEDA" : "Bienvenue à la MIEDA"}</p>
-          <h1 className="home-editorial-title text-[clamp(3.2rem,6vw,5.8rem)] leading-[1.04] tracking-[-0.04em]">
-            {en ? <>A living faith.<br />A family <em className="text-[#35756c]">without<br className="hidden sm:block" /> borders.</em></> : <>Une foi vivante.<br />Une famille <em className="text-[#35756c]">sans<br className="hidden sm:block" /> frontières.</em></>}
+          <h1 className="home-editorial-title text-[clamp(2.65rem,4.7vw,4.7rem)] leading-[1.12] tracking-[-0.03em]">
+            {en ? <>“Behold, I come to do <em className="text-[#35756c]">your will.</em>”</> : <>« Voici, je viens pour faire <em className="text-[#35756c]">ta volonté.</em> »</>}
           </h1>
-          <p className="mt-7 max-w-md text-base leading-8 text-[#526574] sm:text-lg">{en ? "Together, let us grow in faith, share the Gospel and experience the love of Jesus Christ. There is a place for you here." : "Ensemble, grandissons dans la foi, partageons l’Évangile et vivons l’amour de Jésus-Christ. Ici, vous avez votre place."}</p>
+          <p className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-[#35756c]">{en ? "Hebrews 10:9" : "Hébreux 10:9"}</p>
+          <p className="mt-7 max-w-md text-xl leading-8 text-[#526574]">{en ? "Join our community of faith." : "Rejoignez notre communauté de foi."}</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link to="/cultes#culte-en-ligne" className="home-primary-link"><Play className="h-4 w-4" />{en ? "Join a service" : "Vivre un culte"}<ArrowUpRight className="h-4 w-4" /></Link>
             <Link to="/a-propos" className="inline-flex items-center gap-2 rounded-full border border-[#142c43]/20 px-6 py-3.5 text-sm font-semibold transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">{en ? "Discover our church" : "Découvrir notre Église"}<ArrowUpRight className="h-4 w-4" /></Link>
