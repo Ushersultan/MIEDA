@@ -1,3 +1,4 @@
+import AdminChurchMedia from "@/components/AdminChurchMedia";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,7 +17,7 @@ import { nomEglise } from "@/lib/serviteurs";
 import { apiUrl } from "@/lib/api";
 import ZoomableImage from "@/components/ZoomableImage";
 
-type Tab = "codes" | "membres" | "fideles" | "anniversaires" | "message" | "stats";
+type Tab = "videos" | "codes" | "membres" | "fideles" | "anniversaires" | "message" | "stats";
 
 interface CodePasteur {
   code: string;
@@ -433,6 +434,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
     { id: "fideles", label: "Fidèles par église", icon: Church, count: totalFideles },
     { id: "anniversaires", label: "Anniversaires", icon: Cake, count: anniversaires.aujourdhui.length },
     { id: "message", label: "Message du Prophète", icon: BookOpen },
+    { id: "videos", label: "Vidéos & Direct", icon: BookOpen },
     { id: "stats", label: "Statistiques", icon: TrendingUp },
   ];
 
@@ -920,6 +922,7 @@ Que Dieu vous bénisse dans votre ministère 🙏`;
 
             {/* ═══════ MESSAGE DU PROPHÈTE ═══════ */}
             {tab === "message" && <AdminMessageProphetique />}
+            {tab === "videos" && <AdminChurchMedia />}
 
             {/* ═══════ STATISTIQUES ═══════ */}
             {tab === "stats" && (
