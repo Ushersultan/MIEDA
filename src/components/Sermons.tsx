@@ -1,3 +1,5 @@
+import ChurchMedia from "@/components/ChurchMedia";
+import MediaPlayer from "@/components/MediaPlayer";
 import { useEffect, useState, useMemo } from "react";
 import { horairesServices } from "@/data/horaires";
 import {
@@ -29,7 +31,7 @@ interface YTSearchItem {
 const YOUTUBE_LIVE_URL = "https://www.youtube.com/@VsdCommunicationMIEDA/live";
 const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@VsdCommunicationMIEDA";
 const ZOOM_URL =
-  "https://us06web.zoom.us/j/83515225605?pwd=dWJFK0hjalJsbFljV3lNb0pLOFM1dz09";
+  "https://us06web.zoom.us/j/83515225605";
 const ZOOM_MEETING_ID = "835 1522 5605";
 
 async function openExternal(url: string) {
@@ -182,12 +184,8 @@ const VideoModal = ({
             aria-label="Fermer"
           >✕</button>
         </div>
-        <div className="relative aspect-video">
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-            className="absolute inset-0 w-full h-full"
-            allowFullScreen allow="autoplay; encrypted-media" title={title}
-          />
+        <div className="p-3">
+          <MediaPlayer url={`https://www.youtube.com/watch?v=${videoId}`} title={title} />
         </div>
       </div>
     </div>
@@ -564,6 +562,8 @@ const Sermons = () => {
         <CulteEnLigne />
         <EcoleDimanche />
 
+        <ChurchMedia />
+
         {/* ── Médias / Vidéos ── */}
         <div className="flex items-center gap-4 mb-10">
           <div className="flex-1 h-px bg-border" />
@@ -582,12 +582,8 @@ const Sermons = () => {
                 En direct maintenant
               </span>
             </div>
-            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-2 border-red-600/60">
-              <iframe
-                src={`https://www.youtube.com/embed/${liveVideo.id}?autoplay=0`}
-                className="absolute inset-0 w-full h-full"
-                allowFullScreen allow="autoplay; encrypted-media" title={liveVideo.title}
-              />
+            <div className="rounded-2xl shadow-2xl border-2 border-red-600/60 p-3">
+              <MediaPlayer url={`https://www.youtube.com/watch?v=${liveVideo.id}`} title={liveVideo.title} />
             </div>
             <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <p className="font-medium text-foreground">{liveVideo.title}</p>
@@ -685,10 +681,8 @@ const Sermons = () => {
         {/* Dernier culte */}
         {!loading && !error && !noApiKey && activeTab === "latest" && latestVideo && (
           <div>
-            <div className="aspect-video rounded-2xl overflow-hidden shadow-xl bg-black">
-              <iframe src={`https://www.youtube.com/embed/${latestVideo.id}`}
-                className="w-full h-full" allowFullScreen
-                allow="autoplay; encrypted-media" title={latestVideo.title} />
+            <div className="rounded-2xl shadow-xl p-3">
+              <MediaPlayer url={`https://www.youtube.com/watch?v=${latestVideo.id}`} title={latestVideo.title} />
             </div>
             <div className="mt-4 flex items-start gap-3">
               <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center flex-shrink-0">

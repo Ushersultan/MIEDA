@@ -17,6 +17,8 @@ const config: CapacitorConfig = {
   // Le navigateur interne charge les fichiers via https:// (recommandé)
   server: {
     androidScheme: "https",
+    // Matches the registered app ID: YouTube receives the Android client identity.
+    hostname: "org.eglisesmieda.app",
   },
 
   plugins: {
