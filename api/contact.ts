@@ -1,3 +1,4 @@
+import { validateContact, allowContact } from "../server/security.js";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -21,23 +22,17 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: "Configuration serveur incomplète" });
   }
 
-  const { name, email, phone, message } = req.body ?? {};
-
-  // Validation des champs obligatoires
-  if (!name || !email || !message) {
-    return res.status(400).json({
-      error: "Les champs Nom, Email et Message sont obligatoires.",
-    });
+  const contact = validateContact(req.body);
+  if (!contact) return res.status(400).json({ error: "Champs invalides ou trop longs." });
+  const ip = String(req.headers?.["x-real-ip"] || req.socket?.remoteAddress || "unknown");
+  if (!allowContact(ip)) {
+    res.setHeader("Retry-After", "900");
+    return res.status(429).json({ error: "Trop de messages. Réessayez plus tard." });
   }
-
-  // Validation basique du format de l'email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ error: "Adresse email invalide." });
-  }
+  const { name, email, phone, message } = contact;
 
   try {
-    await resend.emails.send({
+    const delivery = await resend.emails.send({
       from: "MIEDA Website <noreply@eglisesmieda.org>",
       to: ["ushersultan@gmail.com", "com@eglisesmieda.org"],
       subject: "Nouveau message depuis le site MIEDA",
@@ -52,6 +47,7 @@ ${message}
       `.trim(),
     });
 
+    if (delivery.error) throw new Error("Email delivery failed");
     return res.status(200).json({
       success: true,
       message: "Email envoyé avec succès",

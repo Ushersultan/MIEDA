@@ -1,3 +1,4 @@
+import { authorizeMfa } from "../server/security.js";
 import { createClient } from "@supabase/supabase-js";
 
 // ════════════════════════════════════════════════════════════════
@@ -117,13 +118,8 @@ export default async function handler(req: any, res: any) {
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
   if (!token) return res.status(401).json({ error: "Non authentifié" });
 
-  const { data: userData } = await admin.auth.getUser(token);
-  if (!userData?.user) return res.status(401).json({ error: "Session invalide" });
-
-  const { data: profil } = await admin
-    .from("profiles").select("role").eq("id", userData.user.id).maybeSingle();
-  if (!profil || !["admin", "prophete"].includes(profil.role)) {
-    return res.status(403).json({ error: "Réservé à l'administration" });
+  if (!await authorizeMfa(admin, token, ["admin", "prophete"])) {
+    return res.status(403).json({ error: "Session MFA requise pour accéder à cette fonction." });
   }
 
   // ── Paramètres ──
