@@ -1,3 +1,4 @@
+import { authorizeMfa } from "../server/security.js";
 import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
 
@@ -20,7 +21,7 @@ const messageHtml = (prenom: string) => `
       <p style="color:#bfdbfe;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin:0 0 8px">
         Mission Internationale d'Évangélisation et de Délivrance des Âmes
       </p>
-      <h1 style="color:#ffffff;font-size:26px;margin:0">Joyeux anniversaire, ${prenom} !</h1>
+      <h1 style="color:#ffffff;font-size:26px;margin:0">Joyeux anniversaire, ${prenom.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!))} !</h1>
     </div>
 
     <div style="background:#ffffff;padding:28px 24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
@@ -93,15 +94,8 @@ export default async function handler(req: any, res: any) {
   if (secret && token === secret) {
     autorise = true; // déclenchement par la tâche planifiée Vercel
   } else if (token) {
-    const { data: userData } = await admin.auth.getUser(token);
-    if (userData?.user) {
-      const { data: profil } = await admin
-        .from("profiles").select("role").eq("id", userData.user.id).maybeSingle();
-      if (profil?.role === "admin") {
-        autorise = true;
-        manuel = true;
-      }
-    }
+    autorise = await authorizeMfa(admin, token, ["admin"]);
+    manuel = autorise;
   }
 
   if (!autorise) return res.status(401).json({ error: "Non autorisé" });
@@ -134,12 +128,13 @@ export default async function handler(req: any, res: any) {
       if (deja.has(p.id)) continue;
       const prenom = (p.full_name || "").trim().split(/\s+/)[0] || "cher(e) membre";
       try {
-        await resend.emails.send({
+        const delivery = await resend.emails.send({
           from: "MIEDA <noreply@eglisesmieda.org>",
           to: [p.email],
           subject: `Joyeux anniversaire, ${prenom} ! 🎂`,
           html: messageHtml(prenom),
         });
+        if (delivery.error) throw new Error("Email delivery failed");
         await admin.from("journal_anniversaires").upsert({
           user_id: p.id,
           envoye_le: aujourdhui,
