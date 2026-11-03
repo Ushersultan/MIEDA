@@ -1,0 +1,37 @@
+workflows:
+  mieda-android-release:
+    name: MIEDA - Android signed AAB
+    instance_type: linux_x2
+    max_build_duration: 60
+    environment:
+      node: 22
+      java: 21
+      android_signing:
+        - mieda_upload
+      groups:
+        - mieda_android
+    # Manual builds only. No automatic Play publishing or webhook triggers.
+    scripts:
+      - name: Verify release configuration
+        script: |
+          set -eu
+          node scripts/check-android-release.mjs
+      - name: Install locked dependencies
+        script: npm ci --no-fund
+      - name: Build web content and native Android resources
+        script: |
+          set -eu
+          if [ ! -d android ]; then npx cap add android; fi
+          npm run android:prepare
+      - name: Configure signing from secure environment
+        script: node scripts/configure-android-signing.mjs
+      - name: Build signed Android App Bundle
+        script: |
+          set -eu
+          cd android
+          chmod +x gradlew
+          ./gradlew --no-daemon bundleRelease
+          jarsigner -verify app/build/outputs/bundle/release/app-release.aab
+    artifacts:
+      - android/app/build/outputs/bundle/release/*.aab
+      - android/app/build/outputs/mapping/release/mapping.txt

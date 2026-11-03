@@ -10,12 +10,16 @@ const nextCode = requestedCode ? Number(requestedCode) : Math.max(currentCode + 
 if (!Number.isInteger(nextCode) || nextCode <= currentCode) {
   throw new Error("ANDROID_VERSION_CODE doit être un entier supérieur au code local actuel");
 }
+const versionName = process.env.ANDROID_VERSION_NAME || "1.3.3";
+if (!/^\d+\.\d+\.\d+(?:[.-][A-Za-z0-9]+)*$/.test(versionName)) {
+  throw new Error("ANDROID_VERSION_NAME invalide");
+}
 gradle = gradle
   .replace(/versionCode\s+\d+/, `versionCode ${nextCode}`)
-  .replace(/versionName\s+"[^"]+"/, 'versionName "1.3.3"');
+  .replace(/versionName\s+"[^"]+"/, `versionName "${versionName}"`);
 
 await writeFile(gradlePath, gradle, "utf8");
-console.log(`Android configuré : version 1.3.3 (code ${nextCode})`);
+console.log(`Android configuré : version ${versionName} (code ${nextCode})`);
 
 // Reuse the church's existing icon for native launcher and splash assets.
 const assetsDirectory = new URL("../assets/", import.meta.url);

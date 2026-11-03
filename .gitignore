@@ -27,3 +27,12 @@ dist-ssr
 .env.production
 node_modules
 dist
+
+# Private mobile signing material: use secure build-service storage only.
+*.jks
+*.keystore
+*.p12
+*.p8
+key.properties
+keystore.properties
+android/local.properties
