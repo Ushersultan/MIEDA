@@ -24,7 +24,7 @@ const AnniversaryBanner = () => {
           to { transform: translateX(500%) skewX(-18deg); }
         }
         .mieda-anniversary { position: relative; overflow: hidden; background: linear-gradient(115deg, #103e35, #1d6654 55%, #103e35); color: #fff; }
-        .mieda-anniversary::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 25%; background: linear-gradient(90deg, transparent, rgba(255,224,150,.16), transparent); animation: mieda-anniversary-light 4s linear 1; pointer-events: none; }
+        .mieda-anniversary::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 25%; background: linear-gradient(90deg, transparent, rgba(255,224,150,.16), transparent); animation: mieda-anniversary-light 9s linear infinite; pointer-events: none; }
         .mieda-anniversary[data-can-control=true]::before { animation-duration: 9s; animation-iteration-count: infinite; }
         .mieda-anniversary[data-can-control=true][data-paused=true]::before { animation-play-state: paused; }
 
@@ -38,7 +38,7 @@ const AnniversaryBanner = () => {
         .mieda-firework { position: absolute; left: 5%; top: 38%; width: 1px; height: 1px; }
         .mieda-firework:nth-child(2) { left: 91%; top: 44%; }
         .mieda-firework:nth-child(3) { left: 66%; top: 14%; }
-        .mieda-firework::before { content: ''; position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff1b8; opacity: 0; box-shadow: 0 -44px #f6dd9b, 17px -41px #ffecc2, 31px -31px #d8b866, 41px -17px #f6dd9b, 44px 0 #ffecc2, 41px 17px #d8b866, 31px 31px #f6dd9b, 17px 41px #ffecc2, 0 44px #d8b866, -17px 41px #f6dd9b, -31px 31px #ffecc2, -41px 17px #d8b866, -44px 0 #f6dd9b, -41px -17px #ffecc2, -31px -31px #d8b866, -17px -41px #f6dd9b, 12px -22px #fff5db, 22px 12px #f6dd9b, -12px 22px #fff5db, -22px -12px #f6dd9b; animation: mieda-firework-burst 3.8s ease-out 1 both; }
+        .mieda-firework::before { content: ''; position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff1b8; opacity: 0; box-shadow: 0 -44px #f6dd9b, 17px -41px #ffecc2, 31px -31px #d8b866, 41px -17px #f6dd9b, 44px 0 #ffecc2, 41px 17px #d8b866, 31px 31px #f6dd9b, 17px 41px #ffecc2, 0 44px #d8b866, -17px 41px #f6dd9b, -31px 31px #ffecc2, -41px 17px #d8b866, -44px 0 #f6dd9b, -41px -17px #ffecc2, -31px -31px #d8b866, -17px -41px #f6dd9b, 12px -22px #fff5db, 22px 12px #f6dd9b, -12px 22px #fff5db, -22px -12px #f6dd9b; animation: mieda-firework-burst 3.8s ease-out infinite both; }
         .mieda-firework:nth-child(2)::before { animation-delay: .4s; }
         .mieda-firework:nth-child(3)::before { animation-delay: .8s; }
         .mieda-anniversary[data-can-control=true] .mieda-firework::before { animation-iteration-count: infinite; }
