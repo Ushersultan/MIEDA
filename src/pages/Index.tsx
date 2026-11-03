@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Building2, Lightbulb, Radio, ArrowRight } from "lucide-react";
 import MessageProphetique from "@/components/MessageProphetique";
@@ -7,6 +8,43 @@ import Experience from "@/components/Experience";
 import Offering from "@/components/Offering";
 import Reveal from "@/components/Reveal";
 import FeaturedClip from "@/components/FeaturedClip";
+
+const AnniversaryBanner = () => {
+  const { lang } = useLang();
+  const [paused, setPaused] = useState(false);
+  const en = lang === "en";
+  return (
+    <aside aria-label={en ? "MIEDA 29th anniversary" : "29ᵉ anniversaire de la MIEDA"} className="pt-20">
+      <style>{`
+        @keyframes mieda-anniversary-light {
+          from { transform: translateX(-120%) skewX(-18deg); }
+          to { transform: translateX(500%) skewX(-18deg); }
+        }
+        .mieda-anniversary { position: relative; overflow: hidden; background: linear-gradient(115deg, #103e35, #1d6654 55%, #103e35); color: #fff; }
+        .mieda-anniversary::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 25%; background: linear-gradient(90deg, transparent, rgba(255,224,150,.16), transparent); animation: mieda-anniversary-light 9s linear infinite; pointer-events: none; }
+        .mieda-anniversary[data-paused=true]::before,
+        .mieda-anniversary:hover::before,
+        .mieda-anniversary:focus-within::before { animation-play-state: paused; }
+        @media (prefers-reduced-motion: reduce) { .mieda-anniversary::before { animation: none; } }
+      `}</style>
+      <div className="mieda-anniversary border-b border-[#d5b66a]/40" data-paused={paused}>
+        <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-4 px-5 py-6 sm:flex-nowrap sm:justify-between sm:px-8">
+          <div className="flex items-center gap-4">
+            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-[#e5c77f]/70 bg-white/5 font-serif text-4xl text-[#f6dd9b]" aria-hidden="true">29</span>
+            <div>
+              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#f6dd9b]">{en ? "A journey of faith · MIEDA" : "Une histoire de foi · MIEDA"}</p>
+              <h2 className="font-serif text-xl leading-tight sm:text-3xl">{en ? "Celebrating MIEDA’s 29th anniversary!" : "Joyeux 29ᵉ anniversaire à la MIEDA !"}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/85">{en ? "29 years of faith, evangelism and transformed lives. To God be the glory!" : "29 ans de foi, d’évangélisation et de vies transformées. À Dieu toute la gloire !"}</p>
+            </div>
+          </div>
+          <button type="button" onClick={() => setPaused(value => !value)} aria-pressed={paused} className="shrink-0 rounded-full border border-white/35 px-4 py-2 text-xs font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6dd9b]">
+            {en ? (paused ? "Resume animation" : "Pause animation") : (paused ? "Reprendre l’animation" : "Pause animation")}
+          </button>
+        </div>
+      </div>
+    </aside>
+  );
+};
 
 const buildExplorer = (t: (k: string) => string) => [
   { icon: Radio, title: t("accueil.explorer.cultes"), desc: t("accueil.explorer.cultes.desc"), to: "/cultes", color: "text-primary", bg: "bg-primary/10" },
@@ -20,6 +58,7 @@ const Index = () => {
   const explorer = buildExplorer(t);
   return (
     <div className="mieda-home">
+      <AnniversaryBanner />
       <Hero />
       <MessageProphetique embedded />
       <Reveal>
