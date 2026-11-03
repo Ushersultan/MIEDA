@@ -27,9 +27,28 @@ const AnniversaryBanner = () => {
         .mieda-anniversary::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 25%; background: linear-gradient(90deg, transparent, rgba(255,224,150,.16), transparent); animation: mieda-anniversary-light 4s linear 1; pointer-events: none; }
         .mieda-anniversary[data-can-control=true]::before { animation-duration: 9s; animation-iteration-count: infinite; }
         .mieda-anniversary[data-can-control=true][data-paused=true]::before { animation-play-state: paused; }
+
+        @keyframes mieda-firework-burst {
+          0%, 8% { transform: scale(.08); opacity: 0; }
+          14% { opacity: .85; }
+          44% { transform: scale(1); opacity: .7; }
+          70%, 100% { transform: scale(1.25) translateY(12px); opacity: 0; }
+        }
+        .mieda-fireworks { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+        .mieda-firework { position: absolute; left: 5%; top: 38%; width: 1px; height: 1px; }
+        .mieda-firework:nth-child(2) { left: 91%; top: 44%; }
+        .mieda-firework:nth-child(3) { left: 66%; top: 14%; }
+        .mieda-firework::before { content: ''; position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff1b8; opacity: 0; box-shadow: 0 -44px #f6dd9b, 17px -41px #ffecc2, 31px -31px #d8b866, 41px -17px #f6dd9b, 44px 0 #ffecc2, 41px 17px #d8b866, 31px 31px #f6dd9b, 17px 41px #ffecc2, 0 44px #d8b866, -17px 41px #f6dd9b, -31px 31px #ffecc2, -41px 17px #d8b866, -44px 0 #f6dd9b, -41px -17px #ffecc2, -31px -31px #d8b866, -17px -41px #f6dd9b, 12px -22px #fff5db, 22px 12px #f6dd9b, -12px 22px #fff5db, -22px -12px #f6dd9b; animation: mieda-firework-burst 3.8s ease-out 1 both; }
+        .mieda-firework:nth-child(2)::before { animation-delay: .4s; }
+        .mieda-firework:nth-child(3)::before { animation-delay: .8s; }
+        .mieda-anniversary[data-can-control=true] .mieda-firework::before { animation-iteration-count: infinite; }
+        .mieda-anniversary[data-paused=true] .mieda-firework::before { animation-play-state: paused; }
+        @media (max-width: 639px) { .mieda-firework:nth-child(3) { left: 80%; top: 80%; } }
+        @media (prefers-reduced-motion: reduce) { .mieda-firework::before { animation: none; display: none; } }
         @media (prefers-reduced-motion: reduce) { .mieda-anniversary::before { animation: none; } }
       `}</style>
       <div className="mieda-anniversary border-b border-[#d5b66a]/40" data-paused={paused} data-can-control={canControlAnimation}>
+        <div className="mieda-fireworks" aria-hidden="true"><span className="mieda-firework" /><span className="mieda-firework" /><span className="mieda-firework" /></div>
         <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-4 px-5 py-6 sm:flex-nowrap sm:justify-between sm:px-8">
           <div className="flex items-center gap-4">
             <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-[#e5c77f]/70 bg-white/5 font-serif text-4xl text-[#f6dd9b]" aria-hidden="true">29</span>
