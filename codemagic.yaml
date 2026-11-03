@@ -7,6 +7,11 @@ workflows:
     environment:
       node: 22
       java: 21
+      vars:
+        # Last uploaded Play version confirmed as 11 (1.3.2).
+        # Increment this code before each subsequent Play upload.
+        ANDROID_VERSION_CODE: "12"
+        ANDROID_VERSION_NAME: "1.3.3"
       android_signing:
         - mieda_upload
       groups:
