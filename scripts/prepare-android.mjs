@@ -24,7 +24,10 @@ console.log(`Android configuré : version ${versionName} (code ${nextCode})`);
 // Reuse the church's existing icon for native launcher and splash assets.
 const assetsDirectory = new URL("../assets/", import.meta.url);
 await mkdir(assetsDirectory, { recursive: true });
-for (const name of ["icon-only.png", "splash.png", "splash-dark.png"]) {
+for (const name of ["icon-only.png", "icon-foreground.png", "splash.png", "splash-dark.png"]) {
   await copyFile(new URL("../public/icon-512.png", import.meta.url), new URL(name, assetsDirectory));
 }
+// Adaptive icons need both layers; otherwise Android retains Capacitor's default foreground.
+await writeFile(new URL("icon-background.svg", assetsDirectory),
+  '<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024"><rect width="1024" height="1024" fill="#ffffff"/></svg>', "utf8");
 console.log("Logo MIEDA prêt pour les icônes et l’écran de démarrage");
