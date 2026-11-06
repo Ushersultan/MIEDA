@@ -92,6 +92,7 @@ const Footer = () => {
               {lang === "en" ? "Privacy Policy" : "Politique de confidentialité"}
             </Link>
           </p>
+          <p className="mt-3 text-sm">{lang === "en" ? "Developed by Aser Djeha" : "Développé par Aser Djeha"}</p>
         </div>
       </div>
     </footer>
