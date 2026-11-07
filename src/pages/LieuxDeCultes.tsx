@@ -1,3 +1,4 @@
+import { usePastorContacts, type PastorContact } from "@/lib/pastor-contacts";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import {
   MapPin, Phone, Mail, Youtube, Facebook, Instagram, Video,
@@ -48,9 +49,8 @@ const TXT = {
   },
 };
 
-// ── Afficher les numéros de téléphone des serviteurs ? ──
 // Passez à false pour masquer tous les contacts sur le site public.
-const AFFICHER_CONTACTS = true;
+
 
 // ── Icône TikTok (SVG sur mesure, absente de lucide) ──
 const TikTokIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
@@ -124,7 +124,7 @@ const SocialLinks = ({ eglise }: { eglise: Eglise }) => {
 };
 
 // ── Ligne serviteur (équipe) ──
-const ServiteurRow = ({ p, eglise, photo }: { p: Pasteur; eglise: Eglise; photo?: string }) => (
+const ServiteurRow = ({ p, eglise, photo, contact }: { p: Pasteur; eglise: Eglise; photo?: string; contact?: PastorContact }) => (
   <div className="flex items-center gap-3 py-2">
     <Link to={lienServiteur(eglise, p)} className="flex items-center gap-3 min-w-0 flex-1 group">
       {(p.photo ?? photo) ? (
@@ -140,24 +140,20 @@ const ServiteurRow = ({ p, eglise, photo }: { p: Pasteur; eglise: Eglise; photo?
         {p.titre && <p className="text-xs text-muted-foreground">{p.titre}</p>}
       </div>
     </Link>
-    {AFFICHER_CONTACTS && p.telephone && (
-      <a href={`tel:${p.telephone.replace(/[^+\d]/g, "")}`}
+    {contact?.telephone && (
+      <a href={`tel:${contact.telephone.replace(/[^+\d]/g, "")}`}
          className="text-xs text-primary hover:underline flex items-center gap-1 flex-shrink-0">
         <Phone className="w-3 h-3" />
-        {p.telephone}
+        {contact.telephone}
       </a>
     )}
   </div>
 );
 
 // ── Carte d'une église (dépliable) ──
-const EgliseCard = ({ eglise, L, photoParNom }: { eglise: Eglise; L: typeof TXT.fr; photoParNom: (nom: string) => string | undefined }) => {
+const EgliseCard = ({ eglise, L, photoParNom, contacts }: { eglise: Eglise; L: typeof TXT.fr; photoParNom: (nom: string) => string | undefined; contacts: ReturnType<typeof usePastorContacts> }) => {
   const [open, setOpen] = useState(false);
-  const hasDetails = Boolean(
-    eglise.adresse || (AFFICHER_CONTACTS && (eglise.pasteur.telephone || eglise.pasteur.email)) ||
-    eglise.media?.youtubeVideoId || eglise.media?.youtubeChannel ||
-    (eglise.equipe && eglise.equipe.length > 0)
-  );
+  const contact = contacts.contactFor(eglise.id, eglise.pasteur.nom);
   const mapsLink = eglise.adresse
     ? `https://www.google.com/maps/search/${encodeURIComponent(eglise.adresse)}`
     : undefined;
@@ -167,8 +163,8 @@ const EgliseCard = ({ eglise, L, photoParNom }: { eglise: Eglise; L: typeof TXT.
       eglise.estSiege ? "border-primary/40 ring-1 ring-primary/20" : "border-border"
     }`}>
       <button
-        onClick={() => hasDetails && setOpen(!open)}
-        className={`w-full text-left p-5 flex items-start gap-4 ${hasDetails ? "cursor-pointer hover:bg-muted/40" : "cursor-default"} transition-colors`}
+        onClick={() => setOpen(!open)}
+        className={`w-full text-left p-5 flex items-start gap-4 cursor-pointer hover:bg-muted/40 transition-colors`}
       >
         <Avatar nom={eglise.pasteur.nom} photo={eglise.pasteur.photo ?? photoParNom(eglise.pasteur.nom)} />
         <div className="flex-1 min-w-0">
@@ -198,14 +194,14 @@ const EgliseCard = ({ eglise, L, photoParNom }: { eglise: Eglise; L: typeof TXT.
                 </span>
               )}
             </div>
-            {hasDetails && (
+            {(
               <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`} />
             )}
           </div>
         </div>
       </button>
 
-      {open && hasDetails && (
+      {open && (
         <div className="px-5 pb-5 pt-1 border-t border-border space-y-4">
           {/* Lien vers la fiche du serviteur principal */}
           <div className="pt-3">
@@ -229,18 +225,28 @@ const EgliseCard = ({ eglise, L, photoParNom }: { eglise: Eglise; L: typeof TXT.
                 </span>
               </a>
             )}
-            {AFFICHER_CONTACTS && eglise.pasteur.telephone && (
-              <a href={`tel:${eglise.pasteur.telephone.replace(/[^+\d]/g, "")}`}
+            {!contacts.signedIn && (
+              <Link to="/auth" className="text-sm text-primary underline">
+                {L === TXT.fr ? "Connectez-vous pour voir les coordonnées" : "Sign in to view contact details"}
+              </Link>
+            )}
+            {contacts.failed && (
+              <p className="text-sm text-muted-foreground">
+                {L === TXT.fr ? "Coordonnées temporairement indisponibles." : "Contact details are temporarily unavailable."}
+              </p>
+            )}
+            {contact?.telephone && (
+              <a href={`tel:${contact.telephone.replace(/[^+\d]/g, "")}`}
                  className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors">
                 <Phone className="w-4 h-4 text-primary flex-shrink-0" />
-                {eglise.pasteur.telephone}
+                {contact.telephone}
               </a>
             )}
-            {AFFICHER_CONTACTS && eglise.pasteur.email && (
-              <a href={`mailto:${eglise.pasteur.email}`}
+            {contact?.email && (
+              <a href={`mailto:${contact.email}`}
                  className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors">
                 <Mail className="w-4 h-4 text-primary flex-shrink-0" />
-                {eglise.pasteur.email}
+                {contact.email}
               </a>
             )}
           </div>
@@ -253,7 +259,7 @@ const EgliseCard = ({ eglise, L, photoParNom }: { eglise: Eglise; L: typeof TXT.
               </p>
               <div className="divide-y divide-border">
                 {eglise.equipe.map((p) => (
-                  <ServiteurRow key={p.nom} p={p} eglise={eglise} photo={photoParNom(p.nom)} />
+                  <ServiteurRow key={p.nom} p={p} eglise={eglise} photo={photoParNom(p.nom)} contact={contacts.contactFor(eglise.id, p.nom)} />
                 ))}
               </div>
             </div>
@@ -286,6 +292,7 @@ const EgliseCard = ({ eglise, L, photoParNom }: { eglise: Eglise; L: typeof TXT.
 const LieuxDeCultes = () => {
   const { lang } = useLang();
   const L = TXT[lang];
+  const contacts = usePastorContacts();
   const [query, setQuery] = useState("");
   const [photosServiteurs, setPhotosServiteurs] = useState<{ nom: string; url: string }[]>([]);
 
@@ -416,7 +423,7 @@ const LieuxDeCultes = () => {
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {liste.map((eglise) => (
-                      <EgliseCard key={eglise.id} eglise={eglise} L={L} photoParNom={photoParNom} />
+                      <EgliseCard key={eglise.id} eglise={eglise} L={L} photoParNom={photoParNom} contacts={contacts} />
                     ))}
                   </div>
                 </div>
@@ -434,7 +441,7 @@ const LieuxDeCultes = () => {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {international.map((eglise) => (
-                  <EgliseCard key={eglise.id} eglise={eglise} L={L} photoParNom={photoParNom} />
+                  <EgliseCard key={eglise.id} eglise={eglise} L={L} photoParNom={photoParNom} contacts={contacts} />
                 ))}
               </div>
             </div>

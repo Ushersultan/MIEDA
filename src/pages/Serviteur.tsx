@@ -1,3 +1,5 @@
+import { usePastorContacts } from "@/lib/pastor-contacts";
+import { useLang } from "@/contexts/LanguageContext";
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +19,8 @@ const getInitials = (nom: string) => {
 const Serviteur = () => {
   const { egliseId = "", slug = "" } = useParams();
   const res = trouverServiteur(egliseId, slug);
+  const contacts = usePastorContacts();
+  const { lang } = useLang();
 
   // Photo du compte pasteur (si le nom correspond et qu'une photo est définie)
   const [photoCompte, setPhotoCompte] = useState<string | null>(null);
@@ -52,6 +56,7 @@ const Serviteur = () => {
   }
 
   const { pasteur, eglise, estPrincipal } = res;
+  const contact = contacts.contactFor(eglise.id, pasteur.nom);
 
   return (
     <div className="pt-20">
@@ -98,27 +103,34 @@ const Serviteur = () => {
             <div className="bg-card border border-border rounded-2xl p-6">
               <h2 className="font-semibold text-foreground mb-4">Coordonnées</h2>
               <div className="space-y-3">
-                {pasteur.telephone && (
-                  <a href={`tel:${pasteur.telephone.replace(/[^+\d]/g, "")}`}
+                {!contacts.signedIn && (
+                  <Link to="/auth" className="text-sm text-primary underline">
+                    {lang === "fr" ? "Connectez-vous pour voir les coordonnées" : "Sign in to view contact details"}
+                  </Link>
+                )}
+                {contact?.telephone && (
+                  <a href={`tel:${contact?.telephone.replace(/[^+\d]/g, "")}`}
                      className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
                     <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <Phone className="w-5 h-5 text-primary" />
                     </div>
-                    {pasteur.telephone}
+                    {contact?.telephone}
                   </a>
                 )}
-                {pasteur.email && (
-                  <a href={`mailto:${pasteur.email}`}
+                {contact?.email && (
+                  <a href={`mailto:${contact?.email}`}
                      className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
                     <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <Mail className="w-5 h-5 text-primary" />
                     </div>
-                    {pasteur.email}
+                    {contact?.email}
                   </a>
                 )}
-                {!pasteur.telephone && !pasteur.email && (
+                {contacts.signedIn && !contacts.loading && !contact?.telephone && !contact?.email && (
                   <p className="text-sm text-muted-foreground">
-                    Contactez ce serviteur via son église.
+                    {contacts.failed
+                      ? (lang === "fr" ? "Coordonnées temporairement indisponibles." : "Contact details are temporarily unavailable.")
+                      : (lang === "fr" ? "Contactez ce serviteur via son église." : "Contact this pastor through their church.")}
                   </p>
                 )}
               </div>
