@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -187,21 +187,6 @@ const Contact = () => {
                     </h4>
                     <p className="text-muted-foreground">
                       com@eglisesmieda.org
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-primary" />
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-1 text-foreground">
-                      Téléphone
-                    </h4>
-                    <p className="text-muted-foreground">
-                      +225 07 58 93 25 62
                     </p>
                   </div>
                 </div>

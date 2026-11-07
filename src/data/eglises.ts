@@ -10,8 +10,6 @@ export interface Pasteur {
   nom: string;
   titre?: string;
   photo?: string;
-  telephone?: string;
-  email?: string;
 }
 
 export interface Reseaux {
@@ -83,7 +81,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI KOUASSI ELISE",
       titre: "Pasteur titulaire",
-      telephone: "05 05 64 70 75",
     },
   },
   {
@@ -97,7 +94,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAMETCHI AMON ALEXANDRE",
       titre: "Evangéliste titulaire",
-      telephone: "07 48 62 73 85",
     },
   },
   {
@@ -111,7 +107,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ALLA KONAN GUILLAUME",
       titre: "Pasteur titulaire",
-      telephone: "07 47 34 84 71",
     },
   },
   {
@@ -127,7 +122,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "Révérend Docteur DJEHA KOUADIO",
       titre: "Prophète · Président Fondateur",
-      telephone: "07 07 88 79 89",
     },
     reseaux: {
       facebook: "https://www.facebook.com/mieda225",
@@ -141,67 +135,54 @@ export const eglises: Eglise[] = [
       {
         nom: "N'GUESSAN KOFFI CASIMIR",
         titre: "Pasteur titulaire",
-        telephone: "07 58 93 25 62",
       },
       {
         nom: "OFFI KOFFI",
         titre: "Pasteur titulaire",
-        telephone: "07 08 35 15 54",
       },
       {
         nom: "ARIOLE ERIC",
         titre: "Pasteur titulaire",
-        telephone: "07 07 58 35 84",
       },
       {
         nom: "LATH MEL ELVIS",
         titre: "Pasteur titulaire",
-        telephone: "07 09 07 95 61",
       },
       {
         nom: "KOUAKOU AHOU ODETTE NICOLE",
         titre: "Pasteur titulaire",
-        telephone: "07 07 64 88 22",
       },
       {
         nom: "KOFFI BROU MARIUS",
         titre: "Pasteur titulaire",
-        telephone: "07 58 06 45 19",
       },
       {
         nom: "BRITO AMBROISE",
         titre: "Pasteur titulaire",
-        telephone: "07 08 15 42 64",
       },
       {
         nom: "KONAN WILFRIED",
         titre: "Pasteur titulaire",
-        telephone: "07 09 17 56 96",
       },
       {
         nom: "Mme YAO JOSEPHINE BLASSONNI",
         titre: "Pasteur assistante",
-        telephone: "07 09 50 53 49",
       },
       {
         nom: "IRIGO BOMISSO CHARLES",
         titre: "Pasteur assistant",
-        telephone: "01 52 69 52 96",
       },
       {
         nom: "GUEHI LILIANE PATRICIA",
         titre: "Evangéliste assistante",
-        telephone: "07 58 56 25 91",
       },
       {
         nom: "Mme DIALLO Née ALINGRA N'DRI ANGELE",
         titre: "Evangéliste assistante",
-        telephone: "01 73 84 40 13",
       },
       {
         nom: "KONAN AYA JEANNE",
         titre: "Evangéliste assistante",
-        telephone: "07 59 87 67 52",
       },
     ],
   },
@@ -216,7 +197,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU ASSIE ARSENE",
       titre: "Pasteur titulaire",
-      telephone: "07 09 36 07 48",
     },
   },
 
@@ -232,7 +212,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ABOYA KOUADIO",
       titre: "Pasteur stagiaire",
-      telephone: "07 09 42 78 81",
     },
   },
   {
@@ -246,7 +225,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ZAORO HABA H. RODRIGUE",
       titre: "Pasteur titulaire",
-      telephone: "07 58 21 74 22",
     },
   },
   {
@@ -260,7 +238,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO N'GUESSAN EDOUARD",
       titre: "Pasteur titulaire",
-      telephone: "07 49 95 57 15",
     },
   },
   {
@@ -274,7 +251,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN AMANI MARCELIN",
       titre: "Pasteur titulaire",
-      telephone: "07 49 87 22 50",
     },
   },
   {
@@ -288,7 +264,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ANDOH LUCETTE Epse KOUAME",
       titre: "Pasteur titulaire",
-      telephone: "07 58 21 74 22",
     },
   },
   {
@@ -302,13 +277,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU KOUASSI CLEMENT",
       titre: "Pasteur titulaire",
-      telephone: "07 07 76 85 38",
     },
     equipe: [
       {
         nom: "MICHEL AXCEL OHOREME",
         titre: "Evangéliste assistant",
-        telephone: "07 79 14 60 68",
       },
     ],
   },
@@ -323,7 +296,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN KOUAME EZEQUIEL",
       titre: "Pasteur assistant",
-      telephone: "07 08 04 70 99",
     },
   },
   {
@@ -337,7 +309,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU KOFFI SERGE",
       titre: "Pasteur titulaire",
-      telephone: "07 49 94 46 71",
     },
   },
 
@@ -366,7 +337,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "OUATTARA ARDJOUMA",
       titre: "Pasteur titulaire",
-      telephone: "07 57 63 47 97",
     },
   },
   {
@@ -380,7 +350,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "COULIBALY KASSINIBIN SAMUEL",
       titre: "Pasteur titulaire",
-      telephone: "07 49 00 25 07",
     },
   },
   {
@@ -394,7 +363,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'GUESSAN YAO CHRISTOPHE",
       titre: "Evangéliste stagiaire",
-      telephone: "01 71 92 12 39",
     },
   },
   {
@@ -408,7 +376,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO BAH LAMBERT",
       titre: "Pasteur assistant",
-      telephone: "07 08 58 61 21",
     },
   },
   {
@@ -422,7 +389,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ACHIE SALL TANGUY",
       titre: "Pasteur titulaire",
-      telephone: "07 47 10 05 48",
     },
   },
   {
@@ -436,7 +402,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DJAGBO FRANCK OLIVIER",
       titre: "Pasteur assistant",
-      telephone: "01 51 27 61 15",
     },
   },
   {
@@ -450,7 +415,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'GUESSAN FERDINAND",
       titre: "Pasteur titulaire",
-      telephone: "07 47 42 22 91",
     },
   },
   {
@@ -464,7 +428,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AGBASSA AFFOUNDJI ALAIN",
       titre: "Pasteur titulaire",
-      telephone: "01 51 76 13 21",
     },
   },
   {
@@ -478,7 +441,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BOUABRE LORICE LANDRY",
       titre: "Pasteur titulaire",
-      telephone: "05 44 14 87 16",
     },
   },
   {
@@ -492,7 +454,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "EHOUMAN A. AGNES EPSE AGBASSA",
       titre: "Evangéliste titulaire",
-      telephone: "07 08 44 45 00",
     },
   },
   {
@@ -506,7 +467,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME KOUADIO AMIRAL",
       titre: "Pasteur titulaire",
-      telephone: "07 49 00 41 49",
     },
   },
   {
@@ -520,7 +480,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BROU KONAN ROGER",
       titre: "Pasteur stagiaire",
-      telephone: "07 58 72 91 39",
     },
   },
   {
@@ -534,13 +493,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO KOUAME MARIUS",
       titre: "Pasteur titulaire",
-      telephone: "07 08 64 43 87",
     },
     equipe: [
       {
         nom: "BROU KOUAKOU",
         titre: "Prophète stagiaire",
-        telephone: "05 56 21 66 38",
       },
     ],
   },
@@ -557,7 +514,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ASSUIE KOUASSI JEAN ELISEE",
       titre: "Evangéliste stagiaire",
-      telephone: "07 47 16 84 19",
     },
   },
   {
@@ -571,7 +527,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "LOUKOU TANOH EZECHIEL",
       titre: "Pasteur titulaire",
-      telephone: "07 87 10 23 69",
     },
   },
   {
@@ -585,7 +540,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AKUI DABAH AIME CONSTANT",
       titre: "Pasteur titulaire",
-      telephone: "07 47 69 56 90",
     },
   },
   {
@@ -599,7 +553,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUALY GNAKOUA HERVE",
       titre: "Apôtre titulaire",
-      telephone: "07 59 32 42 59",
     },
   },
   {
@@ -613,7 +566,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BATIONO SERGE",
       titre: "Evangéliste titulaire",
-      telephone: "07 59 58 09 68",
     },
   },
   {
@@ -627,7 +579,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO KONAN BRICE ARNAUD",
       titre: "Pasteur titulaire",
-      telephone: "07 89 36 53 47",
     },
   },
 
@@ -643,7 +594,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU KOUAME (BOUA MICHEL)",
       titre: "Pasteur titulaire",
-      telephone: "07 08 28 85 69",
     },
     equipe: [
       {
@@ -663,13 +613,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "HEDIHON YAO EPHREM",
       titre: "Pasteur titulaire",
-      telephone: "07 77 63 66 51",
     },
     equipe: [
       {
         nom: "N'GORAN AHOU BRIGITTE EPSE KOUASSI",
         titre: "Pasteure stagiaire",
-        telephone: "01 00 60 63 04",
       },
     ],
   },
@@ -684,7 +632,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI YAO NARCISSE",
       titre: "Pasteur assistant",
-      telephone: "07 57 37 67 05",
     },
   },
   {
@@ -698,7 +645,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KRAH N'GUESSAN HYACINTHE",
       titre: "Pasteur titulaire",
-      telephone: "07 59 03 90 92",
     },
   },
   {
@@ -712,23 +658,19 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOKORA JONAS",
       titre: "Pasteur titulaire",
-      telephone: "07 09 73 02 30",
     },
     equipe: [
       {
         nom: "MESSAN KOFFI BASILE",
         titre: "Pasteur titulaire",
-        telephone: "07 09 55 01 84",
       },
       {
         nom: "KOUAKOU AHOU ELIANE",
         titre: "Pasteure assistante",
-        telephone: "05 06 90 53 83",
       },
       {
         nom: "KOUAME KOFFI ANGE",
         titre: "Evangéliste assistant",
-        telephone: "07 49 54 06 15",
       },
     ],
   },
@@ -743,13 +685,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONGO KOUAME",
       titre: "Pasteur titulaire",
-      telephone: "07 68 40 30 52",
     },
     equipe: [
       {
         nom: "KOUAME KOUAME ETIENNE",
         titre: "Pasteur assistant",
-        telephone: "07 87 59 32 57",
       },
     ],
   },
@@ -764,7 +704,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO AHOUTOU NARCISSE",
       titre: "Pasteur titulaire",
-      telephone: "07 57 57 83 68",
     },
   },
   {
@@ -778,7 +717,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'DRI BI N'DRIN ARMEL",
       titre: "Pasteur assistant",
-      telephone: "05 86 50 41 43",
     },
   },
   {
@@ -792,7 +730,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DJEHA KOUADJALAIN JOSUE",
       titre: "Pasteur titulaire",
-      telephone: "07 07 40 95 78",
     },
   },
   {
@@ -806,18 +743,15 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AKA YAO",
       titre: "Pasteur titulaire",
-      telephone: "07 07 63 53 71",
     },
     equipe: [
       {
         nom: "YAO AMANI CHRISTIANE",
         titre: "Evangéliste assistante",
-        telephone: "05 05 66 44 84",
       },
       {
         nom: "DIGBE KRAGBE JACQUEMIN",
         titre: "Pasteur assistant",
-        telephone: "05 05 28 99 84",
       },
     ],
   },
@@ -834,7 +768,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO KONAN CYRIL",
       titre: "Pasteur titulaire",
-      telephone: "07 07 39 40 35",
     },
   },
   {
@@ -848,7 +781,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO KOUAKOU OLIVIER",
       titre: "Pasteur assistant",
-      telephone: "01 71 53 30 34",
     },
   },
   {
@@ -862,18 +794,15 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO N'GUESSAN PIERRETTE",
       titre: "Evangéliste titulaire",
-      telephone: "07 09 06 98 13",
     },
     equipe: [
       {
         nom: "KOUADIO KONAN MILLOS A.",
         titre: "Pasteur titulaire",
-        telephone: "07 58 23 75 61",
       },
       {
         nom: "KOUAME KOUAKOU GILBERT",
         titre: "Pasteur assistant",
-        telephone: "07 14 14 29 03",
       },
     ],
   },
@@ -888,7 +817,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "GBE KESSE BASILE",
       titre: "Pasteur titulaire",
-      telephone: "07 08 74 76 85",
     },
   },
   {
@@ -902,7 +830,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ZEBLY TREZERE SERGE PACOME",
       titre: "Pasteur stagiaire",
-      telephone: "07 14 29 85 64",
     },
   },
   {
@@ -916,7 +843,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONGO KOUASSI",
       titre: "Pasteur titulaire",
-      telephone: "07 57 17 12 74",
     },
   },
   {
@@ -930,7 +856,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU KOUADIO FRANCOIS",
       titre: "Pasteur titulaire",
-      telephone: "07 09 88 15 67",
     },
   },
   {
@@ -944,7 +869,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "GAHOUDE GUY CASIMIR",
       titre: "Pasteur titulaire",
-      telephone: "07 59 18 56 05",
     },
   },
   {
@@ -958,18 +882,15 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO N'ZAN ORLANDO",
       titre: "Evangéliste titulaire",
-      telephone: "07 48 59 48 65",
     },
     equipe: [
       {
         nom: "OUEYAN BI SUI JEAN-JAURES",
         titre: "Pasteur assistant",
-        telephone: "07 77 29 03 56",
       },
       {
         nom: "DATTE KOUAME GUILLAUME",
         titre: "Pasteur stagiaire",
-        telephone: "07 09 68 86 17",
       },
     ],
   },
@@ -984,7 +905,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "TRA BI DURAVIN JEAN CLAUDE",
       titre: "Pasteur assistant",
-      telephone: "07 57 45 88 45",
     },
   },
 
@@ -1000,58 +920,47 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YOBOUET KOUADIO PATRICK",
       titre: "Pasteur titulaire",
-      telephone: "07 08 36 92 80",
     },
     equipe: [
       {
         nom: "KOUASSI N'GUESSAN COLETTE",
         titre: "Evangéliste titulaire",
-        telephone: "07 07 61 84 64",
       },
       {
         nom: "KELATE HELENE",
         titre: "Evangéliste titulaire",
-        telephone: "05 05 10 90 47",
       },
       {
         nom: "NIAMIEN BROU",
         titre: "Pasteur titulaire",
-        telephone: "07 59 11 83 16",
       },
       {
         nom: "Mme ANVO PATRICIA",
         titre: "Evangéliste titulaire",
-        telephone: "07 07 26 95 66",
       },
       {
         nom: "KOUASSI KOUADIO THIERRY",
         titre: "Pasteur titulaire",
-        telephone: "07 59 93 34 04",
       },
       {
         nom: "KOUAKOU AHOU SOLANGE",
         titre: "Evangéliste titulaire",
-        telephone: "07 07 91 78 96",
       },
       {
         nom: "KONAN JEAN MATEI",
         titre: "Pasteur assistant",
-        telephone: "05 05 33 12 31",
       },
       {
         nom: "KOUMAN KOUAME ABRAHAM",
         titre: "Pasteur assistant",
-        telephone: "07 07 50 83 66",
       },
       {
         nom: "SORO MINGAME",
         titre: "Pasteur assistant",
-        telephone: "07 07 21 74 77",
       },
       {
         nom: "DALLY GNAHOUA JEAN LOUIS",
         titre: "Evangéliste",
-        telephone: "07 07 40 95 78",
       },
     ],
   },
@@ -1066,13 +975,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOMMON MICHAËL ROMARIC",
       titre: "Pasteur titulaire",
-      telephone: "07 47 94 20 24",
     },
     equipe: [
       {
         nom: "YAO KONAN GEOFFROID",
         titre: "Pasteur titulaire",
-        telephone: "07 47 34 38 34",
       },
     ],
   },
@@ -1100,7 +1007,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME KOFFI NOEL (JOSUE)",
       titre: "Pasteur titulaire",
-      telephone: "05 75 52 03 30",
     },
   },
   {
@@ -1114,7 +1020,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DIBO YAOLEY SIMPLICE",
       titre: "Pasteur titulaire",
-      telephone: "07 47 01 48 10",
     },
   },
   {
@@ -1128,7 +1033,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BOUAFFI N'GUESSAN BERNADETTE",
       titre: "Evangéliste titulaire",
-      telephone: "01 43 87 99 25",
     },
   },
   {
@@ -1142,13 +1046,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "SODOUA DAVE CLAUDE",
       titre: "Evangéliste titulaire",
-      telephone: "07 08 14 11 01",
     },
     equipe: [
       {
         nom: "IBO AKE EMMANUEL",
         titre: "Pasteur assistant",
-        telephone: "07 08 34 77 84",
       },
     ],
   },
@@ -1163,18 +1065,15 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'DRI YAO KAN AIME",
       titre: "Pasteur titulaire",
-      telephone: "07 08 12 10 54",
     },
     equipe: [
       {
         nom: "GNAGNE DJOME PAUL",
         titre: "Pasteur Enseignant titulaire",
-        telephone: "07 48 81 99 92",
       },
       {
         nom: "N'GOTTA N'GUESSAN",
         titre: "Pasteur titulaire",
-        telephone: "07 58 19 87 13",
       },
     ],
   },
@@ -1189,7 +1088,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DIATTO YAO KOUMAN",
       titre: "Evangéliste titulaire",
-      telephone: "01 03 89 04 42",
     },
   },
   {
@@ -1203,7 +1101,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'GUESSAN KONAN HERMANN",
       titre: "Pasteur titulaire",
-      telephone: "07 57 46 12 11",
     },
   },
   {
@@ -1217,7 +1114,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "LOROU BI GORE XAVIER DIMITRI",
       titre: "Pasteur titulaire",
-      telephone: "05 46 60 06 07",
     },
   },
   {
@@ -1231,7 +1127,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "GUEU OUESSEU ALPHONSE",
       titre: "Pasteur titulaire",
-      telephone: "07 59 03 21 06",
     },
   },
 
@@ -1247,7 +1142,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN KOUAKOU FULGENCE",
       titre: "Pasteur assistant",
-      telephone: "07 49 02 97 84",
     },
   },
   {
@@ -1261,7 +1155,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN N'GUESSAN HORTENSE",
       titre: "Pasteure stagiaire",
-      telephone: "07 49 32 81 02",
     },
   },
   {
@@ -1275,7 +1168,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DIAH N'GUESSAN CHANTAL EPSE BOHOUSSOU",
       titre: "Pasteure assistante",
-      telephone: "01 01 44 84 97",
     },
   },
   {
@@ -1289,7 +1181,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'DRI AMANI GEORGES",
       titre: "Pasteur assistant",
-      telephone: "07 57 85 39 57",
     },
   },
   {
@@ -1303,7 +1194,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO N'DA YAO MARTIAL",
       titre: "Pasteur stagiaire",
-      telephone: "07 68 23 38 77",
     },
   },
   {
@@ -1317,7 +1207,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO N'GUESSAN ELYSEE",
       titre: "Pasteur titulaire",
-      telephone: "07 08 51 31 44",
     },
   },
   {
@@ -1331,7 +1220,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AGNISSAN KOUASSI ACHILLE",
       titre: "Pasteur titulaire",
-      telephone: "07 07 40 24 43",
     },
   },
   {
@@ -1345,7 +1233,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI KOUADIO ALFRED",
       titre: "Pasteur titulaire",
-      telephone: "07 48 91 85 37",
     },
   },
   {
@@ -1359,7 +1246,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BOHOUSSOU KOFFI SERGE",
       titre: "Pasteur titulaire",
-      telephone: "07 49 22 99 01",
     },
   },
   {
@@ -1373,7 +1259,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BROU KONAN AUGUSTIN",
       titre: "Pasteur stagiaire",
-      telephone: "01 70 71 38 20",
     },
   },
 
@@ -1389,7 +1274,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI KOFFI JOSEPH",
       titre: "Pasteur assistant",
-      telephone: "07 07 39 22 13",
     },
     equipe: [
       {
@@ -1409,7 +1293,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'GUESSAN BROU PHILIPPE",
       titre: "Pasteur titulaire",
-      telephone: "07 08 71 65 06",
     },
   },
   {
@@ -1423,7 +1306,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN N'GORAN BERTIN",
       titre: "Pasteur titulaire",
-      telephone: "07 59 03 91 00",
     },
   },
   {
@@ -1437,7 +1319,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ASSIE YAO KEVIN",
       titre: "Pasteur stagiaire",
-      telephone: "07 00 54 35 71",
     },
   },
   {
@@ -1451,7 +1332,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUASSI SYLVAIN",
       titre: "Pasteur assistant",
-      telephone: "01 43 22 34 47",
     },
   },
 
@@ -1467,7 +1347,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AMENAN VIRGINIE YOBOUET",
       titre: "Pasteur titulaire",
-      telephone: "07 07 70 04 59",
     },
     equipe: [
       {
@@ -1487,7 +1366,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN KOUASSI JEAN STEPHANE",
       titre: "Pasteur stagiaire",
-      telephone: "07 48 09 09 83",
     },
   },
   {
@@ -1501,7 +1379,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KRA AHOU VIRGINIE",
       titre: "Pasteur titulaire",
-      telephone: "07 77 91 08 26",
     },
   },
   {
@@ -1515,7 +1392,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO N'GUESSAN ANTOINE",
       titre: "Pasteur titulaire",
-      telephone: "07 07 36 83 35",
     },
   },
   {
@@ -1529,7 +1405,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO YAO SEBASTIEN",
       titre: "Pasteur titulaire",
-      telephone: "07 59 03 91 89",
     },
   },
   {
@@ -1543,7 +1418,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME BROU EUGENE",
       titre: "Pasteur titulaire",
-      telephone: "07 67 18 44 05",
     },
   },
   {
@@ -1557,7 +1431,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN KOUAKOU JACQUES",
       titre: "Pasteur titulaire",
-      telephone: "07 48 51 12 18",
     },
   },
   {
@@ -1571,7 +1444,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ASSAMOI YAPI BERANGER",
       titre: "Pasteur titulaire",
-      telephone: "07 07 45 36 27",
     },
   },
   {
@@ -1585,7 +1457,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONE PEDJARA",
       titre: "Pasteur stagiaire",
-      telephone: "01 52 51 12 82",
     },
   },
   {
@@ -1599,7 +1470,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'GUESSAN KOUAKOU MARCELIN",
       titre: "Pasteur titulaire",
-      telephone: "07 08 86 34 74",
     },
   },
   {
@@ -1613,7 +1483,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO KOUASSI JEAN PAUL",
       titre: "Pasteur titulaire",
-      telephone: "07 48 49 80 99",
     },
   },
   {
@@ -1627,7 +1496,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BROU YAO",
       titre: "Pasteur titulaire",
-      telephone: "07 09 81 51 18",
     },
     equipe: [
       {
@@ -1649,7 +1517,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU KOUADIO JEAN LOUIS",
       titre: "Pasteur titulaire",
-      telephone: "07 59 03 90 63",
     },
   },
   {
@@ -1663,7 +1530,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "MAH STEPHANE",
       titre: "Pasteur assistant",
-      telephone: "07 47 29 38 53",
     },
   },
   {
@@ -1677,33 +1543,27 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KRAMO KOFFI LEONCE",
       titre: "Pasteur titulaire",
-      telephone: "07 49 00 11 26",
     },
     equipe: [
       {
         nom: "KOUADIO N'DRI BEATRICE",
         titre: "Pasteur assistante",
-        telephone: "07 07 39 77 38",
       },
       {
         nom: "KANGA N'GORAN MARCEL",
         titre: "Pasteur assistant",
-        telephone: "05 45 89 05 89",
       },
       {
         nom: "N'GUESSAN K. NORBERT",
         titre: "Pasteur assistant",
-        telephone: "07 08 02 22 65",
       },
       {
         nom: "ORE MARCEL",
         titre: "Pasteur stagiaire",
-        telephone: "07 79 50 62 21",
       },
       {
         nom: "N'GUESSAN K. CESAR",
         titre: "Pasteur stagiaire",
-        telephone: "05 74 76 77 91",
       },
     ],
   },
@@ -1718,7 +1578,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ORE GAUZE OLIVIER",
       titre: "Pasteur assistant",
-      telephone: "07 57 32 37 49",
     },
   },
   {
@@ -1732,7 +1591,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME YAO BERNARD",
       titre: "Pasteur assistant",
-      telephone: "07 48 65 72 32",
     },
   },
   {
@@ -1746,7 +1604,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME SAINT JAURES",
       titre: "Pasteur titulaire",
-      telephone: "07 07 46 74 70",
     },
   },
   {
@@ -1760,7 +1617,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO KOFFI",
       titre: "Pasteur titulaire",
-      telephone: "07 48 47 76 37",
     },
   },
   {
@@ -1774,7 +1630,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN KOUAME NARCISSE",
       titre: "Pasteur stagiaire",
-      telephone: "07 78 66 09 08",
     },
   },
   {
@@ -1788,7 +1643,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YAO KOUADIO PAUL",
       titre: "Pasteur titulaire",
-      telephone: "07 07 74 12 29",
     },
   },
   {
@@ -1802,7 +1656,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI YAO DANIEL",
       titre: "Pasteur titulaire",
-      telephone: "07 48 09 69 92",
     },
   },
 
@@ -1818,7 +1671,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ALLOU KOUAKOU ANDERSON",
       titre: "Pasteur titulaire",
-      telephone: "07 08 03 32 87",
     },
   },
   {
@@ -1832,7 +1684,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BROU EHOUMAN ROBERT",
       titre: "Pasteur titulaire",
-      telephone: "07 47 44 68 94",
     },
   },
   {
@@ -1846,7 +1697,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAO KOFFI FERDINAND YAME",
       titre: "Pasteur titulaire",
-      telephone: "07 09 99 69 06",
     },
   },
   {
@@ -1860,7 +1710,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ETTIEN JACQUES ANOH",
       titre: "Pasteur assistant",
-      telephone: "07 79 97 00 36",
     },
   },
   {
@@ -1874,7 +1723,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN KOUAKOU VINCENT",
       titre: "Pasteur titulaire",
-      telephone: "07 08 76 65 48",
     },
   },
   {
@@ -1888,7 +1736,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUA KOFFI GERMAIN",
       titre: "Pasteur assistant",
-      telephone: "07 09 88 52 06",
     },
   },
   {
@@ -1902,7 +1749,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "FREDY KOUADIO AMOS BOHOUE",
       titre: "Pasteur assistant",
-      telephone: "07 09 81 71 32",
     },
   },
   {
@@ -1916,13 +1762,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME KOUADIO ANDERSON",
       titre: "Pasteur titulaire",
-      telephone: "07 09 68 86 83",
     },
     equipe: [
       {
         nom: "KONAN GNAMIEN RICHARD",
         titre: "Pasteur stagiaire",
-        telephone: "07 48 99 72 45",
       },
     ],
   },
@@ -1937,7 +1781,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONGOZA LOUKOU CYRILLE",
       titre: "Pasteur titulaire",
-      telephone: "07 07 21 84 77",
     },
   },
   {
@@ -1951,7 +1794,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUAKOU ADRIEN",
       titre: "Evangéliste titulaire",
-      telephone: "07 59 03 20 99",
     },
   },
 
@@ -1967,7 +1809,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUAME JEAN MARC LIONEL",
       titre: "Pasteur titulaire",
-      telephone: "07 98 77 65 92",
     },
   },
   {
@@ -1981,7 +1822,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ASSOMAN N'GBESSO NARCISSE",
       titre: "Pasteur assistant",
-      telephone: "07 49 07 82 11",
     },
   },
   {
@@ -1995,7 +1835,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "COULIBALY MOUSTAPHA",
       titre: "Pasteur titulaire",
-      telephone: "07 09 83 51 65",
     },
   },
   {
@@ -2009,7 +1848,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUAME PHILIPPE JACQUES",
       titre: "Evangéliste stagiaire",
-      telephone: "07 07 49 08 91",
     },
   },
   {
@@ -2023,13 +1861,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BROU YAO BENOIT",
       titre: "Pasteur titulaire",
-      telephone: "05 46 03 97 45",
     },
     equipe: [
       {
         nom: "AMADJA AUGUSTIN",
         titre: "Pasteur stagiaire",
-        telephone: "01 60 26 74 79",
       },
     ],
   },
@@ -2044,7 +1880,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUAME AUGUSTIN",
       titre: "Evangéliste titulaire",
-      telephone: "07 07 75 62 69",
     },
   },
   {
@@ -2058,7 +1893,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "ZEGO GENEVIEVE EPSE DAGO",
       titre: "Pasteur assistante",
-      telephone: "01 04 29 14 15",
     },
   },
 
@@ -2074,7 +1908,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "COCOU YAO OLIVIER",
       titre: "Pasteur stagiaire",
-      telephone: "07 17 10 77 88",
     },
   },
   {
@@ -2088,7 +1921,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME KOUASSI ALEXIS",
       titre: "Pasteur titulaire",
-      telephone: "07 08 58 20 90",
     },
   },
   {
@@ -2102,18 +1934,15 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "SARAKA MEDARD",
       titre: "Pasteur titulaire",
-      telephone: "07 59 03 92 14",
     },
     equipe: [
       {
         nom: "KOUAKOU KOUASSI",
         titre: "Pasteur titulaire",
-        telephone: "01 01 44 79 17",
       },
       {
         nom: "KOFFI KOUAME MARCELIN",
         titre: "Pasteur assistant",
-        telephone: "05 55 85 29 17",
       },
     ],
   },
@@ -2128,7 +1957,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "TANOH KOUAME NOEL",
       titre: "Evangéliste titulaire",
-      telephone: "07 68 55 68 60",
     },
   },
   {
@@ -2142,7 +1970,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AMANI KOUASSI CHRISTIAN",
       titre: "Pasteur stagiaire",
-      telephone: "07 09 55 65 09",
     },
   },
   {
@@ -2156,7 +1983,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO YAO MARIUS",
       titre: "Pasteur titulaire",
-      telephone: "07 09 38 26 50",
     },
   },
   {
@@ -2170,7 +1996,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BALIE YVES DAZLAURE",
       titre: "Pasteur assistant",
-      telephone: "07 59 68 25 55",
     },
   },
   {
@@ -2184,7 +2009,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "BROU KOUADIO CONSTANTIN",
       titre: "Pasteur titulaire",
-      telephone: "05 06 53 87 82",
     },
   },
   {
@@ -2198,7 +2022,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "GNEZE THOMAS",
       titre: "Pasteur assistant",
-      telephone: "05 45 64 42 62",
     },
   },
   {
@@ -2212,7 +2035,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'DRI KOUADIO JEAN NOËL",
       titre: "Pasteur titulaire",
-      telephone: "07 09 80 79 34",
     },
   },
   {
@@ -2226,7 +2048,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI KOFFI DESIRE",
       titre: "Pasteur assistant",
-      telephone: "07 59 68 25 55",
     },
   },
   {
@@ -2240,7 +2061,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUAKOU VICTOR",
       titre: "Pasteur stagiaire",
-      telephone: "07 49 20 23 35",
     },
   },
 
@@ -2269,18 +2089,15 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME KOUAME ELISE",
       titre: "Pasteur titulaire",
-      telephone: "07 77 24 91 49",
     },
     equipe: [
       {
         nom: "KOUAKOU PECARRERE ARNAUD",
         titre: "Pasteur titulaire",
-        telephone: "05 85 75 56 57",
       },
       {
         nom: "TCHAFFA OBAFENI ISAAC",
         titre: "Pasteur assistant",
-        telephone: "07 57 21 84 50",
       },
     ],
   },
@@ -2295,7 +2112,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AMANI KOFFI LUCIEN",
       titre: "Pasteur titulaire",
-      telephone: "07 88 84 50 55",
     },
   },
 
@@ -2311,7 +2127,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DJE KONAN BERTIN",
       titre: "Pasteur titulaire",
-      telephone: "07 49 23 02 93",
     },
   },
   {
@@ -2325,7 +2140,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI EHOUSSOU FREDY",
       titre: "Pasteur titulaire",
-      telephone: "07 07 84 46 94",
     },
   },
   {
@@ -2339,7 +2153,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUAKOU JACQUES",
       titre: "Pasteur titulaire",
-      telephone: "07 77 10 80 32",
     },
   },
   {
@@ -2353,7 +2166,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO KOUAKOU OLIVIER",
       titre: "Pasteur titulaire",
-      telephone: "07 07 82 25 86",
     },
   },
   {
@@ -2367,7 +2179,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "GBONGUE FRANCIS",
       titre: "Pasteur titulaire",
-      telephone: "07 87 69 33 15",
     },
   },
   {
@@ -2381,7 +2192,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI KOUAME NORBERT",
       titre: "Pasteur titulaire",
-      telephone: "07 08 37 40 25",
     },
   },
   {
@@ -2395,18 +2205,15 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN KONAN MARCEL",
       titre: "Pasteur titulaire",
-      telephone: "05 52 18 63 90",
     },
     equipe: [
       {
         nom: "AMANI KOUASSI MARIUS",
         titre: "Pasteur assistant",
-        telephone: "07 59 61 81 64",
       },
       {
         nom: "KLA PASCAL",
         titre: "Pasteur assistant",
-        telephone: "07 78 36 79 08",
       },
     ],
   },
@@ -2421,7 +2228,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DION DELI MICHEL",
       titre: "Pasteur assistant",
-      telephone: "05 86 66 04 01",
     },
   },
   {
@@ -2435,7 +2241,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DION INNOCENT",
       titre: "Pasteur assistant",
-      telephone: "07 07 76 12 93",
     },
   },
 
@@ -2451,7 +2256,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUASSI JULES",
       titre: "Pasteur titulaire",
-      telephone: "07 09 06 37 07",
     },
   },
   {
@@ -2465,7 +2269,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI KOUASSI SYLVAIN",
       titre: "Pasteur titulaire",
-      telephone: "07 49 58 34 69",
     },
   },
   {
@@ -2479,7 +2282,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "LOGNON OUERE STEPHANE",
       titre: "Pasteur assistant",
-      telephone: "07 89 49 11 03",
     },
   },
   {
@@ -2493,7 +2295,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KONAN N'GORAN SIDOINE",
       titre: "Pasteur assistant",
-      telephone: "07 89 67 92 91",
     },
     equipe: [
       {
@@ -2521,7 +2322,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI N'GORAN THEODORE",
       titre: "Pasteur titulaire",
-      telephone: "07 58 22 27 55",
     },
   },
   {
@@ -2535,7 +2335,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "OUATTARA N'CLO PIERRE",
       titre: "Pasteur titulaire",
-      telephone: "01 03 56 69 15",
     },
   },
   {
@@ -2549,7 +2348,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME KONAN HUBERT",
       titre: "Pasteur titulaire",
-      telephone: "07 07 22 48 24",
     },
     equipe: [
       {
@@ -2569,7 +2367,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO YAO MARCELIN",
       titre: "Pasteur titulaire",
-      telephone: "07 07 21 94 44",
     },
   },
 
@@ -2585,7 +2382,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUADIO N'DRI JOSEPH",
       titre: "Pasteur titulaire",
-      telephone: "07 59 03 90 83",
     },
   },
   {
@@ -2599,13 +2395,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "YOBOUET KOUAKOU MESMAIRE",
       titre: "Pasteur titulaire",
-      telephone: "07 87 33 76 87",
     },
     equipe: [
       {
         nom: "KONAN KOUAME LOUIS",
         titre: "Pasteur stagiaire",
-        telephone: "07 08 88 43 64",
       },
     ],
   },
@@ -2620,7 +2414,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME HOUMIEN PHILIPPE DENOS",
       titre: "Pasteur stagiaire",
-      telephone: "07 78 68 40 94",
     },
   },
   {
@@ -2634,7 +2427,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'DRI YAO SAINT-PAUL",
       titre: "Pasteur titulaire",
-      telephone: "07 07 06 78 93",
     },
   },
   {
@@ -2648,13 +2440,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAME KOUAME ELIE GAUTHIER",
       titre: "Pasteur titulaire",
-      telephone: "07 07 04 91 38",
     },
     equipe: [
       {
         nom: "KOFFI KOUAKOU IVES",
         titre: "Pasteur stagiaire",
-        telephone: "07 87 53 20 51",
       },
     ],
   },
@@ -2669,7 +2459,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUASSI KONAN JULIEN",
       titre: "Pasteur titulaire",
-      telephone: "07 49 92 11 55",
     },
   },
   {
@@ -2683,7 +2472,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU BROU OSVALD",
       titre: "Pasteur titulaire",
-      telephone: "07 09 76 27 08",
     },
   },
   {
@@ -2697,7 +2485,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOUAKOU MAYALLY ARGAN DE H.",
       titre: "Pasteur titulaire",
-      telephone: "07 57 99 98 78",
     },
   },
   {
@@ -2711,7 +2498,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "TIEHIDE MARI MARCHAL",
       titre: "Evangéliste titulaire",
-      telephone: "07 59 45 04 21",
     },
   },
   {
@@ -2725,7 +2511,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KONAN JULIEN",
       titre: "Pasteur titulaire",
-      telephone: "07 48 53 85 13",
     },
   },
   {
@@ -2739,7 +2524,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DAGNINI DOUKOURE AXEL-DOMORAUD",
       titre: "Pasteur assistant",
-      telephone: "07 69 10 21 31",
     },
   },
   {
@@ -2753,7 +2537,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "KOFFI KOUAKOU GHISLAIN",
       titre: "Pasteur assistant",
-      telephone: "07 57 42 76 70",
     },
   },
   {
@@ -2767,13 +2550,11 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "EHOUNOU OI EHOUNOU LUCIEN",
       titre: "Pasteur titulaire",
-      telephone: "07 08 83 51 10",
     },
     equipe: [
       {
         nom: "GUEDE MARTIAL",
         titre: "Pasteur stagiaire",
-        telephone: "07 08 25 80 97",
       },
     ],
   },
@@ -2789,7 +2570,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "AMONKON AGUIE FRANCK B.",
       titre: "Pasteur titulaire",
-      telephone: "07 79 81 38 04",
     },
   },
   {
@@ -2814,7 +2594,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "N'GOTTA KOUAKOU SERELL",
       titre: "Pasteur titulaire",
-      telephone: "+224 623 251 579 / +224 664 957 175",
     },
   },
   {
@@ -2827,7 +2606,6 @@ export const eglises: Eglise[] = [
     pasteur: {
       nom: "DJEHA N'DRI ASER",
       titre: "Pasteur titulaire",
-      telephone: "+1 571-206-9260",
     },
   },
   {
