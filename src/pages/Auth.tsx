@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,13 +39,16 @@ const Auth = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const zoomBooking = searchParams.get("rdv") === "zoom";
+  const afterLogin = zoomBooking ? "/contact#rendez-vous-zoom" : "/profil";
   const { user } = useAuth();
   const { toast } = useToast();
 
   // Redirige si déjà connecté
   useEffect(() => {
-    if (user) navigate("/profil");
-  }, [user, navigate]);
+    if (user && !user.is_anonymous) navigate(afterLogin, { replace: true });
+  }, [user, navigate, afterLogin]);
 
   const handleResetPassword = async () => {
     if (!email) {
@@ -93,7 +97,7 @@ const Auth = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast({ title: "Bienvenue ! 🙏", description: "Connexion réussie." });
-        navigate("/profil");
+        navigate(afterLogin, { replace: true });
       } else {
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -101,7 +105,7 @@ const Auth = () => {
           options: {
             // Ramène l'utilisateur sur le site MIEDA après confirmation
             // de son email (et non sur l'URL technique de l'hébergeur).
-            emailRedirectTo: window.location.origin + "/auth",
+            emailRedirectTo: window.location.origin + (zoomBooking ? "/auth?rdv=zoom" : "/auth"),
             // Lues par le déclencheur serveur qui crée le profil
             // et active le code serviteur — sans dépendre du navigateur.
             data: {
