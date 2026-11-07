@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLang } from "@/contexts/LanguageContext";
 import Contact from "@/components/Contact";
 import Offering from "@/components/Offering";
 import { Video, Calendar, ExternalLink, Crown, UserRound } from "lucide-react";
@@ -27,8 +30,12 @@ const rendezVous = [
   },
 ];
 
-const RendezVousZoom = () => (
-  <section className="py-20 bg-[var(--section-bg)]">
+const RendezVousZoom = () => {
+  const { user, loading } = useAuth();
+  const { lang } = useLang();
+  const signedIn = Boolean(user && !user.is_anonymous);
+  return (
+  <section id="rendez-vous-zoom" className="scroll-mt-24 py-20 bg-[var(--section-bg)]">
     <div className="container mx-auto px-4 max-w-5xl">
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
@@ -74,13 +81,20 @@ const RendezVousZoom = () => (
               {r.detail}
             </p>
 
-            <a href={r.lien} target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="w-full" variant={r.accent ? "default" : "outline"}>
-                <Video className="w-4 h-4 mr-2" />
-                {r.cta}
-                <ExternalLink className="w-4 h-4 ml-2 opacity-60" />
-              </Button>
-            </a>
+            <Button asChild size="lg" className="w-full" variant={r.accent ? "default" : "outline"}>
+              {signedIn && !loading ? (
+                <a href={r.lien} target="_blank" rel="noopener noreferrer">
+                  <Video className="w-4 h-4 mr-2" />
+                  {lang === "en" ? "Book an appointment" : r.cta}
+                  <ExternalLink className="w-4 h-4 ml-2 opacity-60" />
+                </a>
+              ) : (
+                <Link to="/auth?rdv=zoom">
+                  <Video className="w-4 h-4 mr-2" />
+                  {lang === "en" ? "Sign in to book" : "Se connecter pour réserver"}
+                </Link>
+              )}
+            </Button>
           </div>
         ))}
       </div>
@@ -91,7 +105,8 @@ const RendezVousZoom = () => (
       </p>
     </div>
   </section>
-);
+  );
+};
 
 const ContactPage = () => {
   return (
