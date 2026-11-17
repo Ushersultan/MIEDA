@@ -134,10 +134,7 @@ const WAVE = {
 };
 
 const IBAN_FR = {
-  iban: "FR17 3000 2005 3200 0000 6156 V05",
-  bic: "CRLYFRPP",
   titulaire: "MIEDA",
-  adresse: "40 Avenue de Sully, 93190 Livry-Gargan, France",
 };
 
 // ── Utilitaire PayPal ──
@@ -471,12 +468,18 @@ const Offering = () => {
                 </div>
               </div>
               <div className="divide-y divide-border">
-                <CopyRow label={L.lIban} value={IBAN_FR.iban} copyValue={IBAN_FR.iban.replace(/\s/g, "")} />
-                <CopyRow label={L.lBic} value={IBAN_FR.bic} />
                 <CopyRow label={L.lTitulaire} value={IBAN_FR.titulaire} />
-                <CopyRow label={L.lAdresse} value={IBAN_FR.adresse} />
               </div>
-              <p className="text-xs text-muted-foreground mt-3">{L.ibanNote}</p>
+              <p className="text-sm text-muted-foreground mt-4 mb-4">
+                {lang === "en"
+                  ? "To receive the complete IBAN transfer instructions, contact admin@eglisesmieda.org."
+                  : "Pour recevoir les instructions complètes de virement par IBAN, contactez admin@eglisesmieda.org."}
+              </p>
+              <Button asChild className="w-full">
+                <a href={`mailto:admin@eglisesmieda.org?subject=${encodeURIComponent(lang === "en" ? "MIEDA donation — IBAN transfer instructions" : "Don MIEDA — coordonnées pour virement IBAN")}`}>
+                  {lang === "en" ? "Request bank details" : "Demander les coordonnées bancaires"}
+                </a>
+              </Button>
             </TabsContent>
           </Tabs>
         </DialogContent>
