@@ -38,7 +38,7 @@ const TXT = {
     autres: "Autres moyens de faire un don",
 
     virement: "Virement bancaire",
-    usa: "États-Unis 🇺🇸",
+    usa: "États-Unis et international 🇺🇸",
 
     waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
     waveNote: "Envoyez votre don directement à l'aide de l'application Wave.",
@@ -90,7 +90,7 @@ const TXT = {
     autres: "Other ways to donate",
 
     virement: "Bank transfer",
-    usa: "United States 🇺🇸",
+    usa: "United States and international 🇺🇸",
 
     waveSous: "Mobile Money · Côte d'Ivoire 🇨🇮",
     waveNote: "Send your donation directly using the Wave app.",
@@ -124,12 +124,8 @@ const CURRENCY = "USD";
 
 // ── Coordonnées officielles des dons — MIEDA Diaspora ──
 const BANQUE_US = {
-  banque: "Manufacturers and Traders Trust Company (M&T Bank)",
-  adresse: "One M&T Plaza, Buffalo, NY 14203, USA",
-  beneficiaire: "KOUADIO DJEHA",
-  compte: "9886633974",
-  chipsAba: "0555",
-  swift: "MANTUS33",
+  banque: "JPMorgan Chase Bank, N.A.",
+  beneficiaire: "EGLISE MIEDA USA INC.",
 };
 
 const WAVE = {
@@ -435,12 +431,18 @@ const Offering = () => {
               </div>
               <div className="divide-y divide-border">
                 <CopyRow label={L.lBanque} value={BANQUE_US.banque} />
-                <CopyRow label={L.lAdresse} value={BANQUE_US.adresse} />
                 <CopyRow label={L.lBenef} value={BANQUE_US.beneficiaire} />
-                <CopyRow label={L.lCompte} value={BANQUE_US.compte} />
-                <CopyRow label={L.lChips} value={BANQUE_US.chipsAba} />
-                <CopyRow label={L.lSwift} value={BANQUE_US.swift} />
               </div>
+              <p className="text-sm text-muted-foreground mt-4 mb-4">
+                {lang === "en"
+                  ? "To receive the complete wire transfer instructions, contact admin@eglisesmieda.org."
+                  : "Pour recevoir les instructions complètes de virement, contactez admin@eglisesmieda.org."}
+              </p>
+              <Button asChild className="w-full">
+                <a href={`mailto:admin@eglisesmieda.org?subject=${encodeURIComponent(lang === "en" ? "MIEDA donation — wire transfer instructions" : "Don MIEDA — coordonnées pour virement bancaire")}`}>
+                  {lang === "en" ? "Request bank details" : "Demander les coordonnées bancaires"}
+                </a>
+              </Button>
             </TabsContent>
 
             {/* ── Wave ── */}
