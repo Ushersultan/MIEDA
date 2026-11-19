@@ -16,7 +16,7 @@ export const CLE_CODE_PENDING = "mieda-code-serviteur-pending";
 export async function tenterActivationCode(code: string): Promise<string> {
   for (let essai = 0; essai < 5; essai++) {
     const { data: res } = await supabase.rpc("activer_code_pasteur", { p_code: code });
-    if (res === "ok" || res === "code_invalide") return res as string;
+    if (["ok", "code_invalide", "trop_de_tentatives", "refuse", "non_connecte"].includes(res)) return res as string;
     // 'profil_en_creation' ou erreur transitoire → attendre puis réessayer
     await new Promise((r) => setTimeout(r, 1300));
   }
@@ -107,7 +107,7 @@ const Auth = () => {
             // de son email (et non sur l'URL technique de l'hébergeur).
             emailRedirectTo: window.location.origin + (zoomBooking ? "/auth?rdv=zoom" : "/auth"),
             // Lues par le déclencheur serveur qui crée le profil
-            // et active le code serviteur — sans dépendre du navigateur.
+            // Le code serviteur est activé après connexion via la fonction limitée en tentatives.
             data: {
               full_name: fullName,
               ville,
