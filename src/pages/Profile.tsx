@@ -1,3 +1,4 @@
+import { apiUrl } from "@/lib/api";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -166,22 +167,31 @@ const Profile = () => {
       toast({ title: "Photo trop lourde", description: "Maximum 4 Mo.", variant: "destructive" });
       return;
     }
-    setUploading(true);
-    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const path = `${user.id}/avatar.${ext}`;
-    const { error: upErr } = await supabase.storage.from("avatars")
-      .upload(path, file, { upsert: true, contentType: file.type });
-    if (upErr) {
-      toast({ title: "Erreur d'envoi", description: upErr.message, variant: "destructive" });
-      setUploading(false);
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      toast({ title: "Format invalide", description: "JPEG, PNG ou WebP uniquement.", variant: "destructive" });
       return;
     }
-    const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
-    const url = `${pub.publicUrl}?t=${Date.now()}`;
-    await supabase.from("profiles").update({ photo_url: url }).eq("id", user.id);
-    setForm((f) => ({ ...f, photo_url: url }));
-    toast({ title: "Photo mise à jour ✓" });
-    setUploading(false);
+    setUploading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Veuillez vous reconnecter.");
+      const response = await fetch(apiUrl("/api/avatar"), {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session.access_token}`, "Content-Type": file.type },
+        body: file,
+      });
+      if (!response.ok) throw new Error("Envoi refusé. Image valide de 4 Mo maximum requise.");
+      const { url } = await response.json();
+      const { error } = await supabase.from("profiles").update({ photo_url: url }).eq("id", user.id);
+      if (error) throw new Error("Impossible de mettre à jour la photo.");
+      setForm((f) => ({ ...f, photo_url: url }));
+      toast({ title: "Photo mise à jour ✓" });
+    } catch (error) {
+      toast({ title: "Erreur d’envoi", description: error instanceof Error ? error.message : "Réessayez.", variant: "destructive" });
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
   };
 
   const handleSave = async () => {
@@ -333,7 +343,7 @@ const Profile = () => {
               >
                 {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
               </button>
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
+              <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handlePhoto} />
             </div>
 
             <div className="text-center sm:text-left">
