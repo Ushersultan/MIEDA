@@ -8,10 +8,15 @@ import { initNative } from "./lib/native";
 window.addEventListener("error", (e) => {
   const root = document.getElementById("root");
   if (root && !root.hasChildNodes()) {
-    root.innerHTML =
-      '<div style="font-family:sans-serif;padding:24px;color:#991b1b;background:#fef2f2;min-height:100vh">' +
-      "<h2>⚠️ Erreur au démarrage</h2><pre style='white-space:pre-wrap;font-size:12px'>" +
-      String(e.message || e.error || "Erreur inconnue") + "</pre></div>";
+    const panel = document.createElement("div");
+    panel.className = "min-h-screen bg-red-50 p-6 font-sans text-red-800";
+    const title = document.createElement("h2");
+    title.textContent = "⚠️ Erreur au démarrage";
+    const message = document.createElement("pre");
+    message.className = "whitespace-pre-wrap text-xs";
+    message.textContent = String(e.message || e.error || "Erreur inconnue");
+    panel.append(title, message);
+    root.replaceChildren(panel);
   }
 });
 

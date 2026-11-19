@@ -1,3 +1,4 @@
+import { safeExternalUrl } from "@/lib/content-safety";
 import ChurchMedia from "@/components/ChurchMedia";
 import MediaPlayer from "@/components/MediaPlayer";
 import { useEffect, useState, useMemo } from "react";
@@ -35,17 +36,19 @@ const ZOOM_URL =
 const ZOOM_MEETING_ID = "835 1522 5605";
 
 async function openExternal(url: string) {
+  const safeUrl = safeExternalUrl(url);
+  if (!safeUrl) return;
   try {
     const { Capacitor } = await import("@capacitor/core");
     if (Capacitor.isNativePlatform()) {
       const { Browser } = await import("@capacitor/browser");
-      await Browser.open({ url, presentationStyle: "popover" });
+      await Browser.open({ url: safeUrl, presentationStyle: "popover" });
       return;
     }
   } catch (error) {
     console.warn("Ouverture native indisponible", error);
   }
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.open(safeUrl, "_blank", "noopener,noreferrer");
 }
 
 // ── Lieu Culte Yamoussoukro (Google Maps) ──
